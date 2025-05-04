@@ -24,7 +24,7 @@ void init_timer1(void)
 // La entrada value debe ser un número de 0 a 255
 void TIMER1_PWM1_set_servo_PW(uint16_t value)
 {
-	uint16_t ticks = (4000/256) * value + 1000;	// Función empírica para giro de 180°
+	uint16_t ticks = (3277/256) * value + 3276;
 	if (ticks > ICR1) ticks = ICR1;			// Truncar ticks a ICR1 si se pasan del valor
 	OCR1A = ticks;							// Ajustar el valor de OCR1A
 }
@@ -32,7 +32,7 @@ void TIMER1_PWM1_set_servo_PW(uint16_t value)
 // Establecer ancho de pulso para PWM1
 void TIMER1_PWM2_set_servo_PW(uint16_t value)
 {
-	uint16_t ticks = (4000/256) * value + 1000;	// Función empírica para giro de 180°
+	uint16_t ticks = (3277/256) * value + 3276;
 	if (ticks > ICR1) ticks = ICR1;			// Truncar ticks a ICR1 si se pasan del valor
 	OCR1B = ticks;							// Ajustar el valor de OCR1B
 }
