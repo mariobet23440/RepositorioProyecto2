@@ -12,18 +12,18 @@
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
-    <AssemblyName>Proyecto2_Receptor</AssemblyName>
-    <Name>Proyecto2_Receptor</Name>
-    <RootNamespace>Proyecto2_Receptor</RootNamespace>
+    <AssemblyName>Proyecto2_Transmisor</AssemblyName>
+    <Name>Proyecto2_Transmisor</Name>
+    <RootNamespace>Proyecto2_Transmisor</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
     <CacheFlash>true</CacheFlash>
     <ProgFlashFromRam>true</ProgFlashFromRam>
-    <RamSnippetAddress />
+    <RamSnippetAddress>0x20000000</RamSnippetAddress>
     <UncachedRange />
     <preserveEEPROM>true</preserveEEPROM>
-    <OverrideVtorValue />
+    <OverrideVtorValue>exception_table</OverrideVtorValue>
     <BootSegment>2</BootSegment>
     <ResetRule>0</ResetRule>
     <eraseonlaunchrule>0</eraseonlaunchrule>
@@ -40,6 +40,19 @@
   </dependencies>
 </framework-data>
     </AsfFrameworkConfig>
+    <avrtool>com.atmel.avrdbg.tool.simulator</avrtool>
+    <avrtoolserialnumber />
+    <avrdeviceexpectedsignature>0x1E950F</avrdeviceexpectedsignature>
+    <com_atmel_avrdbg_tool_simulator>
+      <ToolOptions xmlns="">
+        <InterfaceProperties>
+        </InterfaceProperties>
+      </ToolOptions>
+      <ToolType xmlns="">com.atmel.avrdbg.tool.simulator</ToolType>
+      <ToolNumber xmlns="">
+      </ToolNumber>
+      <ToolName xmlns="">Simulator</ToolName>
+    </com_atmel_avrdbg_tool_simulator>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -120,16 +133,16 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Libreria_Timer1PWM\LibreriaTimer1PWM.c">
+    <Compile Include="Libreria_ADC\LibreriaADC.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Libreria_Timer1PWM\LibreriaTimer1PWM.h">
+    <Compile Include="Libreria_ADC\LibreriaADC.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Libreria_Timer2PWM\LibreriaTimer2PWM.c">
+    <Compile Include="Libreria_Timer0\LibreriaTimer0.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Libreria_Timer2PWM\LibreriaTimer2PWM.h">
+    <Compile Include="Libreria_Timer0\LibreriaTimer0.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Libreria_UART\Libreria_UART.c">
@@ -143,9 +156,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Libreria_Timer1PWM" />
-    <Folder Include="Libreria_Timer2PWM" />
+    <Folder Include="Libreria_ADC" />
     <Folder Include="Libreria_UART" />
+    <Folder Include="Libreria_Timer0" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

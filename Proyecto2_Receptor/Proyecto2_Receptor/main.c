@@ -11,7 +11,15 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "Libreria_Timer1PWM/LibreriaTimer1PWM.h"
+#include "Libreria_Timer2PWM/LibreriaTimer2PWM.h"
+#include "Libreria_UART.h"
 
+
+void init_timer0(void)
+{
+	
+}
 
 int main(void)
 {
