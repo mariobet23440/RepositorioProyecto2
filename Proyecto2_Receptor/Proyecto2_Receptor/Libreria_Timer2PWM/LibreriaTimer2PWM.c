@@ -11,7 +11,7 @@
 static uint8_t manual_pwm_pin = DDD3;
 
 // Inicialización de TIMER2 - PWM Manual
-void init_timer2_manualpwm(void)
+void init_timer2(void)
 {
 	// Modo Normal, TOP = 255
 	TCCR2B |= (1 << CS21); // Prescaler de 8
@@ -23,9 +23,15 @@ void init_timer2_manualpwm(void)
 }
 
 // Establecer ancho de pulso en TIMER2
-void timer2_set_PW(uint8_t value)
+void TIMER2_PWMA_set_PW(uint8_t value)
 {
 	OCR2A = 255 - value;
+}
+
+// Establecer ancho de pulso en TIMER2
+void TIMER2_PWMB_set_PW(uint8_t value)
+{
+	OCR2B = 255 - value;
 }
 
 

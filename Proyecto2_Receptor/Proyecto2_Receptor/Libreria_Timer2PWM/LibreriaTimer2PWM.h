@@ -10,8 +10,10 @@
 #define LIBRERIATIMER2PWM_H_
 
 #include <avr/io.h>
-void init_timer2_manualpwm(void);
-void timer2_set_PW(uint8_t value);
+void init_timer2(void);
+void TIMER2_PWMA_set_PW(uint8_t value);
+void TIMER2_PWMB_set_PW(uint8_t value);
+
 
 
 #endif /* LIBRERIATIMER2PWM_H_ */

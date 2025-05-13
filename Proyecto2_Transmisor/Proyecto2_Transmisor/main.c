@@ -56,6 +56,8 @@ int main(void)
     /* Replace with your application code */
     while (1) 
     {
+		DisplayInPORTBD(adc_value_chan0);
+		
     }
 }
 

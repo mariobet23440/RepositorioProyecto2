@@ -20,19 +20,18 @@ void init_timer1(void)
 	DDRB |= (1 << DDB1) | (1 << DDB2);		// Configurar PB1 y PB2 como salida (OC1A y OC1B)
 }
 
-// Establecer ancho de pulso para PWM1
-// La entrada value debe ser un número de 0 a 255
+// PWM para servo en canal A (PB1)
 void TIMER1_PWM1_set_servo_PW(uint16_t value)
 {
-	uint16_t ticks = (3277/256) * value + 3276;
-	if (ticks > ICR1) ticks = ICR1;			// Truncar ticks a ICR1 si se pasan del valor
-	OCR1A = ticks;							// Ajustar el valor de OCR1A
+	uint16_t ticks = ((uint32_t)value * 3277) / 256 + 3276;
+	if (ticks > ICR1) ticks = ICR1;
+	OCR1A = ticks;
 }
 
-// Establecer ancho de pulso para PWM1
+// PWM para servo en canal B (PB2)
 void TIMER1_PWM2_set_servo_PW(uint16_t value)
 {
-	uint16_t ticks = (3277/256) * value + 3276;
-	if (ticks > ICR1) ticks = ICR1;			// Truncar ticks a ICR1 si se pasan del valor
-	OCR1B = ticks;							// Ajustar el valor de OCR1B
+	uint16_t ticks = ((uint32_t)value * 3277) / 256 + 3276;
+	if (ticks > ICR1) ticks = ICR1;
+	OCR1B = ticks;
 }
