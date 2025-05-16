@@ -7,12 +7,14 @@
  * Contiene instrucciones para la lectura de canales del ADC y transmisión de datos con UART
  */ 
 
+
 // Frecuencia de reloj de sistema
 #define F_CPU 16000000UL
 
 // Librerías
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 #include "Libreria_ADC/LibreriaADC.h"
 #include "Libreria_Timer0/LibreriaTimer0.h"
 #include "Libreria_UART/Libreria_UART.h"
@@ -24,9 +26,11 @@ char adc_value_chan1 = 0;	// Valor del canal 1 del ADC
 char adc_value_chan2 = 0;	// Valor del canal 2 del ADC
 char adc_value_chan3 = 0;	// Valor del canal 3 del ADC
 
+
 // Prototipos de funciones
-void DisplayInPORTBD(char data);
-void send_data(char action);
+//void DisplayInPORTBD(char data);
+//void send_data(char action);
+
 
 // Setup
 void setup(void)
@@ -35,29 +39,26 @@ void setup(void)
 	cli();
 	
 	// Setup
-	setup_adc();		// Inicializar ADC
+	//setup_adc();		// Inicializar ADC
 	init_timer0();		// Inicializar Timer0
 	UART_init();		// Inicializar UART
-	
-	// Solo para hacer ensayos, habilitar los últimos 4 bits de PORTD y los primeros 4 de PORTB
-	DDRD |= (1 << PORTD2) | (1 << PORTD3) | (1 << PORTD4) | (1 << PORTD5);
-	DDRB = 0x0F;
 	
 	// Habilitar Interrupciones globales
 	sei();
 }
 
+/*
+
 // Mainloop
 int main(void)
 {
 	setup();
-	UART_sendString("Si lees esto... ¡Comunicación Exitosa!\r\n");
+	UART_sendChar('A');
+	UART_sendChar('B');
 		
-    /* Replace with your application code */
+    // Replace with your application code
     while (1) 
     {
-		DisplayInPORTBD(adc_value_chan0);
-		
     }
 }
 
@@ -142,4 +143,19 @@ ISR(ADC_vect)
 			adc_set_channel(0);			// En cualquier otro caso regresar al canal 0
 			break;
 	}
+}
+*/
+
+
+
+int main(void)
+{
+	setup();
+	while(1);
+}
+
+// Interrupción por registro de data vacío en USART
+ISR(USART_UDRE_vect)
+{
+	UDR0 = 'G';
 }

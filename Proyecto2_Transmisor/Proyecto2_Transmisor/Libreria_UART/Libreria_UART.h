@@ -9,11 +9,8 @@
 #ifndef LIBRERIA_UART_H_
 #define LIBRERIA_UART_H_
 
-
 #include <avr/io.h>
-void UART_init(void) ;
-void UART_sendChar(char c);
-void UART_sendString(const char* str);
+void UART_init(void);
 
 
 

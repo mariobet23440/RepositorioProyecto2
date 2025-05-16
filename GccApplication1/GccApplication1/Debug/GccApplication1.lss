@@ -1,0 +1,271 @@
+
+GccApplication1.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000002  00800100  00000172  000001e6  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000172  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .comment      00000030  00000000  00000000  000001e8  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000218  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000038  00000000  00000000  00000258  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000887  00000000  00000000  00000290  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 00000717  00000000  00000000  00000b17  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   0000031b  00000000  00000000  0000122e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000060  00000000  00000000  0000154c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000003dd  00000000  00000000  000015ac  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000001a4  00000000  00000000  00001989  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000028  00000000  00000000  00001b2d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 34 00 	jmp	0x68	; 0x68 <__ctors_end>
+   4:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+   8:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+   c:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  10:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  14:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  18:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  1c:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  20:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  24:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  28:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  2c:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  30:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  34:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  38:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  3c:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  40:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  44:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  48:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  4c:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  50:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  54:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  58:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  5c:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  60:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+  64:	0c 94 49 00 	jmp	0x92	; 0x92 <__bad_interrupt>
+
+00000068 <__ctors_end>:
+  68:	11 24       	eor	r1, r1
+  6a:	1f be       	out	0x3f, r1	; 63
+  6c:	cf ef       	ldi	r28, 0xFF	; 255
+  6e:	d8 e0       	ldi	r29, 0x08	; 8
+  70:	de bf       	out	0x3e, r29	; 62
+  72:	cd bf       	out	0x3d, r28	; 61
+
+00000074 <__do_copy_data>:
+  74:	11 e0       	ldi	r17, 0x01	; 1
+  76:	a0 e0       	ldi	r26, 0x00	; 0
+  78:	b1 e0       	ldi	r27, 0x01	; 1
+  7a:	e2 e7       	ldi	r30, 0x72	; 114
+  7c:	f1 e0       	ldi	r31, 0x01	; 1
+  7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
+  80:	05 90       	lpm	r0, Z+
+  82:	0d 92       	st	X+, r0
+  84:	a2 30       	cpi	r26, 0x02	; 2
+  86:	b1 07       	cpc	r27, r17
+  88:	d9 f7       	brne	.-10     	; 0x80 <__do_copy_data+0xc>
+  8a:	0e 94 91 00 	call	0x122	; 0x122 <main>
+  8e:	0c 94 b7 00 	jmp	0x16e	; 0x16e <_exit>
+
+00000092 <__bad_interrupt>:
+  92:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+00000096 <UART_init>:
+#define F_CPU 16000000UL
+#include <avr/io.h>
+#include <util/delay.h>
+
+void UART_init(void) {
+	UBRR0H = (103 >> 8);
+  96:	10 92 c5 00 	sts	0x00C5, r1	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7f80c5>
+	UBRR0L = 103;
+  9a:	87 e6       	ldi	r24, 0x67	; 103
+  9c:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7f80c4>
+
+	UCSR0B = (1 << TXEN0); // Habilitar transmisión
+  a0:	88 e0       	ldi	r24, 0x08	; 8
+  a2:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7f80c1>
+	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00); // 8 bits de datos, sin paridad, 1 bit de stop
+  a6:	86 e0       	ldi	r24, 0x06	; 6
+  a8:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7f80c2>
+  ac:	08 95       	ret
+
+000000ae <UART_sendChar>:
+}
+
+void UART_sendChar(char c) {
+	// Parpadeo rápido para indicar que estamos esperando buffer
+	while (!(UCSR0A & (1 << UDRE0))) {
+  ae:	0d c0       	rjmp	.+26     	; 0xca <UART_sendChar+0x1c>
+		PORTB ^= (1 << PB0); // LED parpadeando rápido
+  b0:	25 b1       	in	r18, 0x05	; 5
+  b2:	91 e0       	ldi	r25, 0x01	; 1
+  b4:	92 27       	eor	r25, r18
+  b6:	95 b9       	out	0x05, r25	; 5
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  b8:	2f ef       	ldi	r18, 0xFF	; 255
+  ba:	31 ee       	ldi	r19, 0xE1	; 225
+  bc:	94 e0       	ldi	r25, 0x04	; 4
+  be:	21 50       	subi	r18, 0x01	; 1
+  c0:	30 40       	sbci	r19, 0x00	; 0
+  c2:	90 40       	sbci	r25, 0x00	; 0
+  c4:	e1 f7       	brne	.-8      	; 0xbe <UART_sendChar+0x10>
+  c6:	00 c0       	rjmp	.+0      	; 0xc8 <UART_sendChar+0x1a>
+  c8:	00 00       	nop
+	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00); // 8 bits de datos, sin paridad, 1 bit de stop
+}
+
+void UART_sendChar(char c) {
+	// Parpadeo rápido para indicar que estamos esperando buffer
+	while (!(UCSR0A & (1 << UDRE0))) {
+  ca:	90 91 c0 00 	lds	r25, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7f80c0>
+  ce:	95 ff       	sbrs	r25, 5
+  d0:	ef cf       	rjmp	.-34     	; 0xb0 <UART_sendChar+0x2>
+		PORTB ^= (1 << PB0); // LED parpadeando rápido
+		_delay_ms(100);
+	}
+
+	// Cuando el buffer está libre, enviamos el carácter
+	UDR0 = c;
+  d2:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7f80c6>
+	// Parpadeo lento indicando que el dato fue enviado
+	PORTB &= ~(1 << PB0);
+  d6:	85 b1       	in	r24, 0x05	; 5
+  d8:	8e 7f       	andi	r24, 0xFE	; 254
+  da:	85 b9       	out	0x05, r24	; 5
+  dc:	2f ef       	ldi	r18, 0xFF	; 255
+  de:	39 e6       	ldi	r19, 0x69	; 105
+  e0:	88 e1       	ldi	r24, 0x18	; 24
+  e2:	21 50       	subi	r18, 0x01	; 1
+  e4:	30 40       	sbci	r19, 0x00	; 0
+  e6:	80 40       	sbci	r24, 0x00	; 0
+  e8:	e1 f7       	brne	.-8      	; 0xe2 <UART_sendChar+0x34>
+  ea:	00 c0       	rjmp	.+0      	; 0xec <UART_sendChar+0x3e>
+  ec:	00 00       	nop
+	_delay_ms(500); // Parpadeo lento
+	PORTB |= (1 << PB0);
+  ee:	85 b1       	in	r24, 0x05	; 5
+  f0:	81 60       	ori	r24, 0x01	; 1
+  f2:	85 b9       	out	0x05, r24	; 5
+  f4:	9f ef       	ldi	r25, 0xFF	; 255
+  f6:	29 e6       	ldi	r18, 0x69	; 105
+  f8:	38 e1       	ldi	r19, 0x18	; 24
+  fa:	91 50       	subi	r25, 0x01	; 1
+  fc:	20 40       	sbci	r18, 0x00	; 0
+  fe:	30 40       	sbci	r19, 0x00	; 0
+ 100:	e1 f7       	brne	.-8      	; 0xfa <UART_sendChar+0x4c>
+ 102:	00 c0       	rjmp	.+0      	; 0x104 <UART_sendChar+0x56>
+ 104:	00 00       	nop
+ 106:	08 95       	ret
+
+00000108 <UART_sendString>:
+	_delay_ms(500); // Parpadeo lento
+}
+
+void UART_sendString(const char* str) {
+ 108:	cf 93       	push	r28
+ 10a:	df 93       	push	r29
+ 10c:	ec 01       	movw	r28, r24
+	while (*str) {
+ 10e:	03 c0       	rjmp	.+6      	; 0x116 <UART_sendString+0xe>
+		UART_sendChar(*str++);
+ 110:	21 96       	adiw	r28, 0x01	; 1
+ 112:	0e 94 57 00 	call	0xae	; 0xae <UART_sendChar>
+	PORTB |= (1 << PB0);
+	_delay_ms(500); // Parpadeo lento
+}
+
+void UART_sendString(const char* str) {
+	while (*str) {
+ 116:	88 81       	ld	r24, Y
+ 118:	81 11       	cpse	r24, r1
+ 11a:	fa cf       	rjmp	.-12     	; 0x110 <UART_sendString+0x8>
+		UART_sendChar(*str++);
+	}
+}
+ 11c:	df 91       	pop	r29
+ 11e:	cf 91       	pop	r28
+ 120:	08 95       	ret
+
+00000122 <main>:
+
+int main(void) {
+	// Configura PB0 como salida para LED de prueba
+	DDRB |= (1 << PB0);
+ 122:	84 b1       	in	r24, 0x04	; 4
+ 124:	81 60       	ori	r24, 0x01	; 1
+ 126:	84 b9       	out	0x04, r24	; 4
+
+	// Indicamos que el código llegó al principio
+	PORTB |= (1 << PB0); // Enciende LED al principio
+ 128:	85 b1       	in	r24, 0x05	; 5
+ 12a:	81 60       	ori	r24, 0x01	; 1
+ 12c:	85 b9       	out	0x05, r24	; 5
+ 12e:	2f ef       	ldi	r18, 0xFF	; 255
+ 130:	83 ed       	ldi	r24, 0xD3	; 211
+ 132:	90 e3       	ldi	r25, 0x30	; 48
+ 134:	21 50       	subi	r18, 0x01	; 1
+ 136:	80 40       	sbci	r24, 0x00	; 0
+ 138:	90 40       	sbci	r25, 0x00	; 0
+ 13a:	e1 f7       	brne	.-8      	; 0x134 <main+0x12>
+ 13c:	00 c0       	rjmp	.+0      	; 0x13e <main+0x1c>
+ 13e:	00 00       	nop
+	_delay_ms(1000); // Espera un segundo
+	PORTB &= ~(1 << PB0); // Apaga LED
+ 140:	85 b1       	in	r24, 0x05	; 5
+ 142:	8e 7f       	andi	r24, 0xFE	; 254
+ 144:	85 b9       	out	0x05, r24	; 5
+
+	// Inicializa UART
+	UART_init();
+ 146:	0e 94 4b 00 	call	0x96	; 0x96 <UART_init>
+
+	// Envía una cadena de prueba
+	UART_sendString("A");
+ 14a:	80 e0       	ldi	r24, 0x00	; 0
+ 14c:	91 e0       	ldi	r25, 0x01	; 1
+ 14e:	0e 94 84 00 	call	0x108	; 0x108 <UART_sendString>
+
+	// Si UART está funcionando correctamente, el LED parpadeará lento
+	while (1) {
+		// El LED se mantendrá prendido o parpadeando lentamente
+		PORTB ^= (1 << PB0);
+ 152:	95 b1       	in	r25, 0x05	; 5
+ 154:	81 e0       	ldi	r24, 0x01	; 1
+ 156:	89 27       	eor	r24, r25
+ 158:	85 b9       	out	0x05, r24	; 5
+ 15a:	2f ef       	ldi	r18, 0xFF	; 255
+ 15c:	83 ed       	ldi	r24, 0xD3	; 211
+ 15e:	90 e3       	ldi	r25, 0x30	; 48
+ 160:	21 50       	subi	r18, 0x01	; 1
+ 162:	80 40       	sbci	r24, 0x00	; 0
+ 164:	90 40       	sbci	r25, 0x00	; 0
+ 166:	e1 f7       	brne	.-8      	; 0x160 <main+0x3e>
+ 168:	00 c0       	rjmp	.+0      	; 0x16a <main+0x48>
+ 16a:	00 00       	nop
+ 16c:	f2 cf       	rjmp	.-28     	; 0x152 <main+0x30>
+
+0000016e <_exit>:
+ 16e:	f8 94       	cli
+
+00000170 <__stop_program>:
+ 170:	ff cf       	rjmp	.-2      	; 0x170 <__stop_program>
