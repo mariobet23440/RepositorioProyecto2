@@ -28,7 +28,7 @@ más robusto y dificil de malinterpretar.
 #define RXTX_END			0x5A    // Complemento con máxima distancia de Hamming (Z)
 
 // Constantes para pares de caracteres de instrucción
-#define MOTORREDUCTOR_X		0x5555  // 0101 0101 0101 0101
+#define MOTORREDUCTOR_X		0x5555  // 0101 0101 0101 0101 (En ascii es 77)
 #define MOTORREDUCTOR_Y		0xAAAA  // 1010 1010 1010 1010
 #define SERVOMOTOR_X		0x3333  // 0011 0011 0011 0011
 #define SERVOMOTOR_Y		0xCCCC  // 1100 1100 1100 1100
@@ -36,6 +36,8 @@ más robusto y dificil de malinterpretar.
 #define EEPROM_2			0xF0F0  // 1111 0000 1111 0000
 #define EEPROM_3			0x9999  // 1001 1001 1001 1001
 #define EEPROM_4			0x6666  // 0110 0110 0110 0110
+
+// SAMPLE - ¥77AZ (MOTORREDUCTOR X - A)
 
 /************************************************************************/
 /* LIBRERÍAS                                                            */
@@ -61,9 +63,43 @@ volatile char reception_ended = 1;			// Bandera de final de framing
 
 // Arreglo de datos recibidos
 volatile uint8_t received_data[3] = {0xA5, 0xCC, 0xFF};  // Ejemplo de 3 bytes hexadecimales
+	
+// Arreglo de constantes
+const uint16_t instrucciones[] = {
+	MOTORREDUCTOR_X,
+	MOTORREDUCTOR_Y,
+	SERVOMOTOR_X,
+	SERVOMOTOR_Y,
+	EEPROM_1,
+	EEPROM_2,
+	EEPROM_3,
+	EEPROM_4
+};
+
+// Nombres de Instrucciones
+const char* const nombres_instrucciones[] = {
+	"MOTORREDUCTOR_X",
+	"MOTORREDUCTOR_Y",
+	"SERVOMOTOR_X",
+	"SERVOMOTOR_Y",
+	"EEPROM_1",
+	"EEPROM_2",
+	"EEPROM_3",
+	"EEPROM_4"
+};
+
+// Tamaño del arreglo
+const size_t num_instrucciones = sizeof(instrucciones) / sizeof(instrucciones[0]);
 
 /************************************************************************/
-/* SETUP Y MAINLOOP                                                                     */
+/* PROTOTIPOS DE FUNCIONES                                              */
+/************************************************************************/
+void setup(void);
+void process_instruction(void);
+void show_instruction_ASCII(void);
+
+/************************************************************************/
+/* SETUP Y MAINLOOP                                                     */
 /************************************************************************/
 void setup(void)
 {
@@ -77,9 +113,75 @@ int main(void)
 {
 	setup();
 	UART_sendString("PROGRAMACIÓN DE MICROCONTROLADORES - PROYECTO 2 - RECEPTOR \r\n");
-	UART_sendString("Mostrando caracteres de envío... \r\n");
+	show_instruction_ASCII();
 	while(1);
 	return 0;
+}
+
+/************************************************************************/
+/* RUTINAS NO DE INTERRUPCIÓN                                           */
+/************************************************************************/
+// Procesar Instrucciones (A partir del arreglo de datos recibido)
+void process_instruction(void)
+{
+	// Número de 16 bits de caracteres de instrucción 
+	uint16_t	instruction = ((uint16_t)received_data[0] << 8) | received_data[1];
+	
+	// Caracter de datos 
+	char		data_char = received_data[2];
+	
+	// Logs de prueba para monitor serial
+	UART_sendString("Instrucción recibida: ");
+	
+	switch(instruction)
+	{
+		case MOTORREDUCTOR_X:
+		UART_sendString("MOTORREDUCTOR X - ");		
+		// Hacer algo más
+		break;
+		
+		case MOTORREDUCTOR_Y:
+		UART_sendString("MOTORREDUCTOR Y - ");
+		// Hacer algo más
+		break;
+		
+		case SERVOMOTOR_X:
+		UART_sendString("SERVOMOTOR X - ");
+		// Hacer algo más
+		break;
+		
+		case SERVOMOTOR_Y:
+		UART_sendString("SERVOMOTOR Y - ");
+		// Hacer algo más
+		break;
+		
+		default:
+		UART_sendString("INSTRUCCIÓN INVÁLIDA - ");
+		break;
+	}
+	
+	UART_sendChar(data_char);
+	UART_sendString("\r\n");
+}
+
+void show_instruction_ASCII(void)
+{
+	UART_sendString("INSTRUCCIONES (EN ASCII) \r\n");
+	UART_sendString("Para ejecutar las siguientes instrucciones, coloque el caracter mostrado dos veces \r\n");
+	for (size_t i = 0; i < num_instrucciones; ++i) {
+		UART_sendString(nombres_instrucciones[i]);		// Mostrar nombre de instrucción
+		UART_sendString(" : ");							// Espacio
+		UART_sendChar(instrucciones[i] >> 8);			// Mostrar instrucción
+		UART_sendString("\r\n");
+	}
+	UART_sendString("\r\n");
+	UART_sendString("Para iniciar y terminar frames de 3 bytes \r\n");
+	UART_sendString("Inicio: ¥ \r\n");
+	UART_sendString("Fin: Z \r\n");
+	UART_sendString("\r\n");
+	UART_sendString("Ingrese un caracter para accionar el sistema. \r\n");
+	
+	
 }
 
 /************************************************************************/
@@ -186,6 +288,9 @@ ISR(USART_RX_vect)
 		UART_sendChar(received_data[2]);
 		UART_sendString("] ");
 		UART_sendString("\r\n");
+		
+		// PROCESAR INSTRUCCIÓN!!!!
+		process_instruction();
 	}
 	else
 	{
