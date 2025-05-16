@@ -7,19 +7,38 @@
  * Contiene instrucciones para la lectura de canales del ADC y transmisión de datos con UART
  */ 
 
-
+// -- CONSTANTES --
 // Frecuencia de reloj de sistema
 #define F_CPU 16000000UL
 
-// Librerías
+// Constantes para protocolo de comunicaciones
+#define MOTORREDUCTOR_X  0x5555  // 0101 0101 0101 0101
+#define MOTORREDUCTOR_Y  0xAAAA  // 1010 1010 1010 1010
+#define SERVOMOTOR_X     0x3333  // 0011 0011 0011 0011
+#define SERVOMOTOR_Y     0xCCCC  // 1100 1100 1100 1100
+#define EEPROM_1         0x0F0F  // 0000 1111 0000 1111
+#define EEPROM_2         0xF0F0  // 1111 0000 1111 0000
+#define EEPROM_3         0x9999  // 1001 1001 1001 1001
+#define EEPROM_4         0x6666  // 0110 0110 0110 0110
+
+/*
+NOTA: Aquí una curiosidad. Estas constantes son números de 16 bits, con distancias de Hamming de 8 bits mínimo.
+Esto facilita la corrección de errores en el receptor y dificulta malinterpretaciones por caracteres que se
+parecen entre sí.
+*/
+
+// -- LIBRERÍAS --
+// Librerías externas
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+
+// Librerías Propias
 #include "Libreria_ADC/LibreriaADC.h"
-#include "Libreria_Timer0/LibreriaTimer0.h"
+#include "Libreria_Timer1/Libreria_Timer1.h"
 #include "Libreria_UART/Libreria_UART.h"
 
-// Variables utilizadas
+// -- VARIABLES --
 char current_channel = 0;	// Canal actual del ADC
 char adc_value_chan0 = 0;	// Valor del canal 0 del ADC
 char adc_value_chan1 = 0;	// Valor del canal 1 del ADC
@@ -27,86 +46,54 @@ char adc_value_chan2 = 0;	// Valor del canal 2 del ADC
 char adc_value_chan3 = 0;	// Valor del canal 3 del ADC
 
 
-// Prototipos de funciones
-//void DisplayInPORTBD(char data);
-//void send_data(char action);
+// -- PROTOTIPOS DE FUNCIONES --
+void send_formated_data(uint16_t label, char data);
 
 
-// Setup
+// -- SETUP --
 void setup(void)
 {
 	// Deshabilitar interrupciones globales
 	cli();
 	
 	// Setup
-	//setup_adc();		// Inicializar ADC
-	init_timer0();		// Inicializar Timer0
+	setup_adc();		// Inicializar ADC
+	//init_timer0();		// Inicializar Timer0
 	UART_init();		// Inicializar UART
 	
 	// Habilitar Interrupciones globales
 	sei();
 }
 
-/*
-
-// Mainloop
+// -- MAINLOOP --
 int main(void)
 {
 	setup();
-	UART_sendChar('A');
-	UART_sendChar('B');
 		
     // Replace with your application code
     while (1) 
     {
+		send_formated_data(MOTORREDUCTOR_X, adc_value_chan0);
+		send_formated_data(MOTORREDUCTOR_Y, adc_value_chan1);
+		send_formated_data(SERVOMOTOR_X, adc_value_chan2);
+		send_formated_data(SERVOMOTOR_Y, adc_value_chan3);
     }
 }
 
-// Rutina No de Interrupción 1 - Protocolo de Comunicaciones
-void send_data(char action)
+// -- RUTINAS NO DE INTERRUPCÍÓN -- 
+// Envío de datos formateados
+void send_formated_data(uint16_t label, char data)
 {
-	switch(action)
-	{
-		// 1: Enviar entrada X de motores DC
-		case 1:
-			UART_sendString("MX");
-			UART_sendChar(adc_value_chan0);
-			break;
-		
-		// 2: Enviar entrada Y de motores DC
-		case 2:
-			UART_sendString("MY");
-			UART_sendChar(adc_value_chan1);
-			break;
-			
-		// 3: Enviar entrada X de servomotores
-		case 3:
-			UART_sendString("SX");
-			UART_sendChar(adc_value_chan2);
-			break;
-		
-		// 4: Enviar entrada Y de servomotores
-		case 4:
-			UART_sendString("SY");
-			UART_sendChar(adc_value_chan3);
-			break;
-	}
-}
-
-// Mostrar datos en PD2-PD5 y PB0-PB3 (SOLO TESTING LUEGO SACAR)
-void DisplayInPORTBD(char data)
-{
-	// Limpiar los bits PD2 a PD5 de PORTD, sin afectar PD0 y PD1
-	PORTD &= 0x03;  // 0x03 es 00000011, no afecta a PD2-PD5
-
-	// Mostrar el nibble bajo de `data` (los 4 bits más bajos) en PORTD (PD2-PD5)
-	PORTD |= (data & 0x0F) << 2;  // Escribir solo el nibble bajo (los 4 bits más bajos)
-
-	// Mostrar el nibble alto de `data` (los 4 bits más altos) en PORTB (PB0-PB3)
-	PORTB = (data & 0xF0) >> 4;  // Escribir el nibble alto en PB0-PB3
+	// Enviar byte alto del label
+	UART_sendChar((label >> 8) & 0xFF);
+	// Enviar byte bajo del label
+	UART_sendChar(label & 0xFF);
+	// Enviar el dato
+	UART_sendChar(data);
 }
 
 
+// -- RUTINAS DE INTERRUPCIÓN -- 
 // Interrupción por conversión completa en el ADC - Lectura y Multiplexado de canales
 ISR(ADC_vect)
 {	
@@ -143,19 +130,4 @@ ISR(ADC_vect)
 			adc_set_channel(0);			// En cualquier otro caso regresar al canal 0
 			break;
 	}
-}
-*/
-
-
-
-int main(void)
-{
-	setup();
-	while(1);
-}
-
-// Interrupción por registro de data vacío en USART
-ISR(USART_UDRE_vect)
-{
-	UDR0 = 'G';
 }

@@ -139,10 +139,10 @@
     <Compile Include="Libreria_ADC\LibreriaADC.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Libreria_Timer0\LibreriaTimer0.c">
+    <Compile Include="Libreria_Timer1\Libreria_Timer1.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Libreria_Timer0\LibreriaTimer0.h">
+    <Compile Include="Libreria_Timer1\Libreria_Timer1.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="Libreria_UART\Libreria_UART.c">
@@ -158,7 +158,7 @@
   <ItemGroup>
     <Folder Include="Libreria_ADC" />
     <Folder Include="Libreria_UART" />
-    <Folder Include="Libreria_Timer0" />
+    <Folder Include="Libreria_Timer1" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

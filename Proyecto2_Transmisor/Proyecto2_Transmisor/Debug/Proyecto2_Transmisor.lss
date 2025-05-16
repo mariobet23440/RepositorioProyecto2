@@ -3,29 +3,31 @@ Proyecto2_Transmisor.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  00000152  2**0
+  0 .data         00000000  00800100  00800100  0000029c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000000fe  00000000  00000000  00000054  2**1
+  1 .text         00000228  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  00000152  2**0
+  2 .bss          00000005  00800100  00800100  0000029c  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  0000029c  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000184  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000002cc  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000078  00000000  00000000  000001c4  2**0
+  5 .debug_aranges 00000090  00000000  00000000  0000030c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000864  00000000  00000000  0000023c  2**0
+  6 .debug_info   00000a39  00000000  00000000  0000039c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 000006fc  00000000  00000000  00000aa0  2**0
+  7 .debug_abbrev 000007c5  00000000  00000000  00000dd5  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000419  00000000  00000000  0000119c  2**0
+  8 .debug_line   00000524  00000000  00000000  0000159a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000000ac  00000000  00000000  000015b8  2**2
+  9 .debug_frame  0000012c  00000000  00000000  00001ac0  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000043e  00000000  00000000  00001664  2**0
+ 10 .debug_str    00000479  00000000  00000000  00001bec  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    0000003c  00000000  00000000  00001aa2  2**0
+ 11 .debug_loc    000001c4  00000000  00000000  00002065  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000048  00000000  00000000  00001ade  2**0
+ 12 .debug_ranges 00000060  00000000  00000000  00002229  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -50,9 +52,9 @@ Disassembly of section .text:
   40:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   44:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   48:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
-  4c:	0c 94 6e 00 	jmp	0xdc	; 0xdc <__vector_19>
+  4c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   50:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
-  54:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
+  54:	0c 94 b5 00 	jmp	0x16a	; 0x16a <__vector_21>
   58:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   5c:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
   60:	0c 94 46 00 	jmp	0x8c	; 0x8c <__bad_interrupt>
@@ -76,126 +78,322 @@ Disassembly of section .text:
   7c:	1d 92       	st	X+, r1
 
 0000007e <.do_clear_bss_start>:
-  7e:	a0 30       	cpi	r26, 0x00	; 0
+  7e:	a5 30       	cpi	r26, 0x05	; 5
   80:	b2 07       	cpc	r27, r18
   82:	e1 f7       	brne	.-8      	; 0x7c <.do_clear_bss_loop>
-  84:	0e 94 6b 00 	call	0xd6	; 0xd6 <main>
-  88:	0c 94 7d 00 	jmp	0xfa	; 0xfa <_exit>
+  84:	0e 94 9a 00 	call	0x134	; 0x134 <main>
+  88:	0c 94 12 01 	jmp	0x224	; 0x224 <_exit>
 
 0000008c <__bad_interrupt>:
   8c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
-00000090 <init_timer0>:
+00000090 <setup_adc>:
+#include "LibreriaADC.h"
 
-// Inicialización de TIMER 0 - Disparo de conversión
-void init_timer0(void)
+void setup_adc(void)
 {
-	// Operamos el temporizador en modo NORMAL
-	TCCR0B |= (1 << CS01) | (1 << CS00);	// Prescaler de 64
-  90:	85 b5       	in	r24, 0x25	; 37
-  92:	83 60       	ori	r24, 0x03	; 3
-  94:	85 bd       	out	0x25, r24	; 37
-	TCNT0 = 0;
-  96:	16 bc       	out	0x26, r1	; 38
+	// Formato de datos y voltaje de referencia
+	ADMUX |= (1 << ADLAR) | (1 << REFS0);   // Ajuste a la izquierda (ADLAR), Referencia AVCC (REFS0)
+  90:	ec e7       	ldi	r30, 0x7C	; 124
+  92:	f0 e0       	ldi	r31, 0x00	; 0
+  94:	80 81       	ld	r24, Z
+  96:	80 66       	ori	r24, 0x60	; 96
+  98:	80 83       	st	Z, r24
 	
-	// Habilitar interrupciones por overflow de TIMER0
-	TIMSK0 |= (1 << TOIE0);
-  98:	ee e6       	ldi	r30, 0x6E	; 110
-  9a:	f0 e0       	ldi	r31, 0x00	; 0
-  9c:	80 81       	ld	r24, Z
-  9e:	81 60       	ori	r24, 0x01	; 1
-  a0:	80 83       	st	Z, r24
-  a2:	08 95       	ret
+	// Habilitación de ADC e interrupciones por conversión completada
+	ADCSRA |= (1 << ADEN) | (1 << ADIE);    // Habilitar ADC y habilitar interrupción ADC
+  9a:	ea e7       	ldi	r30, 0x7A	; 122
+  9c:	f0 e0       	ldi	r31, 0x00	; 0
+  9e:	80 81       	ld	r24, Z
+  a0:	88 68       	ori	r24, 0x88	; 136
+  a2:	80 83       	st	Z, r24
+	
+	// Prescaler
+	ADCSRA |= (1 << ADPS2) | (1 << ADPS1);  // Prescaler de 64
+  a4:	80 81       	ld	r24, Z
+  a6:	86 60       	ori	r24, 0x06	; 6
+  a8:	80 83       	st	Z, r24
+	
+	// Configuraciones para Auto Trigger
+	ADCSRA |= (1 << ADATE);					// Habilitar Auto Trigger
+  aa:	80 81       	ld	r24, Z
+  ac:	80 62       	ori	r24, 0x20	; 32
+  ae:	80 83       	st	Z, r24
+	ADCSRB |= (1 << ADTS2) | (1 << ADTS1);	// Trigger Source Timer/Counter0 Overflow
+  b0:	ab e7       	ldi	r26, 0x7B	; 123
+  b2:	b0 e0       	ldi	r27, 0x00	; 0
+  b4:	8c 91       	ld	r24, X
+  b6:	86 60       	ori	r24, 0x06	; 6
+  b8:	8c 93       	st	X, r24
+	
+	// Iniciar conversión
+	ADCSRA |= (1 << ADSC);
+  ba:	80 81       	ld	r24, Z
+  bc:	80 64       	ori	r24, 0x40	; 64
+  be:	80 83       	st	Z, r24
+  c0:	08 95       	ret
 
-000000a4 <UART_init>:
+000000c2 <adc_set_channel>:
+}
 
+// Establecer canal en ADC
+void adc_set_channel(unsigned char channel)
+{
+	ADMUX = (ADMUX & 0xF0) | (channel & 0x0F);  // Limpiar bits de canal y asignar nuevo canal
+  c2:	ec e7       	ldi	r30, 0x7C	; 124
+  c4:	f0 e0       	ldi	r31, 0x00	; 0
+  c6:	90 81       	ld	r25, Z
+  c8:	90 7f       	andi	r25, 0xF0	; 240
+  ca:	8f 70       	andi	r24, 0x0F	; 15
+  cc:	89 2b       	or	r24, r25
+  ce:	80 83       	st	Z, r24
+  d0:	08 95       	ret
+
+000000d2 <UART_init>:
+#include "Libreria_UART.h"
 
 // Inicialización UART a 9600 baudios
 void UART_init(void) {
 	// Configura TX como salida, RX como entrada
 	DDRD |= (1 << PD1);   // TX
-  a4:	8a b1       	in	r24, 0x0a	; 10
-  a6:	82 60       	ori	r24, 0x02	; 2
-  a8:	8a b9       	out	0x0a, r24	; 10
+  d2:	8a b1       	in	r24, 0x0a	; 10
+  d4:	82 60       	ori	r24, 0x02	; 2
+  d6:	8a b9       	out	0x0a, r24	; 10
 	DDRD &= ~(1 << PD0);  // RX
-  aa:	8a b1       	in	r24, 0x0a	; 10
-  ac:	8e 7f       	andi	r24, 0xFE	; 254
-  ae:	8a b9       	out	0x0a, r24	; 10
+  d8:	8a b1       	in	r24, 0x0a	; 10
+  da:	8e 7f       	andi	r24, 0xFE	; 254
+  dc:	8a b9       	out	0x0a, r24	; 10
 
-	// Configurar baud rate antes de activar transmisor/receptor
-	UBRR0H = (103 >> 8);
-  b0:	10 92 c5 00 	sts	0x00C5, r1	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7f80c5>
-	UBRR0L = 103;
-  b4:	87 e6       	ldi	r24, 0x67	; 103
-  b6:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7f80c4>
+	// Configura baud rate a 9600 (F_CPU = 16 MHz)
+	// UBRR = (F_CPU / (16 * BAUD)) - 1 = 103
+	UBRR0 = 103;
+  de:	87 e6       	ldi	r24, 0x67	; 103
+  e0:	90 e0       	ldi	r25, 0x00	; 0
+  e2:	90 93 c5 00 	sts	0x00C5, r25	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7f80c5>
+  e6:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7f80c4>
 
-	// Habilitar transmisor e interrupciones por data register vacío (UDRIE)
-	UCSR0B = (1 << TXEN0) | (1 << UDRIE0);
-  ba:	88 e2       	ldi	r24, 0x28	; 40
-  bc:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7f80c1>
+	// Habilita transmisión
+	UCSR0B = (1 << TXEN0);
+  ea:	88 e0       	ldi	r24, 0x08	; 8
+  ec:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7f80c1>
 
-	// Frame: 8 data bits, 1 stop bit, sin paridad
+	// 8 bits, 1 bit de stop, sin paridad
 	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
-  c0:	86 e0       	ldi	r24, 0x06	; 6
-  c2:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7f80c2>
-  c6:	08 95       	ret
+  f0:	86 e0       	ldi	r24, 0x06	; 6
+  f2:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7f80c2>
+  f6:	08 95       	ret
 
-000000c8 <setup>:
+000000f8 <UART_sendChar>:
+}
 
-// Setup
+// Enviar un carácter
+void UART_sendChar(char c) {
+	while (!(UCSR0A & (1 << UDRE0)));  // Espera buffer libre
+  f8:	90 91 c0 00 	lds	r25, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7f80c0>
+  fc:	95 ff       	sbrs	r25, 5
+  fe:	fc cf       	rjmp	.-8      	; 0xf8 <UART_sendChar>
+	UDR0 = c;
+ 100:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7f80c6>
+ 104:	08 95       	ret
+
+00000106 <setup>:
+
+// -- SETUP --
 void setup(void)
 {
 	// Deshabilitar interrupciones globales
 	cli();
-  c8:	f8 94       	cli
+ 106:	f8 94       	cli
 	
 	// Setup
-	//setup_adc();		// Inicializar ADC
-	init_timer0();		// Inicializar Timer0
-  ca:	0e 94 48 00 	call	0x90	; 0x90 <init_timer0>
+	setup_adc();		// Inicializar ADC
+ 108:	0e 94 48 00 	call	0x90	; 0x90 <setup_adc>
+	//init_timer0();		// Inicializar Timer0
 	UART_init();		// Inicializar UART
-  ce:	0e 94 52 00 	call	0xa4	; 0xa4 <UART_init>
+ 10c:	0e 94 69 00 	call	0xd2	; 0xd2 <UART_init>
 	
 	// Habilitar Interrupciones globales
 	sei();
-  d2:	78 94       	sei
-  d4:	08 95       	ret
+ 110:	78 94       	sei
+ 112:	08 95       	ret
 
-000000d6 <main>:
+00000114 <send_formated_data>:
+}
 
+// -- RUTINAS NO DE INTERRUPCÍÓN -- 
+// Envío de datos formateados
+void send_formated_data(uint16_t label, char data)
+{
+ 114:	cf 93       	push	r28
+ 116:	df 93       	push	r29
+ 118:	d8 2f       	mov	r29, r24
+ 11a:	c6 2f       	mov	r28, r22
+	// Enviar byte alto del label
+	UART_sendChar((label >> 8) & 0xFF);
+ 11c:	89 2f       	mov	r24, r25
+ 11e:	0e 94 7c 00 	call	0xf8	; 0xf8 <UART_sendChar>
+	// Enviar byte bajo del label
+	UART_sendChar(label & 0xFF);
+ 122:	8d 2f       	mov	r24, r29
+ 124:	0e 94 7c 00 	call	0xf8	; 0xf8 <UART_sendChar>
+	// Enviar el dato
+	UART_sendChar(data);
+ 128:	8c 2f       	mov	r24, r28
+ 12a:	0e 94 7c 00 	call	0xf8	; 0xf8 <UART_sendChar>
+}
+ 12e:	df 91       	pop	r29
+ 130:	cf 91       	pop	r28
+ 132:	08 95       	ret
 
+00000134 <main>:
+}
 
+// -- MAINLOOP --
 int main(void)
 {
 	setup();
-  d6:	0e 94 64 00 	call	0xc8	; 0xc8 <setup>
-  da:	ff cf       	rjmp	.-2      	; 0xda <main+0x4>
+ 134:	0e 94 83 00 	call	0x106	; 0x106 <setup>
+		
+    // Replace with your application code
+    while (1) 
+    {
+		send_formated_data(MOTORREDUCTOR_X, adc_value_chan0);
+ 138:	60 91 03 01 	lds	r22, 0x0103	; 0x800103 <adc_value_chan0>
+ 13c:	85 e5       	ldi	r24, 0x55	; 85
+ 13e:	95 e5       	ldi	r25, 0x55	; 85
+ 140:	0e 94 8a 00 	call	0x114	; 0x114 <send_formated_data>
+		send_formated_data(MOTORREDUCTOR_Y, adc_value_chan1);
+ 144:	60 91 02 01 	lds	r22, 0x0102	; 0x800102 <adc_value_chan1>
+ 148:	8a ea       	ldi	r24, 0xAA	; 170
+ 14a:	9a ea       	ldi	r25, 0xAA	; 170
+ 14c:	0e 94 8a 00 	call	0x114	; 0x114 <send_formated_data>
+		send_formated_data(SERVOMOTOR_X, adc_value_chan2);
+ 150:	60 91 01 01 	lds	r22, 0x0101	; 0x800101 <adc_value_chan2>
+ 154:	83 e3       	ldi	r24, 0x33	; 51
+ 156:	93 e3       	ldi	r25, 0x33	; 51
+ 158:	0e 94 8a 00 	call	0x114	; 0x114 <send_formated_data>
+		send_formated_data(SERVOMOTOR_Y, adc_value_chan3);
+ 15c:	60 91 00 01 	lds	r22, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 160:	8c ec       	ldi	r24, 0xCC	; 204
+ 162:	9c ec       	ldi	r25, 0xCC	; 204
+ 164:	0e 94 8a 00 	call	0x114	; 0x114 <send_formated_data>
+ 168:	e7 cf       	rjmp	.-50     	; 0x138 <main+0x4>
 
-000000dc <__vector_19>:
-	while(1);
-}
+0000016a <__vector_21>:
 
-// Interrupción por registro de data vacío en USART
-ISR(USART_UDRE_vect)
-{
-  dc:	1f 92       	push	r1
-  de:	0f 92       	push	r0
-  e0:	0f b6       	in	r0, 0x3f	; 63
-  e2:	0f 92       	push	r0
-  e4:	11 24       	eor	r1, r1
-  e6:	8f 93       	push	r24
-	UDR0 = 'G';
-  e8:	87 e4       	ldi	r24, 0x47	; 71
-  ea:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7f80c6>
-  ee:	8f 91       	pop	r24
-  f0:	0f 90       	pop	r0
-  f2:	0f be       	out	0x3f, r0	; 63
-  f4:	0f 90       	pop	r0
-  f6:	1f 90       	pop	r1
-  f8:	18 95       	reti
 
-000000fa <_exit>:
-  fa:	f8 94       	cli
+// -- RUTINAS DE INTERRUPCIÓN -- 
+// Interrupción por conversión completa en el ADC - Lectura y Multiplexado de canales
+ISR(ADC_vect)
+{	
+ 16a:	1f 92       	push	r1
+ 16c:	0f 92       	push	r0
+ 16e:	0f b6       	in	r0, 0x3f	; 63
+ 170:	0f 92       	push	r0
+ 172:	11 24       	eor	r1, r1
+ 174:	2f 93       	push	r18
+ 176:	3f 93       	push	r19
+ 178:	4f 93       	push	r20
+ 17a:	5f 93       	push	r21
+ 17c:	6f 93       	push	r22
+ 17e:	7f 93       	push	r23
+ 180:	8f 93       	push	r24
+ 182:	9f 93       	push	r25
+ 184:	af 93       	push	r26
+ 186:	bf 93       	push	r27
+ 188:	ef 93       	push	r30
+ 18a:	ff 93       	push	r31
+	// Hacer multiplexado de canal
+	switch(current_channel)
+ 18c:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <current_channel>
+ 190:	81 30       	cpi	r24, 0x01	; 1
+ 192:	81 f0       	breq	.+32     	; 0x1b4 <__vector_21+0x4a>
+ 194:	28 f0       	brcs	.+10     	; 0x1a0 <__vector_21+0x36>
+ 196:	82 30       	cpi	r24, 0x02	; 2
+ 198:	b9 f0       	breq	.+46     	; 0x1c8 <__vector_21+0x5e>
+ 19a:	83 30       	cpi	r24, 0x03	; 3
+ 19c:	f9 f0       	breq	.+62     	; 0x1dc <__vector_21+0x72>
+ 19e:	28 c0       	rjmp	.+80     	; 0x1f0 <__vector_21+0x86>
+	{
+		case 0:
+			adc_value_chan0 = ADCH;		// Guardar valor para canal 0
+ 1a0:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 1a4:	80 93 03 01 	sts	0x0103, r24	; 0x800103 <adc_value_chan0>
+			current_channel = 1;
+ 1a8:	81 e0       	ldi	r24, 0x01	; 1
+ 1aa:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <current_channel>
+			adc_set_channel(1);			// Cambiar al canal 1
+ 1ae:	0e 94 61 00 	call	0xc2	; 0xc2 <adc_set_channel>
+			break;
+ 1b2:	27 c0       	rjmp	.+78     	; 0x202 <__vector_21+0x98>
+			
+		case 1:
+			adc_value_chan1 = ADCH;		// Guardar valor para canal 1
+ 1b4:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 1b8:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <adc_value_chan1>
+			current_channel = 2;
+ 1bc:	82 e0       	ldi	r24, 0x02	; 2
+ 1be:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <current_channel>
+			adc_set_channel(2);			// Cambiar al canal 2
+ 1c2:	0e 94 61 00 	call	0xc2	; 0xc2 <adc_set_channel>
+			break;
+ 1c6:	1d c0       	rjmp	.+58     	; 0x202 <__vector_21+0x98>
+			
+		case 2:
+			adc_value_chan2 = ADCH;		// Guardar valor para canal 2
+ 1c8:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 1cc:	80 93 01 01 	sts	0x0101, r24	; 0x800101 <adc_value_chan2>
+			current_channel = 3;
+ 1d0:	83 e0       	ldi	r24, 0x03	; 3
+ 1d2:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <current_channel>
+			adc_set_channel(3);			// Cambiar al canal 3
+ 1d6:	0e 94 61 00 	call	0xc2	; 0xc2 <adc_set_channel>
+			break;
+ 1da:	13 c0       	rjmp	.+38     	; 0x202 <__vector_21+0x98>
+		
+		case 3:
+			adc_value_chan3 = ADCH;		// Guardar valor para canal 3
+ 1dc:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 1e0:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+			current_channel = 0;
+ 1e4:	10 92 04 01 	sts	0x0104, r1	; 0x800104 <current_channel>
+			adc_set_channel(0);			// Cambiar al canal 0
+ 1e8:	80 e0       	ldi	r24, 0x00	; 0
+ 1ea:	0e 94 61 00 	call	0xc2	; 0xc2 <adc_set_channel>
+			break;
+ 1ee:	09 c0       	rjmp	.+18     	; 0x202 <__vector_21+0x98>
+		
+		default:
+			adc_value_chan0 = ADCH;		// Guardar valor para canal 0
+ 1f0:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 1f4:	80 93 03 01 	sts	0x0103, r24	; 0x800103 <adc_value_chan0>
+			current_channel = 0;
+ 1f8:	10 92 04 01 	sts	0x0104, r1	; 0x800104 <current_channel>
+			adc_set_channel(0);			// En cualquier otro caso regresar al canal 0
+ 1fc:	80 e0       	ldi	r24, 0x00	; 0
+ 1fe:	0e 94 61 00 	call	0xc2	; 0xc2 <adc_set_channel>
+			break;
+	}
+ 202:	ff 91       	pop	r31
+ 204:	ef 91       	pop	r30
+ 206:	bf 91       	pop	r27
+ 208:	af 91       	pop	r26
+ 20a:	9f 91       	pop	r25
+ 20c:	8f 91       	pop	r24
+ 20e:	7f 91       	pop	r23
+ 210:	6f 91       	pop	r22
+ 212:	5f 91       	pop	r21
+ 214:	4f 91       	pop	r20
+ 216:	3f 91       	pop	r19
+ 218:	2f 91       	pop	r18
+ 21a:	0f 90       	pop	r0
+ 21c:	0f be       	out	0x3f, r0	; 63
+ 21e:	0f 90       	pop	r0
+ 220:	1f 90       	pop	r1
+ 222:	18 95       	reti
 
-000000fc <__stop_program>:
-  fc:	ff cf       	rjmp	.-2      	; 0xfc <__stop_program>
+00000224 <_exit>:
+ 224:	f8 94       	cli
+
+00000226 <__stop_program>:
+ 226:	ff cf       	rjmp	.-2      	; 0x226 <__stop_program>

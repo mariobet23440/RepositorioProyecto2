@@ -20,7 +20,7 @@ void setup_adc(void)
 	
 	// Configuraciones para Auto Trigger
 	ADCSRA |= (1 << ADATE);					// Habilitar Auto Trigger
-	ADCSRB |= (1 << ADTS2);					// Trigger Source Timer/Counter0 Overflow
+	ADCSRB |= (1 << ADTS2) | (1 << ADTS1);	// Trigger Source Timer/Counter0 Overflow
 	
 	// Iniciar conversión
 	ADCSRA |= (1 << ADSC);

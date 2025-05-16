@@ -12,41 +12,28 @@ Discarded input sections
  .text          0x00000000        0x0 Libreria_ADC/LibreriaADC.o
  .data          0x00000000        0x0 Libreria_ADC/LibreriaADC.o
  .bss           0x00000000        0x0 Libreria_ADC/LibreriaADC.o
- .text.setup_adc
-                0x00000000       0x32 Libreria_ADC/LibreriaADC.o
- .text.adc_set_channel
-                0x00000000       0x10 Libreria_ADC/LibreriaADC.o
- .debug_info    0x00000000       0xa9 Libreria_ADC/LibreriaADC.o
- .debug_abbrev  0x00000000       0x78 Libreria_ADC/LibreriaADC.o
- .debug_loc     0x00000000       0x21 Libreria_ADC/LibreriaADC.o
+ .text          0x00000000        0x0 Libreria_Timer1/Libreria_Timer1.o
+ .data          0x00000000        0x0 Libreria_Timer1/Libreria_Timer1.o
+ .bss           0x00000000        0x0 Libreria_Timer1/Libreria_Timer1.o
+ .text.init_timer1
+                0x00000000       0x28 Libreria_Timer1/Libreria_Timer1.o
+ .debug_info    0x00000000       0x8e Libreria_Timer1/Libreria_Timer1.o
+ .debug_abbrev  0x00000000       0x51 Libreria_Timer1/Libreria_Timer1.o
  .debug_aranges
-                0x00000000       0x28 Libreria_ADC/LibreriaADC.o
- .debug_ranges  0x00000000       0x18 Libreria_ADC/LibreriaADC.o
- .debug_line    0x00000000       0xe7 Libreria_ADC/LibreriaADC.o
- .debug_str     0x00000000      0x1cf Libreria_ADC/LibreriaADC.o
- .comment       0x00000000       0x31 Libreria_ADC/LibreriaADC.o
- .debug_frame   0x00000000       0x34 Libreria_ADC/LibreriaADC.o
- .text          0x00000000        0x0 Libreria_Timer0/LibreriaTimer0.o
- .data          0x00000000        0x0 Libreria_Timer0/LibreriaTimer0.o
- .bss           0x00000000        0x0 Libreria_Timer0/LibreriaTimer0.o
- .text.reset_timer0
-                0x00000000        0x4 Libreria_Timer0/LibreriaTimer0.o
+                0x00000000       0x20 Libreria_Timer1/Libreria_Timer1.o
+ .debug_ranges  0x00000000       0x10 Libreria_Timer1/Libreria_Timer1.o
+ .debug_line    0x00000000       0xcc Libreria_Timer1/Libreria_Timer1.o
+ .debug_str     0x00000000      0x1c9 Libreria_Timer1/Libreria_Timer1.o
+ .comment       0x00000000       0x31 Libreria_Timer1/Libreria_Timer1.o
+ .debug_frame   0x00000000       0x24 Libreria_Timer1/Libreria_Timer1.o
  .text          0x00000000        0x0 Libreria_UART/Libreria_UART.o
  .data          0x00000000        0x0 Libreria_UART/Libreria_UART.o
  .bss           0x00000000        0x0 Libreria_UART/Libreria_UART.o
+ .text.UART_sendString
+                0x00000000       0x1a Libreria_UART/Libreria_UART.o
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
- .bss.adc_value_chan3
-                0x00000000        0x1 main.o
- .bss.adc_value_chan2
-                0x00000000        0x1 main.o
- .bss.adc_value_chan1
-                0x00000000        0x1 main.o
- .bss.adc_value_chan0
-                0x00000000        0x1 main.o
- .bss.current_channel
-                0x00000000        0x1 main.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
@@ -97,7 +84,7 @@ Linker script and memory map
 Address of section .data set to 0x800100
 LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328p/avr5/crtatmega328p.o
 LOAD Libreria_ADC/LibreriaADC.o
-LOAD Libreria_Timer0/LibreriaTimer0.o
+LOAD Libreria_Timer1/Libreria_Timer1.o
 LOAD Libreria_UART/Libreria_UART.o
 LOAD main.o
 START GROUP
@@ -209,7 +196,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000       0xfe
+.text           0x00000000      0x228
  *(.vectors)
  .vectors       0x00000000       0x68 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
@@ -278,12 +265,12 @@ END GROUP
                 0x0000008c                __vector_11
                 0x0000008c                __vector_13
                 0x0000008c                __vector_17
+                0x0000008c                __vector_19
                 0x0000008c                __vector_7
                 0x0000008c                __vector_5
                 0x0000008c                __vector_4
                 0x0000008c                __vector_9
                 0x0000008c                __vector_2
-                0x0000008c                __vector_21
                 0x0000008c                __vector_15
                 0x0000008c                __vector_8
                 0x0000008c                __vector_14
@@ -293,24 +280,33 @@ END GROUP
                 0x0000008c                __vector_20
                 0x00000090                . = ALIGN (0x2)
  *(.text.*)
- .text.init_timer0
-                0x00000090       0x14 Libreria_Timer0/LibreriaTimer0.o
-                0x00000090                init_timer0
+ .text.setup_adc
+                0x00000090       0x32 Libreria_ADC/LibreriaADC.o
+                0x00000090                setup_adc
+ .text.adc_set_channel
+                0x000000c2       0x10 Libreria_ADC/LibreriaADC.o
+                0x000000c2                adc_set_channel
  .text.UART_init
-                0x000000a4       0x24 Libreria_UART/Libreria_UART.o
-                0x000000a4                UART_init
- .text.setup    0x000000c8        0xe main.o
-                0x000000c8                setup
- .text.main     0x000000d6        0x6 main.o
-                0x000000d6                main
- .text.__vector_19
-                0x000000dc       0x1e main.o
-                0x000000dc                __vector_19
-                0x000000fa                . = ALIGN (0x2)
+                0x000000d2       0x26 Libreria_UART/Libreria_UART.o
+                0x000000d2                UART_init
+ .text.UART_sendChar
+                0x000000f8        0xe Libreria_UART/Libreria_UART.o
+                0x000000f8                UART_sendChar
+ .text.setup    0x00000106        0xe main.o
+                0x00000106                setup
+ .text.send_formated_data
+                0x00000114       0x20 main.o
+                0x00000114                send_formated_data
+ .text.main     0x00000134       0x36 main.o
+                0x00000134                main
+ .text.__vector_21
+                0x0000016a       0xba main.o
+                0x0000016a                __vector_21
+                0x00000224                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000000fa        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x000000fa                _exit
-                0x000000fa                exit
+ .fini9         0x00000224        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00000224                _exit
+                0x00000224                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -329,11 +325,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000000fa        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000224        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000000fe                _etext = .
+                0x00000228                _etext = .
 
-.data           0x00800100        0x0 load address 0x000000fe
+.data           0x00800100        0x0 load address 0x00000228
                 [!provide]                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -345,20 +341,35 @@ END GROUP
                 0x00800100                _edata = .
                 [!provide]                PROVIDE (__data_end, .)
 
-.bss            0x00800100        0x0
+.bss            0x00800100        0x5
                 0x00800100                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
+ .bss.adc_value_chan3
+                0x00800100        0x1 main.o
+                0x00800100                adc_value_chan3
+ .bss.adc_value_chan2
+                0x00800101        0x1 main.o
+                0x00800101                adc_value_chan2
+ .bss.adc_value_chan1
+                0x00800102        0x1 main.o
+                0x00800102                adc_value_chan1
+ .bss.adc_value_chan0
+                0x00800103        0x1 main.o
+                0x00800103                adc_value_chan0
+ .bss.current_channel
+                0x00800104        0x1 main.o
+                0x00800104                current_channel
  *(COMMON)
-                0x00800100                PROVIDE (__bss_end, .)
-                0x000000fe                __data_load_start = LOADADDR (.data)
-                0x000000fe                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800105                PROVIDE (__bss_end, .)
+                0x00000228                __data_load_start = LOADADDR (.data)
+                0x00000228                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800100        0x0
+.noinit         0x00800105        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800100                _end = .
+                0x00800105                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -400,7 +411,7 @@ END GROUP
 
 .comment        0x00000000       0x30
  *(.comment)
- .comment       0x00000000       0x30 Libreria_Timer0/LibreriaTimer0.o
+ .comment       0x00000000       0x30 Libreria_ADC/LibreriaADC.o
                                  0x31 (size before relaxing)
  .comment       0x00000030       0x31 Libreria_UART/Libreria_UART.o
  .comment       0x00000030       0x31 main.o
@@ -425,58 +436,60 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000       0x78
+.debug_aranges  0x00000000       0x90
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x28 Libreria_Timer0/LibreriaTimer0.o
+                0x00000000       0x28 Libreria_ADC/LibreriaADC.o
  .debug_aranges
-                0x00000028       0x20 Libreria_UART/Libreria_UART.o
+                0x00000028       0x30 Libreria_UART/Libreria_UART.o
  .debug_aranges
-                0x00000048       0x30 main.o
+                0x00000058       0x38 main.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x864
+.debug_info     0x00000000      0xa39
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_info    0x000005f4       0x99 Libreria_Timer0/LibreriaTimer0.o
- .debug_info    0x0000068d       0x83 Libreria_UART/Libreria_UART.o
- .debug_info    0x00000710      0x154 main.o
+ .debug_info    0x000005f4       0xa9 Libreria_ADC/LibreriaADC.o
+ .debug_info    0x0000069d       0xf9 Libreria_UART/Libreria_UART.o
+ .debug_info    0x00000796      0x2a3 main.o
 
-.debug_abbrev   0x00000000      0x6fc
+.debug_abbrev   0x00000000      0x7c5
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x5a2 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_abbrev  0x000005a2       0x51 Libreria_Timer0/LibreriaTimer0.o
- .debug_abbrev  0x000005f3       0x51 Libreria_UART/Libreria_UART.o
- .debug_abbrev  0x00000644       0xb8 main.o
+ .debug_abbrev  0x000005a2       0x78 Libreria_ADC/LibreriaADC.o
+ .debug_abbrev  0x0000061a       0xbe Libreria_UART/Libreria_UART.o
+ .debug_abbrev  0x000006d8       0xed main.o
 
-.debug_line     0x00000000      0x419
+.debug_line     0x00000000      0x524
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x134 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_line    0x00000134       0xdb Libreria_Timer0/LibreriaTimer0.o
- .debug_line    0x0000020f       0xd4 Libreria_UART/Libreria_UART.o
- .debug_line    0x000002e3      0x136 main.o
+ .debug_line    0x00000134       0xe7 Libreria_ADC/LibreriaADC.o
+ .debug_line    0x0000021b      0x116 Libreria_UART/Libreria_UART.o
+ .debug_line    0x00000331      0x1f3 main.o
 
-.debug_frame    0x00000000       0xac
+.debug_frame    0x00000000      0x12c
  *(.debug_frame)
- .debug_frame   0x00000000       0x34 Libreria_Timer0/LibreriaTimer0.o
- .debug_frame   0x00000034       0x24 Libreria_UART/Libreria_UART.o
- .debug_frame   0x00000058       0x54 main.o
+ .debug_frame   0x00000000       0x34 Libreria_ADC/LibreriaADC.o
+ .debug_frame   0x00000034       0x50 Libreria_UART/Libreria_UART.o
+ .debug_frame   0x00000084       0xa8 main.o
 
-.debug_str      0x00000000      0x43e
+.debug_str      0x00000000      0x479
  *(.debug_str)
  .debug_str     0x00000000      0x208 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328p/avr5/crtatmega328p.o
- .debug_str     0x00000208      0x198 Libreria_Timer0/LibreriaTimer0.o
-                                0x1cc (size before relaxing)
- .debug_str     0x000003a0       0x2b Libreria_UART/Libreria_UART.o
-                                0x1ba (size before relaxing)
- .debug_str     0x000003cb       0x73 main.o
-                                0x21d (size before relaxing)
+ .debug_str     0x00000208      0x193 Libreria_ADC/LibreriaADC.o
+                                0x1cf (size before relaxing)
+ .debug_str     0x0000039b       0x52 Libreria_UART/Libreria_UART.o
+                                0x1e6 (size before relaxing)
+ .debug_str     0x000003ed       0x8c main.o
+                                0x260 (size before relaxing)
 
-.debug_loc      0x00000000       0x3c
+.debug_loc      0x00000000      0x1c4
  *(.debug_loc)
- .debug_loc     0x00000000       0x3c main.o
+ .debug_loc     0x00000000       0x21 Libreria_ADC/LibreriaADC.o
+ .debug_loc     0x00000021       0x57 Libreria_UART/Libreria_UART.o
+ .debug_loc     0x00000078      0x14c main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -496,11 +509,11 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0x48
+.debug_ranges   0x00000000       0x60
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x18 Libreria_Timer0/LibreriaTimer0.o
- .debug_ranges  0x00000018       0x10 Libreria_UART/Libreria_UART.o
- .debug_ranges  0x00000028       0x20 main.o
+ .debug_ranges  0x00000000       0x18 Libreria_ADC/LibreriaADC.o
+ .debug_ranges  0x00000018       0x20 Libreria_UART/Libreria_UART.o
+ .debug_ranges  0x00000038       0x28 main.o
 
 .debug_macro
  *(.debug_macro)
