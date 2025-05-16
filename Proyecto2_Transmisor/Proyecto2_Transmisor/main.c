@@ -44,6 +44,8 @@ char adc_value_chan0 = 0;	// Valor del canal 0 del ADC
 char adc_value_chan1 = 0;	// Valor del canal 1 del ADC
 char adc_value_chan2 = 0;	// Valor del canal 2 del ADC
 char adc_value_chan3 = 0;	// Valor del canal 3 del ADC
+char uart_mode_enabled = 0;		// Modo UART activado
+char manual_mode_enabled = 0;	// Modo manual activado
 
 
 // -- PROTOTIPOS DE FUNCIONES --
@@ -148,9 +150,26 @@ ISR(USART_RX_vect)
 {
 	// Leer carácter recibido
 	char data = UDR0;
-	UART_sendChar(data);
-	UART_sendChar('\r');
-	UART_sendChar('\n');
+	
+	// Considerar usar variables enabled aquí
+	switch(data)
+	{
+		case 0:
+		send_formated_data(MOTORREDUCTOR_X, adc_value_chan0);
+		break;
+		
+		case 1:
+		send_formated_data(MOTORREDUCTOR_Y, adc_value_chan1);
+		break;
+		
+		case 2:
+		send_formated_data(SERVOMOTOR_X, adc_value_chan2);
+		break;
+		
+		case 3:
+		send_formated_data(SERVOMOTOR_Y, adc_value_chan3);
+		break;
+	}
 }
 
 /*
