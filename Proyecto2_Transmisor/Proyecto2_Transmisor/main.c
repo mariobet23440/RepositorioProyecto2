@@ -11,6 +11,10 @@
 // Frecuencia de reloj de sistema
 #define F_CPU 16000000UL
 
+// Bytes de framing de protocolo de comunicaciones
+#define RXTX_START		 0xA5	 // Patrón con muchas transiciones
+#define RXTX_END		 0x5A	 // Complemento con máxima distancia de Hamming
+
 // Constantes para protocolo de comunicaciones
 #define MOTORREDUCTOR_X  0x5555  // 0101 0101 0101 0101
 #define MOTORREDUCTOR_Y  0xAAAA  // 1010 1010 1010 1010
@@ -96,12 +100,20 @@ raras (Caracteres repetidos, o textos sin sentido).
 // Envío de datos formateados
 void send_formated_data(uint16_t label, char data)
 {
+	// Enviar caracter de inicio de transmisión
+	UART_sendChar(RXTX_START);
+	
 	// Enviar byte alto del label
 	UART_sendChar((label >> 8) & 0xFF);
+	
 	// Enviar byte bajo del label
 	UART_sendChar(label & 0xFF);
+	
 	// Enviar el dato
 	UART_sendChar(data);
+	
+	// Enviar caracter de fin de transmisión
+	UART_sendChar(RXTX_END);
 }
 
 
