@@ -68,7 +68,7 @@ volatile uint8_t received_data[3] = {0xA5, 0xCC, 0xFF};  // Ejemplo de 3 bytes h
 void setup(void)
 {
 	UART_init();
-	//init_timer1();
+	init_timer1();
 	//init_timer2();
 	sei();  // Habilitar interrupciones globales
 }
@@ -76,7 +76,8 @@ void setup(void)
 int main(void)
 {
 	setup();
-	printf("Tilin \r\n");
+	UART_sendString("PROGRAMACIÓN DE MICROCONTROLADORES - PROYECTO 2 - RECEPTOR \r\n");
+	UART_sendString("Mostrando caracteres de envío... \r\n");
 	while(1);
 	return 0;
 }
@@ -88,7 +89,7 @@ ISR(USART_RX_vect)
 {
 	// Guardar caracter (Y limpiar el buffer)
 	char data = UDR0;
-	UART_sendChar(data);
+	//UART_sendChar(data);
 	
 	// Inicializar framing (Lo que tiene más protección)
 	if ((data == RXTX_START) && (!reception_started) && (reception_ended))
@@ -104,7 +105,10 @@ ISR(USART_RX_vect)
 			received_data[i] = 0;
 		}
 		
-		UART_sendChar('1');
+		// Indicador de prueba
+		UART_sendString("Marca de Inicio de Frame: ");
+		UART_sendChar(data);
+		UART_sendString("\r\n");
 	}
 	
 	// Recepción del primer byte de instrucción
@@ -119,7 +123,10 @@ ISR(USART_RX_vect)
 		// Levantar la bandera de recepción del primer byte de instrucción 
 		ins_byte1_received = 1;
 		
-		UART_sendChar('2');
+		// Indicador de prueba
+		UART_sendString("Primer Caracter de Instrucción Recibido: ");
+		UART_sendChar(data);
+		UART_sendString("\r\n");
 	}
 	
 	// Recepción del segundo byte de instrucción
@@ -134,7 +141,10 @@ ISR(USART_RX_vect)
 		// Levantar la bandera de recepción del segundo byte de instrucción
 		ins_byte2_received = 1;
 		
-		UART_sendChar('3');
+		// Indicador de prueba
+		UART_sendString("Segundo Caracter de Instrucción Recibido: ");
+		UART_sendChar(data);
+		UART_sendString("\r\n");
 	}
 	
 	// Recepción de caracter de dato
@@ -149,7 +159,10 @@ ISR(USART_RX_vect)
 		// Levantar la bandera de caracter de dato recibido
 		data_byte_received = 1;
 		
-		UART_sendChar('4');
+		// Indicador de prueba
+		UART_sendString("Caracter de Datos Recibido: ");
+		UART_sendChar(data);
+		UART_sendString("\r\n");
 	}
 	
 	// Fin de transmisión
@@ -161,11 +174,25 @@ ISR(USART_RX_vect)
 		// Levantar la bandera de recepción terminada
 		reception_ended = 1;
 		
-		UART_sendChar('5');
+		// Indicador de prueba
+		UART_sendString("Fin de Frame de Información: ");
+		UART_sendChar(data);
+		UART_sendString("\r\n");
+		UART_sendString("Arreglo de Datos: [");
+		UART_sendChar(received_data[0]);
+		UART_sendString(", ");
+		UART_sendChar(received_data[1]);
+		UART_sendString(", ");
+		UART_sendChar(received_data[2]);
+		UART_sendString("] ");
+		UART_sendString("\r\n");
 	}
 	else
 	{
-		UART_sendChar('6');
+		// Indicador de prueba
+		UART_sendString("Caracter Inválido: ");
+		UART_sendChar(data);
+		UART_sendString("\r\n");
 	}
 	
 }
