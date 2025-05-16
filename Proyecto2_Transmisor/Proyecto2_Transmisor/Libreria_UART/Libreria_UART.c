@@ -18,8 +18,8 @@ void UART_init(void) {
 	// UBRR = (F_CPU / (16 * BAUD)) - 1 = 103
 	UBRR0 = 103;
 
-	// Habilita transmisión
-	UCSR0B = (1 << TXEN0);
+	// Habilita transmisión, recepción e interrupción por recepción
+	UCSR0B = (1 << TXEN0) | (1 << RXEN0) | (1 << RXCIE0);;
 
 	// 8 bits, 1 bit de stop, sin paridad
 	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);

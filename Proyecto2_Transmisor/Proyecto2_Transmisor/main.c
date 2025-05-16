@@ -58,7 +58,7 @@ void setup(void)
 	
 	// Setup
 	setup_adc();		// Inicializar ADC
-	//init_timer0();		// Inicializar Timer0
+	init_timer1();		// Inicializar Timer1
 	UART_init();		// Inicializar UART
 	
 	// Habilitar Interrupciones globales
@@ -77,10 +77,20 @@ int main(void)
 		send_formated_data(MOTORREDUCTOR_Y, adc_value_chan1);
 		send_formated_data(SERVOMOTOR_X, adc_value_chan2);
 		send_formated_data(SERVOMOTOR_Y, adc_value_chan3);
+		_delay_ms(10);
     }
 }
 
-// -- RUTINAS NO DE INTERRUPCÍÓN -- 
+/*
+NOTA: La comunicación UART requiere de tiempos de descanso y una sincronización controlada. 
+Al enviar valores continuamente, o al utilizar otras interrupciones demasiado rápido, se observan cosas
+raras (Caracteres repetidos, o textos sin sentido).
+*/
+
+/************************************************************************/
+/* RUTINAS NO DE INTERRUPCÍÓN                                           */
+/************************************************************************/
+
 // Envío de datos formateados
 void send_formated_data(uint16_t label, char data)
 {
@@ -131,3 +141,20 @@ ISR(ADC_vect)
 			break;
 	}
 }
+
+
+//INTERRUPCIÓN POR RECEPCIÓN DE CARACTER
+ISR(USART_RX_vect)
+{
+	// Leer carácter recibido
+	char data = UDR0;
+	UART_sendChar(data);
+	UART_sendChar('\r');
+	UART_sendChar('\n');
+}
+
+/*
+NOTA 2: Es importante considerar que la comunicación entre la computadora y el control es más segura que 
+el lazo RF entre el control y el carro. Por lo tanto, no vale mucho la pena hacer un sistema más complejo
+(De todas maneras tendré que )
+*/
