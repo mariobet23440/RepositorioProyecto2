@@ -1,7 +1,6 @@
-Libreria_Timer2PWM/LibreriaTimer2PWM.d \
- Libreria_Timer2PWM/LibreriaTimer2PWM.o: \
- ../Libreria_Timer2PWM/LibreriaTimer2PWM.c \
- ../Libreria_Timer2PWM/LibreriaTimer2PWM.h \
+Libreria_HBridge/Libreria_HBridge.d Libreria_HBridge/Libreria_HBridge.o: \
+ ../Libreria_HBridge/Libreria_HBridge.c \
+ ../Libreria_HBridge/Libreria_HBridge.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -14,7 +13,7 @@ Libreria_Timer2PWM/LibreriaTimer2PWM.d \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h
 
-../Libreria_Timer2PWM/LibreriaTimer2PWM.h:
+../Libreria_HBridge/Libreria_HBridge.h:
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 

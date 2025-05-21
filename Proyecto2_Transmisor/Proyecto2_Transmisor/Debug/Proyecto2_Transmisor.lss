@@ -23,11 +23,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  000001ac  00000000  00000000  00002068  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000527  00000000  00000000  00002214  2**0
+ 10 .debug_str    000005a8  00000000  00000000  00002214  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000002d0  00000000  00000000  0000273b  2**0
+ 11 .debug_loc    000002d0  00000000  00000000  000027bc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000078  00000000  00000000  00002a0b  2**0
+ 12 .debug_ranges 00000078  00000000  00000000  00002a8c  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -88,58 +88,33 @@ Disassembly of section .text:
   8c:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 00000090 <setup_adc>:
-#include "LibreriaADC.h"
-
-void setup_adc(void)
-{
-	// Formato de datos y voltaje de referencia
-	ADMUX |= (1 << ADLAR) | (1 << REFS0);   // Ajuste a la izquierda (ADLAR), Referencia AVCC (REFS0)
   90:	ec e7       	ldi	r30, 0x7C	; 124
   92:	f0 e0       	ldi	r31, 0x00	; 0
   94:	80 81       	ld	r24, Z
   96:	80 66       	ori	r24, 0x60	; 96
   98:	80 83       	st	Z, r24
-	
-	// Habilitación de ADC e interrupciones por conversión completada
-	ADCSRA |= (1 << ADEN) | (1 << ADIE);    // Habilitar ADC y habilitar interrupción ADC
   9a:	ea e7       	ldi	r30, 0x7A	; 122
   9c:	f0 e0       	ldi	r31, 0x00	; 0
   9e:	80 81       	ld	r24, Z
   a0:	88 68       	ori	r24, 0x88	; 136
   a2:	80 83       	st	Z, r24
-	
-	// Prescaler
-	ADCSRA |= (1 << ADPS2) | (1 << ADPS1);  // Prescaler de 64
   a4:	80 81       	ld	r24, Z
   a6:	86 60       	ori	r24, 0x06	; 6
   a8:	80 83       	st	Z, r24
-	
-	// Configuraciones para Auto Trigger
-	ADCSRA |= (1 << ADATE);					// Habilitar Auto Trigger
   aa:	80 81       	ld	r24, Z
   ac:	80 62       	ori	r24, 0x20	; 32
   ae:	80 83       	st	Z, r24
-	ADCSRB |= (1 << ADTS2) | (1 << ADTS1);	// Trigger Source Timer/Counter0 Overflow
   b0:	ab e7       	ldi	r26, 0x7B	; 123
   b2:	b0 e0       	ldi	r27, 0x00	; 0
   b4:	8c 91       	ld	r24, X
   b6:	86 60       	ori	r24, 0x06	; 6
   b8:	8c 93       	st	X, r24
-	
-	// Iniciar conversión
-	ADCSRA |= (1 << ADSC);
   ba:	80 81       	ld	r24, Z
   bc:	80 64       	ori	r24, 0x40	; 64
   be:	80 83       	st	Z, r24
   c0:	08 95       	ret
 
 000000c2 <adc_set_channel>:
-}
-
-// Establecer canal en ADC
-void adc_set_channel(unsigned char channel)
-{
-	ADMUX = (ADMUX & 0xF0) | (channel & 0x0F);  // Limpiar bits de canal y asignar nuevo canal
   c2:	ec e7       	ldi	r30, 0x7C	; 124
   c4:	f0 e0       	ldi	r31, 0x00	; 0
   c6:	90 81       	ld	r25, Z
@@ -150,78 +125,46 @@ void adc_set_channel(unsigned char channel)
   d0:	08 95       	ret
 
 000000d2 <init_timer1>:
-#include "Libreria_Timer1.h"
-
-// Inicialización de Timer1
-void init_timer1(void)
-{
-	TCCR1A |= (1 << COM1A1) | (1 << COM1B1) | (1 << WGM11); // Fast PWM, OC1A y OC1B no invertido
   d2:	e0 e8       	ldi	r30, 0x80	; 128
   d4:	f0 e0       	ldi	r31, 0x00	; 0
   d6:	80 81       	ld	r24, Z
   d8:	82 6a       	ori	r24, 0xA2	; 162
   da:	80 83       	st	Z, r24
-	TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << CS11);  // Prescaler de 8, Fast PWM
   dc:	e1 e8       	ldi	r30, 0x81	; 129
   de:	f0 e0       	ldi	r31, 0x00	; 0
   e0:	80 81       	ld	r24, Z
   e2:	8a 61       	ori	r24, 0x1A	; 26
   e4:	80 83       	st	Z, r24
-	ICR1 = 39999;							// Establecer TOP a 39999 (Frecuencia de 50 Hz, 20ms)
   e6:	8f e3       	ldi	r24, 0x3F	; 63
   e8:	9c e9       	ldi	r25, 0x9C	; 156
   ea:	90 93 87 00 	sts	0x0087, r25	; 0x800087 <__TEXT_REGION_LENGTH__+0x7f8087>
   ee:	80 93 86 00 	sts	0x0086, r24	; 0x800086 <__TEXT_REGION_LENGTH__+0x7f8086>
-	DDRB |= (1 << DDB1) | (1 << DDB2);		// Configurar PB1 y PB2 como salida (OC1A y OC1B)
   f2:	84 b1       	in	r24, 0x04	; 4
   f4:	86 60       	ori	r24, 0x06	; 6
   f6:	84 b9       	out	0x04, r24	; 4
   f8:	08 95       	ret
 
 000000fa <UART_init>:
-#include "Libreria_UART.h"
-
-// Inicialización UART a 9600 baudios
-void UART_init(void) {
-	// Configura TX como salida, RX como entrada
-	DDRD |= (1 << PD1);   // TX
   fa:	8a b1       	in	r24, 0x0a	; 10
   fc:	82 60       	ori	r24, 0x02	; 2
   fe:	8a b9       	out	0x0a, r24	; 10
-	DDRD &= ~(1 << PD0);  // RX
  100:	8a b1       	in	r24, 0x0a	; 10
  102:	8e 7f       	andi	r24, 0xFE	; 254
  104:	8a b9       	out	0x0a, r24	; 10
-
-	// Configura baud rate a 9600 (F_CPU = 16 MHz)
-	// UBRR = (F_CPU / (16 * BAUD)) - 1 = 103
-	UBRR0 = 103;
  106:	87 e6       	ldi	r24, 0x67	; 103
  108:	90 e0       	ldi	r25, 0x00	; 0
  10a:	90 93 c5 00 	sts	0x00C5, r25	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7f80c5>
  10e:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7f80c4>
-
-	// Habilita transmisión, recepción e interrupción por recepción
-	UCSR0B = (1 << TXEN0) | (1 << RXEN0) | (1 << RXCIE0);;
  112:	88 e9       	ldi	r24, 0x98	; 152
  114:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7f80c1>
-
-	// 8 bits, 1 bit de stop, sin paridad
-	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
  118:	86 e0       	ldi	r24, 0x06	; 6
  11a:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7f80c2>
  11e:	08 95       	ret
 
 00000120 <UART_sendChar>:
-}
-
-// Enviar un carácter
-void UART_sendChar(char c) {
-	while (!(UCSR0A & (1 << UDRE0)));  // Espera buffer libre
  120:	90 91 c0 00 	lds	r25, 0x00C0	; 0x8000c0 <__TEXT_REGION_LENGTH__+0x7f80c0>
  124:	95 ff       	sbrs	r25, 5
  126:	fc cf       	rjmp	.-8      	; 0x120 <UART_sendChar>
-	UDR0 = c;
  128:	80 93 c6 00 	sts	0x00C6, r24	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7f80c6>
  12c:	08 95       	ret
 

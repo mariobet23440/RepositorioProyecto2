@@ -36,6 +36,7 @@ parecen entre sí.
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <math.h>			// MATEMÁTICAS!!!
 
 // Librerías Propias
 #include "Libreria_ADC/LibreriaADC.h"

@@ -3,7 +3,7 @@
 * FECHA DE CREACIÓN: 3/05/25 19:35:08
 * FECHA DE ENTREGA: 17/05/25 16:30:00
 * AUTOR: Mario Alejandro Betancourt Franco (Universidad del Valle de Guatemala, 23440)
-* MICROCONTROLADOR: ATMega328P (En un Arduino Nano)
+* MICROCONTROLADOR: ATMega328P (En un Arduino Uno)
 * DESCRIPCIÓN: Programa para controlar un carro a control remoto. El programa ofrece soporte para el control de
 * dos motorreductores en las ruedas y dos servomotores a través de comandos recibidos por UART. 
 */
@@ -48,9 +48,11 @@ más robusto y dificil de malinterpretar.
 #include <stdint.h>
 #include <string.h>
 #include <stdio.h>
+#include "Libreria_Timer0PWM/Libreria_Timer0PWM.h"
 #include "Libreria_Timer1PWM/LibreriaTimer1PWM.h"
-#include "Libreria_Timer2PWM/LibreriaTimer2PWM.h"
 #include "Libreria_UART/Libreria_UART.h"
+#include "Libreria_HBridge/Libreria_HBridge.h"
+
 
 /************************************************************************/
 /* VARIABLES GLOBALES                                                   */
@@ -97,15 +99,18 @@ const size_t num_instrucciones = sizeof(instrucciones) / sizeof(instrucciones[0]
 void setup(void);
 void process_instruction(void);
 void show_instruction_ASCII(void);
+int8_t normalize_input(char valor);
+void move_differential(int8_t traslacion, int8_t rotacion);
+
 
 /************************************************************************/
 /* SETUP Y MAINLOOP                                                     */
 /************************************************************************/
 void setup(void)
 {
-	UART_init();
 	init_timer1();
-	//init_timer2();
+	init_timer0();
+	UART_init();
 	sei();  // Habilitar interrupciones globales
 }
 
@@ -114,6 +119,7 @@ int main(void)
 	setup();
 	UART_sendString("PROGRAMACIÓN DE MICROCONTROLADORES - PROYECTO 2 - RECEPTOR \r\n");
 	show_instruction_ASCII();
+	PORTB |= (1 << PORTB1);
 	while(1);
 	return 0;
 }
@@ -137,22 +143,22 @@ void process_instruction(void)
 	{
 		case MOTORREDUCTOR_X:
 		UART_sendString("MOTORREDUCTOR X - ");		
-		// Hacer algo más
+		TIMER0_PWMA_set_PW(data_char);
 		break;
 		
 		case MOTORREDUCTOR_Y:
 		UART_sendString("MOTORREDUCTOR Y - ");
-		// Hacer algo más
+		TIMER0_PWMB_set_PW(data_char);
 		break;
 		
 		case SERVOMOTOR_X:
 		UART_sendString("SERVOMOTOR X - ");
-		// Hacer algo más
+		TIMER1_PWMA_set_servo_PW(data_char);
 		break;
 		
 		case SERVOMOTOR_Y:
 		UART_sendString("SERVOMOTOR Y - ");
-		// Hacer algo más
+		TIMER1_PWMB_set_servo_PW(data_char);
 		break;
 		
 		default:
@@ -162,8 +168,10 @@ void process_instruction(void)
 	
 	UART_sendChar(data_char);
 	UART_sendString("\r\n");
+	UART_sendString("\r\n");
 }
 
+// Mostrar ASCII de instrucciones
 void show_instruction_ASCII(void)
 {
 	UART_sendString("INSTRUCCIONES (EN ASCII) \r\n");
@@ -180,9 +188,46 @@ void show_instruction_ASCII(void)
 	UART_sendString("Fin: Z \r\n");
 	UART_sendString("\r\n");
 	UART_sendString("Ingrese un caracter para accionar el sistema. \r\n");
-	
-	
 }
+
+// Normalizar entrada (0 a 255 -> -128 a 127)
+int8_t normalize_input(char valor)
+{
+	return ((int16_t)valor - 128); // Convierte 0–255 en -128 a 127
+}
+
+// Movimiento de ruedas diferenciales - Permite traslación y rotación con entradas analógicas
+void move_differential(int8_t traslacion, int8_t rotacion)
+{
+	int16_t vel_izq = traslacion - rotacion;
+	int16_t vel_der = traslacion + rotacion;
+
+	// Saturación
+	if (vel_izq > 255) vel_izq = 255;
+	if (vel_izq < -255) vel_izq = -255;
+	if (vel_der > 255) vel_der = 255;
+	if (vel_der < -255) vel_der = -255;
+
+	// Motor izquierdo
+	if (vel_izq >= 0) {
+		motorA_forward();
+		TIMER0_PWMA_set_PW((uint8_t)vel_izq);
+		} else {
+		motorA_backward();
+		TIMER0_PWMA_set_PW((uint8_t)(-vel_izq));
+	}
+
+	// Motor derecho
+	if (vel_der >= 0) {
+		motorB_forward();
+		TIMER0_PWMB_set_PW((uint8_t)vel_der);
+		} else {
+		motorB_backward();
+		TIMER0_PWMB_set_PW((uint8_t)(-vel_der));
+	}
+}
+
+
 
 /************************************************************************/
 /* INTERRUPCIÓN POR RECEPCIÓN UART                                      */

@@ -480,7 +480,7 @@ END GROUP
  .debug_frame   0x00000058       0x50 Libreria_UART/Libreria_UART.o
  .debug_frame   0x000000a8      0x104 main.o
 
-.debug_str      0x00000000      0x527
+.debug_str      0x00000000      0x5a8
  *(.debug_str)
  .debug_str     0x00000000      0x208 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_str     0x00000208      0x193 Libreria_ADC/LibreriaADC.o
@@ -489,8 +489,8 @@ END GROUP
                                 0x1c9 (size before relaxing)
  .debug_str     0x000003d5       0x49 Libreria_UART/Libreria_UART.o
                                 0x1e6 (size before relaxing)
- .debug_str     0x0000041e      0x109 main.o
-                                0x2e9 (size before relaxing)
+ .debug_str     0x0000041e      0x18a main.o
+                                0x2f5 (size before relaxing)
 
 .debug_loc      0x00000000      0x2d0
  *(.debug_loc)

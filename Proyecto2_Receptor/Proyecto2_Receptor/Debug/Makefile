@@ -35,13 +35,16 @@ LINKER_SCRIPT_DEP:=
 SUBDIRS :=  \
 ../Libreria_Timer1PWM \
 ../Libreria_Timer2PWM \
-../Libreria_UART
+../Libreria_UART \
+../Libreria_HBridge \
+../Libreria_Timer0PWM
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../Libreria_HBridge/Libreria_HBridge.c \
+../Libreria_TIMER0PWM/Libreria_Timer0PWM.c \
 ../Libreria_Timer1PWM/LibreriaTimer1PWM.c \
-../Libreria_Timer2PWM/LibreriaTimer2PWM.c \
 ../Libreria_UART/Libreria_UART.c \
 ../main.c
 
@@ -53,26 +56,30 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+Libreria_HBridge/Libreria_HBridge.o \
+Libreria_TIMER0PWM/Libreria_Timer0PWM.o \
 Libreria_Timer1PWM/LibreriaTimer1PWM.o \
-Libreria_Timer2PWM/LibreriaTimer2PWM.o \
 Libreria_UART/Libreria_UART.o \
 main.o
 
 OBJS_AS_ARGS +=  \
+Libreria_HBridge/Libreria_HBridge.o \
+Libreria_TIMER0PWM/Libreria_Timer0PWM.o \
 Libreria_Timer1PWM/LibreriaTimer1PWM.o \
-Libreria_Timer2PWM/LibreriaTimer2PWM.o \
 Libreria_UART/Libreria_UART.o \
 main.o
 
 C_DEPS +=  \
+Libreria_HBridge/Libreria_HBridge.d \
+Libreria_TIMER0PWM/Libreria_Timer0PWM.d \
 Libreria_Timer1PWM/LibreriaTimer1PWM.d \
-Libreria_Timer2PWM/LibreriaTimer2PWM.d \
 Libreria_UART/Libreria_UART.d \
 main.d
 
 C_DEPS_AS_ARGS +=  \
+Libreria_HBridge/Libreria_HBridge.d \
+Libreria_TIMER0PWM/Libreria_Timer0PWM.d \
 Libreria_Timer1PWM/LibreriaTimer1PWM.d \
-Libreria_Timer2PWM/LibreriaTimer2PWM.d \
 Libreria_UART/Libreria_UART.d \
 main.d
 
@@ -90,14 +97,21 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
-Libreria_Timer1PWM/LibreriaTimer1PWM.o: ../Libreria_Timer1PWM/LibreriaTimer1PWM.c
+Libreria_HBridge/Libreria_HBridge.o: ../Libreria_HBridge/Libreria_HBridge.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\gcc\dev\atmega328p" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-Libreria_Timer2PWM/LibreriaTimer2PWM.o: ../Libreria_Timer2PWM/LibreriaTimer2PWM.c
+Libreria_TIMER0PWM/Libreria_Timer0PWM.o: ../Libreria_TIMER0PWM/Libreria_Timer0PWM.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\gcc\dev\atmega328p" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Libreria_Timer1PWM/LibreriaTimer1PWM.o: ../Libreria_Timer1PWM/LibreriaTimer1PWM.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\gcc\dev\atmega328p" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

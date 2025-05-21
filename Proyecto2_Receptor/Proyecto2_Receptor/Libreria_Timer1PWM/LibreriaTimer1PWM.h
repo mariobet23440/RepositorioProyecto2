@@ -11,7 +11,7 @@
 
 #include <avr/io.h>
 void init_timer1(void);
-void TIMER1_PWM1_set_servo_PW(uint16_t value);
-void TIMER1_PWM2_set_servo_PW(uint16_t value);
+void TIMER1_PWMA_set_servo_PW(uint8_t value);
+void TIMER1_PWMB_set_servo_PW(uint8_t value);
 
 #endif /* LIBRERIATIMER1PWM_H_ */
