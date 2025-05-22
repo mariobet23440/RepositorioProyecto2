@@ -3,31 +3,31 @@ Proyecto2_VersionSimp.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         000004c4  00800100  00000926  000009ba  2**0
+  0 .data         00000460  00800100  0000089e  00000932  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000926  00000000  00000000  00000094  2**1
+  1 .text         0000089e  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          0000000a  008005c4  008005c4  00000e7e  2**0
+  2 .bss          00000007  00800560  00800560  00000d92  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000e7e  2**0
+  3 .comment      00000030  00000000  00000000  00000d92  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000eb0  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  00000dc4  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000190  00000000  00000000  00000ef0  2**0
+  5 .debug_aranges 00000190  00000000  00000000  00000e04  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00001b82  00000000  00000000  00001080  2**0
+  6 .debug_info   00001a00  00000000  00000000  00000f94  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000a92  00000000  00000000  00002c02  2**0
+  7 .debug_abbrev 00000a92  00000000  00000000  00002994  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000f66  00000000  00000000  00003694  2**0
+  8 .debug_line   00000ee2  00000000  00000000  00003426  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000348  00000000  00000000  000045fc  2**2
+  9 .debug_frame  00000344  00000000  00000000  00004308  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000007c0  00000000  00000000  00004944  2**0
+ 10 .debug_str    00000775  00000000  00000000  0000464c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000077a  00000000  00000000  00005104  2**0
+ 11 .debug_loc    00000743  00000000  00000000  00004dc1  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000120  00000000  00000000  0000587e  2**0
+ 12 .debug_ranges 00000120  00000000  00000000  00005504  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -51,10 +51,10 @@ Disassembly of section .text:
   3c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   40:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   44:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
-  48:	0c 94 ad 03 	jmp	0x75a	; 0x75a <__vector_18>
+  48:	0c 94 af 03 	jmp	0x75e	; 0x75e <__vector_18>
   4c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   50:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
-  54:	0c 94 50 03 	jmp	0x6a0	; 0x6a0 <__vector_21>
+  54:	0c 94 52 03 	jmp	0x6a4	; 0x6a4 <__vector_21>
   58:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   5c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   60:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
@@ -72,18 +72,18 @@ Disassembly of section .text:
   74:	15 e0       	ldi	r17, 0x05	; 5
   76:	a0 e0       	ldi	r26, 0x00	; 0
   78:	b1 e0       	ldi	r27, 0x01	; 1
-  7a:	e6 e2       	ldi	r30, 0x26	; 38
-  7c:	f9 e0       	ldi	r31, 0x09	; 9
+  7a:	ee e9       	ldi	r30, 0x9E	; 158
+  7c:	f8 e0       	ldi	r31, 0x08	; 8
   7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
   80:	05 90       	lpm	r0, Z+
   82:	0d 92       	st	X+, r0
-  84:	a4 3c       	cpi	r26, 0xC4	; 196
+  84:	a0 36       	cpi	r26, 0x60	; 96
   86:	b1 07       	cpc	r27, r17
   88:	d9 f7       	brne	.-10     	; 0x80 <__do_copy_data+0xc>
 
 0000008a <__do_clear_bss>:
   8a:	25 e0       	ldi	r18, 0x05	; 5
-  8c:	a4 ec       	ldi	r26, 0xC4	; 196
+  8c:	a0 e6       	ldi	r26, 0x60	; 96
   8e:	b5 e0       	ldi	r27, 0x05	; 5
   90:	01 c0       	rjmp	.+2      	; 0x94 <.do_clear_bss_start>
 
@@ -91,11 +91,11 @@ Disassembly of section .text:
   92:	1d 92       	st	X+, r1
 
 00000094 <.do_clear_bss_start>:
-  94:	ae 3c       	cpi	r26, 0xCE	; 206
+  94:	a7 36       	cpi	r26, 0x67	; 103
   96:	b2 07       	cpc	r27, r18
   98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
-  9a:	0e 94 36 03 	call	0x66c	; 0x66c <main>
-  9e:	0c 94 91 04 	jmp	0x922	; 0x922 <_exit>
+  9a:	0e 94 38 03 	call	0x670	; 0x670 <main>
+  9e:	0c 94 4d 04 	jmp	0x89a	; 0x89a <_exit>
 
 000000a2 <__bad_interrupt>:
   a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -363,7 +363,7 @@ void TIMER1_PWMA_set_servo_PW(uint8_t value)
  1a8:	30 e0       	ldi	r19, 0x00	; 0
  1aa:	ad ec       	ldi	r26, 0xCD	; 205
  1ac:	bc e0       	ldi	r27, 0x0C	; 12
- 1ae:	0e 94 82 04 	call	0x904	; 0x904 <__umulhisi3>
+ 1ae:	0e 94 3e 04 	call	0x87c	; 0x87c <__umulhisi3>
  1b2:	bb 27       	eor	r27, r27
  1b4:	a9 2f       	mov	r26, r25
  1b6:	98 2f       	mov	r25, r24
@@ -395,7 +395,7 @@ void TIMER1_PWMB_set_servo_PW(uint8_t value)
  1e2:	30 e0       	ldi	r19, 0x00	; 0
  1e4:	ad ec       	ldi	r26, 0xCD	; 205
  1e6:	bc e0       	ldi	r27, 0x0C	; 12
- 1e8:	0e 94 82 04 	call	0x904	; 0x904 <__umulhisi3>
+ 1e8:	0e 94 3e 04 	call	0x87c	; 0x87c <__umulhisi3>
  1ec:	bb 27       	eor	r27, r27
  1ee:	a9 2f       	mov	r26, r25
  1f0:	98 2f       	mov	r25, r24
@@ -498,1141 +498,1037 @@ void UART_sendString(const char* str) {
 /************************************************************************/
 void setup(void)
 {
+	// Deshabilitar interrupciones
+	cli();
+ 268:	f8 94       	cli
+	
 	// Inicializar cosas en librerías
 	init_timer0();			// Timer0
- 268:	0e 94 ac 00 	call	0x158	; 0x158 <init_timer0>
+ 26a:	0e 94 ac 00 	call	0x158	; 0x158 <init_timer0>
 	init_timer1();			// Timer1
- 26c:	0e 94 bf 00 	call	0x17e	; 0x17e <init_timer1>
+ 26e:	0e 94 bf 00 	call	0x17e	; 0x17e <init_timer1>
 	init_HBridgePins();		// Puente H
- 270:	0e 94 89 00 	call	0x112	; 0x112 <init_HBridgePins>
-	UART_init();			// UART
- 274:	0e 94 0d 01 	call	0x21a	; 0x21a <UART_init>
+ 272:	0e 94 89 00 	call	0x112	; 0x112 <init_HBridgePins>
 	setup_adc();			// ADC
- 278:	0e 94 68 00 	call	0xd0	; 0xd0 <setup_adc>
- 27c:	08 95       	ret
+ 276:	0e 94 68 00 	call	0xd0	; 0xd0 <setup_adc>
+	UART_init();			// UART
+ 27a:	0e 94 0d 01 	call	0x21a	; 0x21a <UART_init>
+	
+	// Habilitar Interrupciones
+	sei();
+ 27e:	78 94       	sei
+ 280:	08 95       	ret
 
-0000027e <process_instruction_uart>:
+00000282 <process_instruction_uart>:
 
 
 // Procesar Instrucciones (A partir del arreglo de datos recibido) - SOLO CUANDO MODO UART ESTÁ ACTIVADO!!!
 // Esta rutina es exclusiva para ISR(USART_RX_vect) y no se usa para ninguna otra parte del código
 void process_instruction_uart(void)
 {
- 27e:	1f 93       	push	r17
- 280:	cf 93       	push	r28
- 282:	df 93       	push	r29
+ 282:	1f 93       	push	r17
+ 284:	cf 93       	push	r28
+ 286:	df 93       	push	r29
 	// Número de 16 bits de caracteres de instrucción
 	uint16_t	instruction = ((uint16_t)received_data[0] << 8) | received_data[1];
- 284:	e0 e0       	ldi	r30, 0x00	; 0
- 286:	f1 e0       	ldi	r31, 0x01	; 1
- 288:	c0 81       	ld	r28, Z
- 28a:	d0 e0       	ldi	r29, 0x00	; 0
- 28c:	dc 2f       	mov	r29, r28
- 28e:	cc 27       	eor	r28, r28
- 290:	81 81       	ldd	r24, Z+1	; 0x01
- 292:	c8 2b       	or	r28, r24
+ 288:	e0 e0       	ldi	r30, 0x00	; 0
+ 28a:	f1 e0       	ldi	r31, 0x01	; 1
+ 28c:	c0 81       	ld	r28, Z
+ 28e:	d0 e0       	ldi	r29, 0x00	; 0
+ 290:	dc 2f       	mov	r29, r28
+ 292:	cc 27       	eor	r28, r28
+ 294:	81 81       	ldd	r24, Z+1	; 0x01
+ 296:	c8 2b       	or	r28, r24
 	
 	// Caracter de datos
 	char		data_char = received_data[2];
- 294:	12 81       	ldd	r17, Z+2	; 0x02
+ 298:	12 81       	ldd	r17, Z+2	; 0x02
 	
 	// Logs de prueba para monitor serial
 	UART_sendString("Instrucción recibida: ");
- 296:	84 e0       	ldi	r24, 0x04	; 4
- 298:	91 e0       	ldi	r25, 0x01	; 1
- 29a:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 29a:	83 e0       	ldi	r24, 0x03	; 3
+ 29c:	91 e0       	ldi	r25, 0x01	; 1
+ 29e:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 	
 	switch(instruction)
- 29e:	c6 36       	cpi	r28, 0x66	; 102
- 2a0:	86 e6       	ldi	r24, 0x66	; 102
- 2a2:	d8 07       	cpc	r29, r24
- 2a4:	09 f4       	brne	.+2      	; 0x2a8 <process_instruction_uart+0x2a>
- 2a6:	27 c1       	rjmp	.+590    	; 0x4f6 <__EEPROM_REGION_LENGTH__+0xf6>
- 2a8:	68 f4       	brcc	.+26     	; 0x2c4 <process_instruction_uart+0x46>
- 2aa:	c3 33       	cpi	r28, 0x33	; 51
- 2ac:	83 e3       	ldi	r24, 0x33	; 51
- 2ae:	d8 07       	cpc	r29, r24
- 2b0:	61 f1       	breq	.+88     	; 0x30a <process_instruction_uart+0x8c>
- 2b2:	c5 35       	cpi	r28, 0x55	; 85
- 2b4:	85 e5       	ldi	r24, 0x55	; 85
- 2b6:	d8 07       	cpc	r29, r24
- 2b8:	c1 f0       	breq	.+48     	; 0x2ea <process_instruction_uart+0x6c>
- 2ba:	cf 30       	cpi	r28, 0x0F	; 15
- 2bc:	df 40       	sbci	r29, 0x0F	; 15
- 2be:	09 f0       	breq	.+2      	; 0x2c2 <process_instruction_uart+0x44>
- 2c0:	21 c1       	rjmp	.+578    	; 0x504 <__EEPROM_REGION_LENGTH__+0x104>
- 2c2:	33 c0       	rjmp	.+102    	; 0x32a <process_instruction_uart+0xac>
- 2c4:	ca 3a       	cpi	r28, 0xAA	; 170
- 2c6:	8a ea       	ldi	r24, 0xAA	; 170
- 2c8:	d8 07       	cpc	r29, r24
- 2ca:	b9 f0       	breq	.+46     	; 0x2fa <process_instruction_uart+0x7c>
- 2cc:	28 f4       	brcc	.+10     	; 0x2d8 <process_instruction_uart+0x5a>
- 2ce:	c9 39       	cpi	r28, 0x99	; 153
- 2d0:	d9 49       	sbci	r29, 0x99	; 153
- 2d2:	09 f4       	brne	.+2      	; 0x2d6 <process_instruction_uart+0x58>
- 2d4:	08 c1       	rjmp	.+528    	; 0x4e6 <__EEPROM_REGION_LENGTH__+0xe6>
- 2d6:	16 c1       	rjmp	.+556    	; 0x504 <__EEPROM_REGION_LENGTH__+0x104>
- 2d8:	cc 3c       	cpi	r28, 0xCC	; 204
- 2da:	8c ec       	ldi	r24, 0xCC	; 204
- 2dc:	d8 07       	cpc	r29, r24
- 2de:	e9 f0       	breq	.+58     	; 0x31a <process_instruction_uart+0x9c>
- 2e0:	c0 3f       	cpi	r28, 0xF0	; 240
- 2e2:	d0 4f       	sbci	r29, 0xF0	; 240
- 2e4:	09 f4       	brne	.+2      	; 0x2e8 <process_instruction_uart+0x6a>
- 2e6:	8f c0       	rjmp	.+286    	; 0x406 <__EEPROM_REGION_LENGTH__+0x6>
- 2e8:	0d c1       	rjmp	.+538    	; 0x504 <__EEPROM_REGION_LENGTH__+0x104>
+ 2a2:	c4 34       	cpi	r28, 0x44	; 68
+ 2a4:	84 e4       	ldi	r24, 0x44	; 68
+ 2a6:	d8 07       	cpc	r29, r24
+ 2a8:	d1 f1       	breq	.+116    	; 0x31e <process_instruction_uart+0x9c>
+ 2aa:	68 f4       	brcc	.+26     	; 0x2c6 <process_instruction_uart+0x44>
+ 2ac:	c2 34       	cpi	r28, 0x42	; 66
+ 2ae:	82 e4       	ldi	r24, 0x42	; 66
+ 2b0:	d8 07       	cpc	r29, r24
+ 2b2:	29 f1       	breq	.+74     	; 0x2fe <process_instruction_uart+0x7c>
+ 2b4:	c3 34       	cpi	r28, 0x43	; 67
+ 2b6:	83 e4       	ldi	r24, 0x43	; 67
+ 2b8:	d8 07       	cpc	r29, r24
+ 2ba:	49 f1       	breq	.+82     	; 0x30e <process_instruction_uart+0x8c>
+ 2bc:	c1 34       	cpi	r28, 0x41	; 65
+ 2be:	d1 44       	sbci	r29, 0x41	; 65
+ 2c0:	09 f0       	breq	.+2      	; 0x2c4 <process_instruction_uart+0x42>
+ 2c2:	22 c1       	rjmp	.+580    	; 0x508 <__EEPROM_REGION_LENGTH__+0x108>
+ 2c4:	14 c0       	rjmp	.+40     	; 0x2ee <process_instruction_uart+0x6c>
+ 2c6:	c6 34       	cpi	r28, 0x46	; 70
+ 2c8:	86 e4       	ldi	r24, 0x46	; 70
+ 2ca:	d8 07       	cpc	r29, r24
+ 2cc:	09 f4       	brne	.+2      	; 0x2d0 <process_instruction_uart+0x4e>
+ 2ce:	9d c0       	rjmp	.+314    	; 0x40a <__EEPROM_REGION_LENGTH__+0xa>
+ 2d0:	20 f4       	brcc	.+8      	; 0x2da <process_instruction_uart+0x58>
+ 2d2:	c5 34       	cpi	r28, 0x45	; 69
+ 2d4:	d5 44       	sbci	r29, 0x45	; 69
+ 2d6:	59 f1       	breq	.+86     	; 0x32e <process_instruction_uart+0xac>
+ 2d8:	17 c1       	rjmp	.+558    	; 0x508 <__EEPROM_REGION_LENGTH__+0x108>
+ 2da:	c7 34       	cpi	r28, 0x47	; 71
+ 2dc:	87 e4       	ldi	r24, 0x47	; 71
+ 2de:	d8 07       	cpc	r29, r24
+ 2e0:	09 f4       	brne	.+2      	; 0x2e4 <process_instruction_uart+0x62>
+ 2e2:	03 c1       	rjmp	.+518    	; 0x4ea <__EEPROM_REGION_LENGTH__+0xea>
+ 2e4:	c8 34       	cpi	r28, 0x48	; 72
+ 2e6:	d8 44       	sbci	r29, 0x48	; 72
+ 2e8:	09 f4       	brne	.+2      	; 0x2ec <process_instruction_uart+0x6a>
+ 2ea:	07 c1       	rjmp	.+526    	; 0x4fa <__EEPROM_REGION_LENGTH__+0xfa>
+ 2ec:	0d c1       	rjmp	.+538    	; 0x508 <__EEPROM_REGION_LENGTH__+0x108>
 	{
 		case MOTORREDUCTOR_X:
 		UART_sendString("MOTORREDUCTOR X - ");
- 2ea:	8b e1       	ldi	r24, 0x1B	; 27
- 2ec:	91 e0       	ldi	r25, 0x01	; 1
- 2ee:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 2ee:	8a e1       	ldi	r24, 0x1A	; 26
+ 2f0:	91 e0       	ldi	r25, 0x01	; 1
+ 2f2:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		TIMER0_PWMA_set_PW(data_char);
- 2f2:	81 2f       	mov	r24, r17
- 2f4:	0e 94 b9 00 	call	0x172	; 0x172 <TIMER0_PWMA_set_PW>
+ 2f6:	81 2f       	mov	r24, r17
+ 2f8:	0e 94 b9 00 	call	0x172	; 0x172 <TIMER0_PWMA_set_PW>
 		break;
- 2f8:	09 c1       	rjmp	.+530    	; 0x50c <__EEPROM_REGION_LENGTH__+0x10c>
+ 2fc:	09 c1       	rjmp	.+530    	; 0x510 <__EEPROM_REGION_LENGTH__+0x110>
 		
 		case MOTORREDUCTOR_Y:
 		UART_sendString("MOTORREDUCTOR Y - ");
- 2fa:	8e e2       	ldi	r24, 0x2E	; 46
- 2fc:	91 e0       	ldi	r25, 0x01	; 1
- 2fe:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 2fe:	8d e2       	ldi	r24, 0x2D	; 45
+ 300:	91 e0       	ldi	r25, 0x01	; 1
+ 302:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		TIMER0_PWMB_set_PW(data_char);
- 302:	81 2f       	mov	r24, r17
- 304:	0e 94 bc 00 	call	0x178	; 0x178 <TIMER0_PWMB_set_PW>
+ 306:	81 2f       	mov	r24, r17
+ 308:	0e 94 bc 00 	call	0x178	; 0x178 <TIMER0_PWMB_set_PW>
 		break;
- 308:	01 c1       	rjmp	.+514    	; 0x50c <__EEPROM_REGION_LENGTH__+0x10c>
+ 30c:	01 c1       	rjmp	.+514    	; 0x510 <__EEPROM_REGION_LENGTH__+0x110>
 		
 		case SERVOMOTOR_X:
 		UART_sendString("SERVOMOTOR X - ");
- 30a:	81 e4       	ldi	r24, 0x41	; 65
- 30c:	91 e0       	ldi	r25, 0x01	; 1
- 30e:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 30e:	80 e4       	ldi	r24, 0x40	; 64
+ 310:	91 e0       	ldi	r25, 0x01	; 1
+ 312:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		TIMER1_PWMA_set_servo_PW(data_char);
- 312:	81 2f       	mov	r24, r17
- 314:	0e 94 d3 00 	call	0x1a6	; 0x1a6 <TIMER1_PWMA_set_servo_PW>
+ 316:	81 2f       	mov	r24, r17
+ 318:	0e 94 d3 00 	call	0x1a6	; 0x1a6 <TIMER1_PWMA_set_servo_PW>
 		break;
- 318:	f9 c0       	rjmp	.+498    	; 0x50c <__EEPROM_REGION_LENGTH__+0x10c>
+ 31c:	f9 c0       	rjmp	.+498    	; 0x510 <__EEPROM_REGION_LENGTH__+0x110>
 		
 		case SERVOMOTOR_Y:
 		UART_sendString("SERVOMOTOR Y - ");
- 31a:	81 e5       	ldi	r24, 0x51	; 81
- 31c:	91 e0       	ldi	r25, 0x01	; 1
- 31e:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 31e:	80 e5       	ldi	r24, 0x50	; 80
+ 320:	91 e0       	ldi	r25, 0x01	; 1
+ 322:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		TIMER1_PWMB_set_servo_PW(data_char);
- 322:	81 2f       	mov	r24, r17
- 324:	0e 94 f0 00 	call	0x1e0	; 0x1e0 <TIMER1_PWMB_set_servo_PW>
+ 326:	81 2f       	mov	r24, r17
+ 328:	0e 94 f0 00 	call	0x1e0	; 0x1e0 <TIMER1_PWMB_set_servo_PW>
 		break;
- 328:	f1 c0       	rjmp	.+482    	; 0x50c <__EEPROM_REGION_LENGTH__+0x10c>
+ 32c:	f1 c0       	rjmp	.+482    	; 0x510 <__EEPROM_REGION_LENGTH__+0x110>
 		
 		// LECTURA DE EEPROM - Mostrar Posiciones en Servomotores
 		case EEPROM_READ:
 		UART_sendString("EEPROM READ - ");
- 32a:	81 e6       	ldi	r24, 0x61	; 97
- 32c:	91 e0       	ldi	r25, 0x01	; 1
- 32e:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 32e:	80 e6       	ldi	r24, 0x60	; 96
+ 330:	91 e0       	ldi	r25, 0x01	; 1
+ 332:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		
 		char eeprom_dataA = 0;
 		char eeprom_dataB = 0;
 		
 		// Leemos dos posiciones dependiendo del valor de la entrada
 		switch(data_char)
- 332:	12 30       	cpi	r17, 0x02	; 2
- 334:	c1 f0       	breq	.+48     	; 0x366 <process_instruction_uart+0xe8>
- 336:	18 f4       	brcc	.+6      	; 0x33e <process_instruction_uart+0xc0>
- 338:	11 30       	cpi	r17, 0x01	; 1
- 33a:	31 f0       	breq	.+12     	; 0x348 <process_instruction_uart+0xca>
- 33c:	41 c0       	rjmp	.+130    	; 0x3c0 <process_instruction_uart+0x142>
- 33e:	13 30       	cpi	r17, 0x03	; 3
- 340:	09 f1       	breq	.+66     	; 0x384 <process_instruction_uart+0x106>
- 342:	14 30       	cpi	r17, 0x04	; 4
- 344:	71 f1       	breq	.+92     	; 0x3a2 <process_instruction_uart+0x124>
- 346:	3c c0       	rjmp	.+120    	; 0x3c0 <process_instruction_uart+0x142>
+ 336:	12 33       	cpi	r17, 0x32	; 50
+ 338:	c1 f0       	breq	.+48     	; 0x36a <process_instruction_uart+0xe8>
+ 33a:	18 f4       	brcc	.+6      	; 0x342 <process_instruction_uart+0xc0>
+ 33c:	11 33       	cpi	r17, 0x31	; 49
+ 33e:	31 f0       	breq	.+12     	; 0x34c <process_instruction_uart+0xca>
+ 340:	41 c0       	rjmp	.+130    	; 0x3c4 <process_instruction_uart+0x142>
+ 342:	13 33       	cpi	r17, 0x33	; 51
+ 344:	09 f1       	breq	.+66     	; 0x388 <process_instruction_uart+0x106>
+ 346:	14 33       	cpi	r17, 0x34	; 52
+ 348:	71 f1       	breq	.+92     	; 0x3a6 <process_instruction_uart+0x124>
+ 34a:	3c c0       	rjmp	.+120    	; 0x3c4 <process_instruction_uart+0x142>
 		{
-			case 1:
+			case '1':
 			UART_sendString("Leyendo datos en dirección No. 1");
- 348:	80 e7       	ldi	r24, 0x70	; 112
- 34a:	91 e0       	ldi	r25, 0x01	; 1
- 34c:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 34c:	8f e6       	ldi	r24, 0x6F	; 111
+ 34e:	91 e0       	ldi	r25, 0x01	; 1
+ 350:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS1A);
- 350:	80 e0       	ldi	r24, 0x00	; 0
- 352:	90 e0       	ldi	r25, 0x00	; 0
- 354:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
- 358:	d8 2f       	mov	r29, r24
+ 354:	80 e0       	ldi	r24, 0x00	; 0
+ 356:	90 e0       	ldi	r25, 0x00	; 0
+ 358:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
+ 35c:	d8 2f       	mov	r29, r24
 			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS1B);
- 35a:	81 e0       	ldi	r24, 0x01	; 1
- 35c:	90 e0       	ldi	r25, 0x00	; 0
- 35e:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
- 362:	c8 2f       	mov	r28, r24
+ 35e:	81 e0       	ldi	r24, 0x01	; 1
+ 360:	90 e0       	ldi	r25, 0x00	; 0
+ 362:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
+ 366:	c8 2f       	mov	r28, r24
 			break;
- 364:	33 c0       	rjmp	.+102    	; 0x3cc <process_instruction_uart+0x14e>
+ 368:	33 c0       	rjmp	.+102    	; 0x3d0 <process_instruction_uart+0x14e>
 			
-			case 2:
+			case '2':
 			UART_sendString("Leyendo datos en dirección No. 2");
- 366:	81 e9       	ldi	r24, 0x91	; 145
- 368:	91 e0       	ldi	r25, 0x01	; 1
- 36a:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 36a:	80 e9       	ldi	r24, 0x90	; 144
+ 36c:	91 e0       	ldi	r25, 0x01	; 1
+ 36e:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS2A);
- 36e:	82 e0       	ldi	r24, 0x02	; 2
- 370:	90 e0       	ldi	r25, 0x00	; 0
- 372:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
- 376:	d8 2f       	mov	r29, r24
+ 372:	82 e0       	ldi	r24, 0x02	; 2
+ 374:	90 e0       	ldi	r25, 0x00	; 0
+ 376:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
+ 37a:	d8 2f       	mov	r29, r24
 			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS2B);
- 378:	83 e0       	ldi	r24, 0x03	; 3
- 37a:	90 e0       	ldi	r25, 0x00	; 0
- 37c:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
- 380:	c8 2f       	mov	r28, r24
+ 37c:	83 e0       	ldi	r24, 0x03	; 3
+ 37e:	90 e0       	ldi	r25, 0x00	; 0
+ 380:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
+ 384:	c8 2f       	mov	r28, r24
 			break;
- 382:	24 c0       	rjmp	.+72     	; 0x3cc <process_instruction_uart+0x14e>
+ 386:	24 c0       	rjmp	.+72     	; 0x3d0 <process_instruction_uart+0x14e>
 			
-			case 3:
+			case '3':
 			UART_sendString("Leyendo datos en dirección No. 3");
- 384:	82 eb       	ldi	r24, 0xB2	; 178
- 386:	91 e0       	ldi	r25, 0x01	; 1
- 388:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 388:	81 eb       	ldi	r24, 0xB1	; 177
+ 38a:	91 e0       	ldi	r25, 0x01	; 1
+ 38c:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS3A);
- 38c:	84 e0       	ldi	r24, 0x04	; 4
- 38e:	90 e0       	ldi	r25, 0x00	; 0
- 390:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
- 394:	d8 2f       	mov	r29, r24
+ 390:	84 e0       	ldi	r24, 0x04	; 4
+ 392:	90 e0       	ldi	r25, 0x00	; 0
+ 394:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
+ 398:	d8 2f       	mov	r29, r24
 			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS3B);
- 396:	85 e0       	ldi	r24, 0x05	; 5
- 398:	90 e0       	ldi	r25, 0x00	; 0
- 39a:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
- 39e:	c8 2f       	mov	r28, r24
+ 39a:	85 e0       	ldi	r24, 0x05	; 5
+ 39c:	90 e0       	ldi	r25, 0x00	; 0
+ 39e:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
+ 3a2:	c8 2f       	mov	r28, r24
 			break;
- 3a0:	15 c0       	rjmp	.+42     	; 0x3cc <process_instruction_uart+0x14e>
+ 3a4:	15 c0       	rjmp	.+42     	; 0x3d0 <process_instruction_uart+0x14e>
 			
-			case 4:
+			case '4':
 			UART_sendString("Leyendo datos en dirección No. 4");
- 3a2:	83 ed       	ldi	r24, 0xD3	; 211
- 3a4:	91 e0       	ldi	r25, 0x01	; 1
- 3a6:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 3a6:	82 ed       	ldi	r24, 0xD2	; 210
+ 3a8:	91 e0       	ldi	r25, 0x01	; 1
+ 3aa:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS4A);
- 3aa:	86 e0       	ldi	r24, 0x06	; 6
- 3ac:	90 e0       	ldi	r25, 0x00	; 0
- 3ae:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
- 3b2:	d8 2f       	mov	r29, r24
+ 3ae:	86 e0       	ldi	r24, 0x06	; 6
+ 3b0:	90 e0       	ldi	r25, 0x00	; 0
+ 3b2:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
+ 3b6:	d8 2f       	mov	r29, r24
 			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS4B);
- 3b4:	87 e0       	ldi	r24, 0x07	; 7
- 3b6:	90 e0       	ldi	r25, 0x00	; 0
- 3b8:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
- 3bc:	c8 2f       	mov	r28, r24
+ 3b8:	87 e0       	ldi	r24, 0x07	; 7
+ 3ba:	90 e0       	ldi	r25, 0x00	; 0
+ 3bc:	0e 94 5f 00 	call	0xbe	; 0xbe <EEPROM_read>
+ 3c0:	c8 2f       	mov	r28, r24
 			break;
- 3be:	06 c0       	rjmp	.+12     	; 0x3cc <process_instruction_uart+0x14e>
+ 3c2:	06 c0       	rjmp	.+12     	; 0x3d0 <process_instruction_uart+0x14e>
 			
 			default:
 			UART_sendString("Dirección Inválida");
- 3c0:	84 ef       	ldi	r24, 0xF4	; 244
- 3c2:	91 e0       	ldi	r25, 0x01	; 1
- 3c4:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 3c4:	83 ef       	ldi	r24, 0xF3	; 243
+ 3c6:	91 e0       	ldi	r25, 0x01	; 1
+ 3c8:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		// LECTURA DE EEPROM - Mostrar Posiciones en Servomotores
 		case EEPROM_READ:
 		UART_sendString("EEPROM READ - ");
 		
 		char eeprom_dataA = 0;
 		char eeprom_dataB = 0;
- 3c8:	c0 e0       	ldi	r28, 0x00	; 0
+ 3cc:	c0 e0       	ldi	r28, 0x00	; 0
 		
 		// LECTURA DE EEPROM - Mostrar Posiciones en Servomotores
 		case EEPROM_READ:
 		UART_sendString("EEPROM READ - ");
 		
 		char eeprom_dataA = 0;
- 3ca:	d0 e0       	ldi	r29, 0x00	; 0
+ 3ce:	d0 e0       	ldi	r29, 0x00	; 0
 			default:
 			UART_sendString("Dirección Inválida");
 			break;
 		}
 		
 		UART_sendString("\r\n");
- 3cc:	8a e4       	ldi	r24, 0x4A	; 74
- 3ce:	93 e0       	ldi	r25, 0x03	; 3
- 3d0:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 3d0:	89 e4       	ldi	r24, 0x49	; 73
+ 3d2:	93 e0       	ldi	r25, 0x03	; 3
+ 3d4:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		UART_sendString("Datos Recibidos: ");
- 3d4:	87 e0       	ldi	r24, 0x07	; 7
- 3d6:	92 e0       	ldi	r25, 0x02	; 2
- 3d8:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 3d8:	86 e0       	ldi	r24, 0x06	; 6
+ 3da:	92 e0       	ldi	r25, 0x02	; 2
+ 3dc:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		UART_sendChar(eeprom_dataA);
- 3dc:	8d 2f       	mov	r24, r29
- 3de:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
+ 3e0:	8d 2f       	mov	r24, r29
+ 3e2:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
 		UART_sendString(" - ");
- 3e2:	8d e2       	ldi	r24, 0x2D	; 45
- 3e4:	93 e0       	ldi	r25, 0x03	; 3
- 3e6:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 3e6:	8c e2       	ldi	r24, 0x2C	; 44
+ 3e8:	93 e0       	ldi	r25, 0x03	; 3
+ 3ea:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		UART_sendChar(eeprom_dataB);
- 3ea:	8c 2f       	mov	r24, r28
- 3ec:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
+ 3ee:	8c 2f       	mov	r24, r28
+ 3f0:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
 		UART_sendString("\r\n");
- 3f0:	8a e4       	ldi	r24, 0x4A	; 74
- 3f2:	93 e0       	ldi	r25, 0x03	; 3
- 3f4:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 3f4:	89 e4       	ldi	r24, 0x49	; 73
+ 3f6:	93 e0       	ldi	r25, 0x03	; 3
+ 3f8:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		
 		// Mostramos las posiciones en los servomotores
 		TIMER1_PWMA_set_servo_PW(eeprom_dataA);
- 3f8:	8d 2f       	mov	r24, r29
- 3fa:	0e 94 d3 00 	call	0x1a6	; 0x1a6 <TIMER1_PWMA_set_servo_PW>
+ 3fc:	8d 2f       	mov	r24, r29
+ 3fe:	0e 94 d3 00 	call	0x1a6	; 0x1a6 <TIMER1_PWMA_set_servo_PW>
 		TIMER1_PWMB_set_servo_PW(eeprom_dataB);
- 3fe:	8c 2f       	mov	r24, r28
- 400:	0e 94 f0 00 	call	0x1e0	; 0x1e0 <TIMER1_PWMB_set_servo_PW>
+ 402:	8c 2f       	mov	r24, r28
+ 404:	0e 94 f0 00 	call	0x1e0	; 0x1e0 <TIMER1_PWMB_set_servo_PW>
 		break;
- 404:	83 c0       	rjmp	.+262    	; 0x50c <__EEPROM_REGION_LENGTH__+0x10c>
+ 408:	83 c0       	rjmp	.+262    	; 0x510 <__EEPROM_REGION_LENGTH__+0x110>
 		
 		// Escribir en EEPROM
 		case EEPROM_WRITE:
 		UART_sendString("EEPROM WRITE - ");
- 406:	89 e1       	ldi	r24, 0x19	; 25
- 408:	92 e0       	ldi	r25, 0x02	; 2
- 40a:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 40a:	88 e1       	ldi	r24, 0x18	; 24
+ 40c:	92 e0       	ldi	r25, 0x02	; 2
+ 40e:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		
 		
 		switch(data_char)
- 40e:	12 30       	cpi	r17, 0x02	; 2
- 410:	d1 f0       	breq	.+52     	; 0x446 <__EEPROM_REGION_LENGTH__+0x46>
- 412:	18 f4       	brcc	.+6      	; 0x41a <__EEPROM_REGION_LENGTH__+0x1a>
- 414:	11 30       	cpi	r17, 0x01	; 1
- 416:	31 f0       	breq	.+12     	; 0x424 <__EEPROM_REGION_LENGTH__+0x24>
- 418:	49 c0       	rjmp	.+146    	; 0x4ac <__EEPROM_REGION_LENGTH__+0xac>
- 41a:	13 30       	cpi	r17, 0x03	; 3
- 41c:	29 f1       	breq	.+74     	; 0x468 <__EEPROM_REGION_LENGTH__+0x68>
- 41e:	14 30       	cpi	r17, 0x04	; 4
- 420:	a1 f1       	breq	.+104    	; 0x48a <__EEPROM_REGION_LENGTH__+0x8a>
- 422:	44 c0       	rjmp	.+136    	; 0x4ac <__EEPROM_REGION_LENGTH__+0xac>
+ 412:	12 33       	cpi	r17, 0x32	; 50
+ 414:	d1 f0       	breq	.+52     	; 0x44a <__EEPROM_REGION_LENGTH__+0x4a>
+ 416:	18 f4       	brcc	.+6      	; 0x41e <__EEPROM_REGION_LENGTH__+0x1e>
+ 418:	11 33       	cpi	r17, 0x31	; 49
+ 41a:	31 f0       	breq	.+12     	; 0x428 <__EEPROM_REGION_LENGTH__+0x28>
+ 41c:	49 c0       	rjmp	.+146    	; 0x4b0 <__EEPROM_REGION_LENGTH__+0xb0>
+ 41e:	13 33       	cpi	r17, 0x33	; 51
+ 420:	29 f1       	breq	.+74     	; 0x46c <__EEPROM_REGION_LENGTH__+0x6c>
+ 422:	14 33       	cpi	r17, 0x34	; 52
+ 424:	a1 f1       	breq	.+104    	; 0x48e <__EEPROM_REGION_LENGTH__+0x8e>
+ 426:	44 c0       	rjmp	.+136    	; 0x4b0 <__EEPROM_REGION_LENGTH__+0xb0>
 		{
-			case 1:
+			case '1':
 			UART_sendString("Guardando datos en dirección No. 1");
- 424:	89 e2       	ldi	r24, 0x29	; 41
- 426:	92 e0       	ldi	r25, 0x02	; 2
- 428:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 428:	88 e2       	ldi	r24, 0x28	; 40
+ 42a:	92 e0       	ldi	r25, 0x02	; 2
+ 42c:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 			EEPROM_write(EEPROM_ADDRESS1A, adc_value_chan0);
- 42c:	60 91 cc 05 	lds	r22, 0x05CC	; 0x8005cc <adc_value_chan0>
- 430:	80 e0       	ldi	r24, 0x00	; 0
- 432:	90 e0       	ldi	r25, 0x00	; 0
- 434:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
+ 430:	60 91 65 05 	lds	r22, 0x0565	; 0x800565 <adc_value_chan0>
+ 434:	80 e0       	ldi	r24, 0x00	; 0
+ 436:	90 e0       	ldi	r25, 0x00	; 0
+ 438:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
 			EEPROM_write(EEPROM_ADDRESS1B, adc_value_chan1);
- 438:	60 91 cb 05 	lds	r22, 0x05CB	; 0x8005cb <adc_value_chan1>
- 43c:	81 e0       	ldi	r24, 0x01	; 1
- 43e:	90 e0       	ldi	r25, 0x00	; 0
- 440:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
+ 43c:	60 91 64 05 	lds	r22, 0x0564	; 0x800564 <adc_value_chan1>
+ 440:	81 e0       	ldi	r24, 0x01	; 1
+ 442:	90 e0       	ldi	r25, 0x00	; 0
+ 444:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
 			break;
- 444:	37 c0       	rjmp	.+110    	; 0x4b4 <__EEPROM_REGION_LENGTH__+0xb4>
+ 448:	37 c0       	rjmp	.+110    	; 0x4b8 <__EEPROM_REGION_LENGTH__+0xb8>
 			
-			case 2:
+			case '2':
 			UART_sendString("Guardando datos en dirección No. 2");
- 446:	8c e4       	ldi	r24, 0x4C	; 76
- 448:	92 e0       	ldi	r25, 0x02	; 2
- 44a:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 44a:	8b e4       	ldi	r24, 0x4B	; 75
+ 44c:	92 e0       	ldi	r25, 0x02	; 2
+ 44e:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 			EEPROM_write(EEPROM_ADDRESS2A, adc_value_chan0);
- 44e:	60 91 cc 05 	lds	r22, 0x05CC	; 0x8005cc <adc_value_chan0>
- 452:	82 e0       	ldi	r24, 0x02	; 2
- 454:	90 e0       	ldi	r25, 0x00	; 0
- 456:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
+ 452:	60 91 65 05 	lds	r22, 0x0565	; 0x800565 <adc_value_chan0>
+ 456:	82 e0       	ldi	r24, 0x02	; 2
+ 458:	90 e0       	ldi	r25, 0x00	; 0
+ 45a:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
 			EEPROM_write(EEPROM_ADDRESS2B, adc_value_chan1);
- 45a:	60 91 cb 05 	lds	r22, 0x05CB	; 0x8005cb <adc_value_chan1>
- 45e:	83 e0       	ldi	r24, 0x03	; 3
- 460:	90 e0       	ldi	r25, 0x00	; 0
- 462:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
+ 45e:	60 91 64 05 	lds	r22, 0x0564	; 0x800564 <adc_value_chan1>
+ 462:	83 e0       	ldi	r24, 0x03	; 3
+ 464:	90 e0       	ldi	r25, 0x00	; 0
+ 466:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
 			break;
- 466:	26 c0       	rjmp	.+76     	; 0x4b4 <__EEPROM_REGION_LENGTH__+0xb4>
+ 46a:	26 c0       	rjmp	.+76     	; 0x4b8 <__EEPROM_REGION_LENGTH__+0xb8>
 			
-			case 3:
+			case '3':
 			UART_sendString("Guardando datos en dirección No. 3");
- 468:	8f e6       	ldi	r24, 0x6F	; 111
- 46a:	92 e0       	ldi	r25, 0x02	; 2
- 46c:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 46c:	8e e6       	ldi	r24, 0x6E	; 110
+ 46e:	92 e0       	ldi	r25, 0x02	; 2
+ 470:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 			EEPROM_write(EEPROM_ADDRESS3A, adc_value_chan0);
- 470:	60 91 cc 05 	lds	r22, 0x05CC	; 0x8005cc <adc_value_chan0>
- 474:	84 e0       	ldi	r24, 0x04	; 4
- 476:	90 e0       	ldi	r25, 0x00	; 0
- 478:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
+ 474:	60 91 65 05 	lds	r22, 0x0565	; 0x800565 <adc_value_chan0>
+ 478:	84 e0       	ldi	r24, 0x04	; 4
+ 47a:	90 e0       	ldi	r25, 0x00	; 0
+ 47c:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
 			EEPROM_write(EEPROM_ADDRESS3B, adc_value_chan1);
- 47c:	60 91 cb 05 	lds	r22, 0x05CB	; 0x8005cb <adc_value_chan1>
- 480:	85 e0       	ldi	r24, 0x05	; 5
- 482:	90 e0       	ldi	r25, 0x00	; 0
- 484:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
+ 480:	60 91 64 05 	lds	r22, 0x0564	; 0x800564 <adc_value_chan1>
+ 484:	85 e0       	ldi	r24, 0x05	; 5
+ 486:	90 e0       	ldi	r25, 0x00	; 0
+ 488:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
 			break;
- 488:	15 c0       	rjmp	.+42     	; 0x4b4 <__EEPROM_REGION_LENGTH__+0xb4>
+ 48c:	15 c0       	rjmp	.+42     	; 0x4b8 <__EEPROM_REGION_LENGTH__+0xb8>
 			
-			case 4:
+			case '4':
 			UART_sendString("Guardando datos en dirección No. 4");
- 48a:	82 e9       	ldi	r24, 0x92	; 146
- 48c:	92 e0       	ldi	r25, 0x02	; 2
- 48e:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 48e:	81 e9       	ldi	r24, 0x91	; 145
+ 490:	92 e0       	ldi	r25, 0x02	; 2
+ 492:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 			EEPROM_write(EEPROM_ADDRESS4A, adc_value_chan0);
- 492:	60 91 cc 05 	lds	r22, 0x05CC	; 0x8005cc <adc_value_chan0>
- 496:	86 e0       	ldi	r24, 0x06	; 6
- 498:	90 e0       	ldi	r25, 0x00	; 0
- 49a:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
+ 496:	60 91 65 05 	lds	r22, 0x0565	; 0x800565 <adc_value_chan0>
+ 49a:	86 e0       	ldi	r24, 0x06	; 6
+ 49c:	90 e0       	ldi	r25, 0x00	; 0
+ 49e:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
 			EEPROM_write(EEPROM_ADDRESS4B, adc_value_chan1);
- 49e:	60 91 cb 05 	lds	r22, 0x05CB	; 0x8005cb <adc_value_chan1>
- 4a2:	87 e0       	ldi	r24, 0x07	; 7
- 4a4:	90 e0       	ldi	r25, 0x00	; 0
- 4a6:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
+ 4a2:	60 91 64 05 	lds	r22, 0x0564	; 0x800564 <adc_value_chan1>
+ 4a6:	87 e0       	ldi	r24, 0x07	; 7
+ 4a8:	90 e0       	ldi	r25, 0x00	; 0
+ 4aa:	0e 94 53 00 	call	0xa6	; 0xa6 <EEPROM_write>
 			break;
- 4aa:	04 c0       	rjmp	.+8      	; 0x4b4 <__EEPROM_REGION_LENGTH__+0xb4>
+ 4ae:	04 c0       	rjmp	.+8      	; 0x4b8 <__EEPROM_REGION_LENGTH__+0xb8>
 			
 			default:
 			UART_sendString("Dirección Inválida");
- 4ac:	84 ef       	ldi	r24, 0xF4	; 244
- 4ae:	91 e0       	ldi	r25, 0x01	; 1
- 4b0:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 4b0:	83 ef       	ldi	r24, 0xF3	; 243
+ 4b2:	91 e0       	ldi	r25, 0x01	; 1
+ 4b4:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		}
 		
 		UART_sendString("\r\n");
- 4b4:	8a e4       	ldi	r24, 0x4A	; 74
- 4b6:	93 e0       	ldi	r25, 0x03	; 3
- 4b8:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 4b8:	89 e4       	ldi	r24, 0x49	; 73
+ 4ba:	93 e0       	ldi	r25, 0x03	; 3
+ 4bc:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		UART_sendString("Datos Escritos: ");
- 4bc:	85 eb       	ldi	r24, 0xB5	; 181
- 4be:	92 e0       	ldi	r25, 0x02	; 2
- 4c0:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 4c0:	84 eb       	ldi	r24, 0xB4	; 180
+ 4c2:	92 e0       	ldi	r25, 0x02	; 2
+ 4c4:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		UART_sendChar(adc_value_chan0);
- 4c4:	80 91 cc 05 	lds	r24, 0x05CC	; 0x8005cc <adc_value_chan0>
- 4c8:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
+ 4c8:	80 91 65 05 	lds	r24, 0x0565	; 0x800565 <adc_value_chan0>
+ 4cc:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
 		UART_sendString(" - ");
- 4cc:	8d e2       	ldi	r24, 0x2D	; 45
- 4ce:	93 e0       	ldi	r25, 0x03	; 3
- 4d0:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 4d0:	8c e2       	ldi	r24, 0x2C	; 44
+ 4d2:	93 e0       	ldi	r25, 0x03	; 3
+ 4d4:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		UART_sendChar(adc_value_chan1);
- 4d4:	80 91 cb 05 	lds	r24, 0x05CB	; 0x8005cb <adc_value_chan1>
- 4d8:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
+ 4d8:	80 91 64 05 	lds	r24, 0x0564	; 0x800564 <adc_value_chan1>
+ 4dc:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
 		UART_sendString("\r\n");
- 4dc:	8a e4       	ldi	r24, 0x4A	; 74
- 4de:	93 e0       	ldi	r25, 0x03	; 3
- 4e0:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 4e0:	89 e4       	ldi	r24, 0x49	; 73
+ 4e2:	93 e0       	ldi	r25, 0x03	; 3
+ 4e4:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		break;
- 4e4:	13 c0       	rjmp	.+38     	; 0x50c <__EEPROM_REGION_LENGTH__+0x10c>
+ 4e8:	13 c0       	rjmp	.+38     	; 0x510 <__EEPROM_REGION_LENGTH__+0x110>
 		
 		// Habilitar y deshabilitar modo manual
 		case MANUAL_ENABLE:
 		UART_sendString("MANUAL ENABLE - Habilitando modo manual");
- 4e6:	86 ec       	ldi	r24, 0xC6	; 198
- 4e8:	92 e0       	ldi	r25, 0x02	; 2
- 4ea:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 4ea:	85 ec       	ldi	r24, 0xC5	; 197
+ 4ec:	92 e0       	ldi	r25, 0x02	; 2
+ 4ee:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		manual_mode_enabled = 1;
- 4ee:	81 e0       	ldi	r24, 0x01	; 1
- 4f0:	80 93 c8 05 	sts	0x05C8, r24	; 0x8005c8 <manual_mode_enabled>
+ 4f2:	81 e0       	ldi	r24, 0x01	; 1
+ 4f4:	80 93 61 05 	sts	0x0561, r24	; 0x800561 <manual_mode_enabled>
 		break;
- 4f4:	0b c0       	rjmp	.+22     	; 0x50c <__EEPROM_REGION_LENGTH__+0x10c>
+ 4f8:	0b c0       	rjmp	.+22     	; 0x510 <__EEPROM_REGION_LENGTH__+0x110>
 		
 		case MANUAL_DISABLE:
 		UART_sendString("MANUAL ENABLE - Deshabilitando modo manual");
- 4f6:	8e ee       	ldi	r24, 0xEE	; 238
- 4f8:	92 e0       	ldi	r25, 0x02	; 2
- 4fa:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 4fa:	8d ee       	ldi	r24, 0xED	; 237
+ 4fc:	92 e0       	ldi	r25, 0x02	; 2
+ 4fe:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		manual_mode_enabled = 0;
- 4fe:	10 92 c8 05 	sts	0x05C8, r1	; 0x8005c8 <manual_mode_enabled>
+ 502:	10 92 61 05 	sts	0x0561, r1	; 0x800561 <manual_mode_enabled>
 		break;
- 502:	04 c0       	rjmp	.+8      	; 0x50c <__EEPROM_REGION_LENGTH__+0x10c>
+ 506:	04 c0       	rjmp	.+8      	; 0x510 <__EEPROM_REGION_LENGTH__+0x110>
 		
 		default:
 		UART_sendString("INSTRUCCIÓN INVÁLIDA - ");
- 504:	89 e1       	ldi	r24, 0x19	; 25
- 506:	93 e0       	ldi	r25, 0x03	; 3
- 508:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 508:	88 e1       	ldi	r24, 0x18	; 24
+ 50a:	93 e0       	ldi	r25, 0x03	; 3
+ 50c:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		break;
 	}
 	
 	UART_sendChar(data_char);
- 50c:	81 2f       	mov	r24, r17
- 50e:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
+ 510:	81 2f       	mov	r24, r17
+ 512:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
 	UART_sendString("\r\n");
- 512:	8a e4       	ldi	r24, 0x4A	; 74
- 514:	93 e0       	ldi	r25, 0x03	; 3
- 516:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 516:	89 e4       	ldi	r24, 0x49	; 73
+ 518:	93 e0       	ldi	r25, 0x03	; 3
+ 51a:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 	UART_sendString("\r\n");
- 51a:	8a e4       	ldi	r24, 0x4A	; 74
- 51c:	93 e0       	ldi	r25, 0x03	; 3
- 51e:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 51e:	89 e4       	ldi	r24, 0x49	; 73
+ 520:	93 e0       	ldi	r25, 0x03	; 3
+ 522:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 }
- 522:	df 91       	pop	r29
- 524:	cf 91       	pop	r28
- 526:	1f 91       	pop	r17
- 528:	08 95       	ret
+ 526:	df 91       	pop	r29
+ 528:	cf 91       	pop	r28
+ 52a:	1f 91       	pop	r17
+ 52c:	08 95       	ret
 
-0000052a <show_instruction_ASCII>:
+0000052e <show_instruction_ASCII>:
 
 // Mostrar ASCII de instrucciones
 void show_instruction_ASCII(void)
 {
- 52a:	0f 93       	push	r16
- 52c:	1f 93       	push	r17
- 52e:	cf 93       	push	r28
- 530:	df 93       	push	r29
+ 52e:	0f 93       	push	r16
+ 530:	1f 93       	push	r17
+ 532:	cf 93       	push	r28
+ 534:	df 93       	push	r29
 	UART_sendString("INSTRUCCIONES (EN ASCII) \r\n");
- 532:	81 e3       	ldi	r24, 0x31	; 49
- 534:	93 e0       	ldi	r25, 0x03	; 3
- 536:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 536:	80 e3       	ldi	r24, 0x30	; 48
+ 538:	93 e0       	ldi	r25, 0x03	; 3
+ 53a:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 	UART_sendString("Para ejecutar las siguientes instrucciones, coloque el caracter mostrado dos veces \r\n");
- 53a:	8d e4       	ldi	r24, 0x4D	; 77
- 53c:	93 e0       	ldi	r25, 0x03	; 3
- 53e:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 53e:	8c e4       	ldi	r24, 0x4C	; 76
+ 540:	93 e0       	ldi	r25, 0x03	; 3
+ 542:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 	for (size_t i = 0; i < num_instrucciones; ++i) {
- 542:	00 e0       	ldi	r16, 0x00	; 0
- 544:	10 e0       	ldi	r17, 0x00	; 0
- 546:	19 c0       	rjmp	.+50     	; 0x57a <show_instruction_ASCII+0x50>
+ 546:	00 e0       	ldi	r16, 0x00	; 0
+ 548:	10 e0       	ldi	r17, 0x00	; 0
+ 54a:	19 c0       	rjmp	.+50     	; 0x57e <show_instruction_ASCII+0x50>
 		UART_sendString(nombres_instrucciones[i]);		// Mostrar nombre de instrucción
- 548:	e8 01       	movw	r28, r16
- 54a:	cc 0f       	add	r28, r28
- 54c:	dd 1f       	adc	r29, r29
- 54e:	fe 01       	movw	r30, r28
- 550:	ed 55       	subi	r30, 0x5D	; 93
- 552:	fa 4f       	sbci	r31, 0xFA	; 250
- 554:	80 81       	ld	r24, Z
- 556:	91 81       	ldd	r25, Z+1	; 0x01
- 558:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 54c:	e8 01       	movw	r28, r16
+ 54e:	cc 0f       	add	r28, r28
+ 550:	dd 1f       	adc	r29, r29
+ 552:	fe 01       	movw	r30, r28
+ 554:	e0 5c       	subi	r30, 0xC0	; 192
+ 556:	fa 4f       	sbci	r31, 0xFA	; 250
+ 558:	80 81       	ld	r24, Z
+ 55a:	91 81       	ldd	r25, Z+1	; 0x01
+ 55c:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		UART_sendString(" : ");							// Espacio
- 55c:	83 ea       	ldi	r24, 0xA3	; 163
- 55e:	93 e0       	ldi	r25, 0x03	; 3
- 560:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 560:	82 ea       	ldi	r24, 0xA2	; 162
+ 562:	93 e0       	ldi	r25, 0x03	; 3
+ 564:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		UART_sendChar(instrucciones[i] >> 8);			// Mostrar instrucción
- 564:	cd 54       	subi	r28, 0x4D	; 77
- 566:	da 4f       	sbci	r29, 0xFA	; 250
- 568:	89 81       	ldd	r24, Y+1	; 0x01
- 56a:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
+ 568:	c0 5b       	subi	r28, 0xB0	; 176
+ 56a:	da 4f       	sbci	r29, 0xFA	; 250
+ 56c:	89 81       	ldd	r24, Y+1	; 0x01
+ 56e:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
 		UART_sendString("\r\n");
- 56e:	8a e4       	ldi	r24, 0x4A	; 74
- 570:	93 e0       	ldi	r25, 0x03	; 3
- 572:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 572:	89 e4       	ldi	r24, 0x49	; 73
+ 574:	93 e0       	ldi	r25, 0x03	; 3
+ 576:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 // Mostrar ASCII de instrucciones
 void show_instruction_ASCII(void)
 {
 	UART_sendString("INSTRUCCIONES (EN ASCII) \r\n");
 	UART_sendString("Para ejecutar las siguientes instrucciones, coloque el caracter mostrado dos veces \r\n");
 	for (size_t i = 0; i < num_instrucciones; ++i) {
- 576:	0f 5f       	subi	r16, 0xFF	; 255
- 578:	1f 4f       	sbci	r17, 0xFF	; 255
- 57a:	08 30       	cpi	r16, 0x08	; 8
- 57c:	11 05       	cpc	r17, r1
- 57e:	20 f3       	brcs	.-56     	; 0x548 <show_instruction_ASCII+0x1e>
+ 57a:	0f 5f       	subi	r16, 0xFF	; 255
+ 57c:	1f 4f       	sbci	r17, 0xFF	; 255
+ 57e:	08 30       	cpi	r16, 0x08	; 8
+ 580:	11 05       	cpc	r17, r1
+ 582:	20 f3       	brcs	.-56     	; 0x54c <show_instruction_ASCII+0x1e>
 		UART_sendString(nombres_instrucciones[i]);		// Mostrar nombre de instrucción
 		UART_sendString(" : ");							// Espacio
 		UART_sendChar(instrucciones[i] >> 8);			// Mostrar instrucción
 		UART_sendString("\r\n");
 	}
 	UART_sendString("\r\n");
- 580:	8a e4       	ldi	r24, 0x4A	; 74
- 582:	93 e0       	ldi	r25, 0x03	; 3
- 584:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 584:	89 e4       	ldi	r24, 0x49	; 73
+ 586:	93 e0       	ldi	r25, 0x03	; 3
+ 588:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 	UART_sendString("Para iniciar y terminar frames de 3 bytes \r\n");
- 588:	87 ea       	ldi	r24, 0xA7	; 167
- 58a:	93 e0       	ldi	r25, 0x03	; 3
- 58c:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
-	UART_sendString("Inicio: ¥ \r\n");
- 590:	84 ed       	ldi	r24, 0xD4	; 212
- 592:	93 e0       	ldi	r25, 0x03	; 3
- 594:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 58c:	86 ea       	ldi	r24, 0xA6	; 166
+ 58e:	93 e0       	ldi	r25, 0x03	; 3
+ 590:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+	UART_sendString("Inicio: 0 \r\n");
+ 594:	83 ed       	ldi	r24, 0xD3	; 211
+ 596:	93 e0       	ldi	r25, 0x03	; 3
+ 598:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 	UART_sendString("Fin: Z \r\n");
- 598:	81 ee       	ldi	r24, 0xE1	; 225
- 59a:	93 e0       	ldi	r25, 0x03	; 3
- 59c:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 59c:	80 ee       	ldi	r24, 0xE0	; 224
+ 59e:	93 e0       	ldi	r25, 0x03	; 3
+ 5a0:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 	UART_sendString("\r\n");
- 5a0:	8a e4       	ldi	r24, 0x4A	; 74
- 5a2:	93 e0       	ldi	r25, 0x03	; 3
- 5a4:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 5a4:	89 e4       	ldi	r24, 0x49	; 73
+ 5a6:	93 e0       	ldi	r25, 0x03	; 3
+ 5a8:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 	UART_sendString("Ingrese un caracter para accionar el sistema. \r\n");
- 5a8:	8b ee       	ldi	r24, 0xEB	; 235
- 5aa:	93 e0       	ldi	r25, 0x03	; 3
- 5ac:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 5ac:	8a ee       	ldi	r24, 0xEA	; 234
+ 5ae:	93 e0       	ldi	r25, 0x03	; 3
+ 5b0:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 }
- 5b0:	df 91       	pop	r29
- 5b2:	cf 91       	pop	r28
- 5b4:	1f 91       	pop	r17
- 5b6:	0f 91       	pop	r16
- 5b8:	08 95       	ret
+ 5b4:	df 91       	pop	r29
+ 5b6:	cf 91       	pop	r28
+ 5b8:	1f 91       	pop	r17
+ 5ba:	0f 91       	pop	r16
+ 5bc:	08 95       	ret
 
-000005ba <normalize_input>:
+000005be <normalize_input>:
 
 // Normalizar entrada (0 a 255 -> -128 a 127)
 int8_t normalize_input(char valor)
 {
 	return ((int16_t)valor - 128); // Convierte 0–255 en -128 a 127
 }
- 5ba:	80 58       	subi	r24, 0x80	; 128
- 5bc:	08 95       	ret
+ 5be:	80 58       	subi	r24, 0x80	; 128
+ 5c0:	08 95       	ret
 
-000005be <move_differential>:
+000005c2 <move_differential>:
 
 // Movimiento de ruedas diferenciales - Permite traslación y rotación con entradas analógicas
 void move_differential(int8_t traslacion, int8_t rotacion)
 {
- 5be:	0f 93       	push	r16
- 5c0:	1f 93       	push	r17
- 5c2:	cf 93       	push	r28
- 5c4:	df 93       	push	r29
+ 5c2:	0f 93       	push	r16
+ 5c4:	1f 93       	push	r17
+ 5c6:	cf 93       	push	r28
+ 5c8:	df 93       	push	r29
 	int16_t vel_izq = traslacion - rotacion;
- 5c6:	c8 2f       	mov	r28, r24
- 5c8:	88 0f       	add	r24, r24
- 5ca:	dd 0b       	sbc	r29, r29
- 5cc:	06 2e       	mov	r0, r22
- 5ce:	00 0c       	add	r0, r0
- 5d0:	77 0b       	sbc	r23, r23
- 5d2:	8e 01       	movw	r16, r28
- 5d4:	06 1b       	sub	r16, r22
- 5d6:	17 0b       	sbc	r17, r23
+ 5ca:	c8 2f       	mov	r28, r24
+ 5cc:	88 0f       	add	r24, r24
+ 5ce:	dd 0b       	sbc	r29, r29
+ 5d0:	06 2e       	mov	r0, r22
+ 5d2:	00 0c       	add	r0, r0
+ 5d4:	77 0b       	sbc	r23, r23
+ 5d6:	8e 01       	movw	r16, r28
+ 5d8:	06 1b       	sub	r16, r22
+ 5da:	17 0b       	sbc	r17, r23
 	int16_t vel_der = traslacion + rotacion;
- 5d8:	c6 0f       	add	r28, r22
- 5da:	d7 1f       	adc	r29, r23
+ 5dc:	c6 0f       	add	r28, r22
+ 5de:	d7 1f       	adc	r29, r23
 
 	// Saturación
 	if (vel_izq > 255) vel_izq = 255;
 	if (vel_izq < -255) vel_izq = -255;
- 5dc:	01 30       	cpi	r16, 0x01	; 1
- 5de:	8f ef       	ldi	r24, 0xFF	; 255
- 5e0:	18 07       	cpc	r17, r24
- 5e2:	14 f4       	brge	.+4      	; 0x5e8 <move_differential+0x2a>
- 5e4:	01 e0       	ldi	r16, 0x01	; 1
- 5e6:	1f ef       	ldi	r17, 0xFF	; 255
+ 5e0:	01 30       	cpi	r16, 0x01	; 1
+ 5e2:	8f ef       	ldi	r24, 0xFF	; 255
+ 5e4:	18 07       	cpc	r17, r24
+ 5e6:	14 f4       	brge	.+4      	; 0x5ec <move_differential+0x2a>
+ 5e8:	01 e0       	ldi	r16, 0x01	; 1
+ 5ea:	1f ef       	ldi	r17, 0xFF	; 255
 	if (vel_der > 255) vel_der = 255;
 	if (vel_der < -255) vel_der = -255;
- 5e8:	c1 30       	cpi	r28, 0x01	; 1
- 5ea:	8f ef       	ldi	r24, 0xFF	; 255
- 5ec:	d8 07       	cpc	r29, r24
- 5ee:	14 f4       	brge	.+4      	; 0x5f4 <move_differential+0x36>
- 5f0:	c1 e0       	ldi	r28, 0x01	; 1
- 5f2:	df ef       	ldi	r29, 0xFF	; 255
+ 5ec:	c1 30       	cpi	r28, 0x01	; 1
+ 5ee:	8f ef       	ldi	r24, 0xFF	; 255
+ 5f0:	d8 07       	cpc	r29, r24
+ 5f2:	14 f4       	brge	.+4      	; 0x5f8 <move_differential+0x36>
+ 5f4:	c1 e0       	ldi	r28, 0x01	; 1
+ 5f6:	df ef       	ldi	r29, 0xFF	; 255
 
 	// Motor izquierdo
 	if (vel_izq >= 0) {
- 5f4:	11 23       	and	r17, r17
- 5f6:	34 f0       	brlt	.+12     	; 0x604 <move_differential+0x46>
+ 5f8:	11 23       	and	r17, r17
+ 5fa:	34 f0       	brlt	.+12     	; 0x608 <move_differential+0x46>
 		motorA_forward();
- 5f8:	0e 94 90 00 	call	0x120	; 0x120 <motorA_forward>
+ 5fc:	0e 94 90 00 	call	0x120	; 0x120 <motorA_forward>
 		TIMER0_PWMA_set_PW((uint8_t)vel_izq);
- 5fc:	80 2f       	mov	r24, r16
- 5fe:	0e 94 b9 00 	call	0x172	; 0x172 <TIMER0_PWMA_set_PW>
- 602:	06 c0       	rjmp	.+12     	; 0x610 <move_differential+0x52>
+ 600:	80 2f       	mov	r24, r16
+ 602:	0e 94 b9 00 	call	0x172	; 0x172 <TIMER0_PWMA_set_PW>
+ 606:	06 c0       	rjmp	.+12     	; 0x614 <move_differential+0x52>
 		} else {
 		motorA_backward();
- 604:	0e 94 97 00 	call	0x12e	; 0x12e <motorA_backward>
+ 608:	0e 94 97 00 	call	0x12e	; 0x12e <motorA_backward>
 		TIMER0_PWMA_set_PW((uint8_t)(-vel_izq));
- 608:	80 2f       	mov	r24, r16
- 60a:	81 95       	neg	r24
- 60c:	0e 94 b9 00 	call	0x172	; 0x172 <TIMER0_PWMA_set_PW>
+ 60c:	80 2f       	mov	r24, r16
+ 60e:	81 95       	neg	r24
+ 610:	0e 94 b9 00 	call	0x172	; 0x172 <TIMER0_PWMA_set_PW>
 	}
 
 	// Motor derecho
 	if (vel_der >= 0) {
- 610:	dd 23       	and	r29, r29
- 612:	34 f0       	brlt	.+12     	; 0x620 <move_differential+0x62>
+ 614:	dd 23       	and	r29, r29
+ 616:	34 f0       	brlt	.+12     	; 0x624 <move_differential+0x62>
 		motorB_forward();
- 614:	0e 94 9e 00 	call	0x13c	; 0x13c <motorB_forward>
+ 618:	0e 94 9e 00 	call	0x13c	; 0x13c <motorB_forward>
 		TIMER0_PWMB_set_PW((uint8_t)vel_der);
- 618:	8c 2f       	mov	r24, r28
- 61a:	0e 94 bc 00 	call	0x178	; 0x178 <TIMER0_PWMB_set_PW>
- 61e:	06 c0       	rjmp	.+12     	; 0x62c <move_differential+0x6e>
+ 61c:	8c 2f       	mov	r24, r28
+ 61e:	0e 94 bc 00 	call	0x178	; 0x178 <TIMER0_PWMB_set_PW>
+ 622:	06 c0       	rjmp	.+12     	; 0x630 <move_differential+0x6e>
 		} else {
 		motorB_backward();
- 620:	0e 94 a5 00 	call	0x14a	; 0x14a <motorB_backward>
+ 624:	0e 94 a5 00 	call	0x14a	; 0x14a <motorB_backward>
 		TIMER0_PWMB_set_PW((uint8_t)(-vel_der));
- 624:	8c 2f       	mov	r24, r28
- 626:	81 95       	neg	r24
- 628:	0e 94 bc 00 	call	0x178	; 0x178 <TIMER0_PWMB_set_PW>
+ 628:	8c 2f       	mov	r24, r28
+ 62a:	81 95       	neg	r24
+ 62c:	0e 94 bc 00 	call	0x178	; 0x178 <TIMER0_PWMB_set_PW>
 	}
 }
- 62c:	df 91       	pop	r29
- 62e:	cf 91       	pop	r28
- 630:	1f 91       	pop	r17
- 632:	0f 91       	pop	r16
- 634:	08 95       	ret
+ 630:	df 91       	pop	r29
+ 632:	cf 91       	pop	r28
+ 634:	1f 91       	pop	r17
+ 636:	0f 91       	pop	r16
+ 638:	08 95       	ret
 
-00000636 <manual_mode_movement>:
+0000063a <manual_mode_movement>:
 
 /************************************************************************/
 /* RUTINAS NO DE INTERRUPCIÓN                                           */
 /************************************************************************/
 void manual_mode_movement(char Mx, char My, char Sx, char Sy)
 {
- 636:	1f 93       	push	r17
- 638:	cf 93       	push	r28
- 63a:	df 93       	push	r29
- 63c:	c8 2f       	mov	r28, r24
- 63e:	d6 2f       	mov	r29, r22
- 640:	84 2f       	mov	r24, r20
- 642:	12 2f       	mov	r17, r18
+ 63a:	1f 93       	push	r17
+ 63c:	cf 93       	push	r28
+ 63e:	df 93       	push	r29
+ 640:	c8 2f       	mov	r28, r24
+ 642:	d6 2f       	mov	r29, r22
+ 644:	84 2f       	mov	r24, r20
+ 646:	12 2f       	mov	r17, r18
 	// Mover servomotores
 	TIMER1_PWMA_set_servo_PW(Sx);
- 644:	0e 94 d3 00 	call	0x1a6	; 0x1a6 <TIMER1_PWMA_set_servo_PW>
+ 648:	0e 94 d3 00 	call	0x1a6	; 0x1a6 <TIMER1_PWMA_set_servo_PW>
 	TIMER1_PWMB_set_servo_PW(Sy);
- 648:	81 2f       	mov	r24, r17
- 64a:	0e 94 f0 00 	call	0x1e0	; 0x1e0 <TIMER1_PWMB_set_servo_PW>
+ 64c:	81 2f       	mov	r24, r17
+ 64e:	0e 94 f0 00 	call	0x1e0	; 0x1e0 <TIMER1_PWMB_set_servo_PW>
 	
 	// Mover motorreductores (ruedas diferenciales)
 	int8_t traslacion = normalize_input(Mx);
- 64e:	8c 2f       	mov	r24, r28
- 650:	0e 94 dd 02 	call	0x5ba	; 0x5ba <normalize_input>
- 654:	c8 2f       	mov	r28, r24
+ 652:	8c 2f       	mov	r24, r28
+ 654:	0e 94 df 02 	call	0x5be	; 0x5be <normalize_input>
+ 658:	c8 2f       	mov	r28, r24
 	int8_t rotacion   = normalize_input(My);
- 656:	8d 2f       	mov	r24, r29
- 658:	0e 94 dd 02 	call	0x5ba	; 0x5ba <normalize_input>
+ 65a:	8d 2f       	mov	r24, r29
+ 65c:	0e 94 df 02 	call	0x5be	; 0x5be <normalize_input>
 	move_differential(traslacion, rotacion);
- 65c:	68 2f       	mov	r22, r24
- 65e:	8c 2f       	mov	r24, r28
- 660:	0e 94 df 02 	call	0x5be	; 0x5be <move_differential>
+ 660:	68 2f       	mov	r22, r24
+ 662:	8c 2f       	mov	r24, r28
+ 664:	0e 94 e1 02 	call	0x5c2	; 0x5c2 <move_differential>
 }
- 664:	df 91       	pop	r29
- 666:	cf 91       	pop	r28
- 668:	1f 91       	pop	r17
- 66a:	08 95       	ret
+ 668:	df 91       	pop	r29
+ 66a:	cf 91       	pop	r28
+ 66c:	1f 91       	pop	r17
+ 66e:	08 95       	ret
 
-0000066c <main>:
-	setup_adc();			// ADC
+00000670 <main>:
+	sei();
 }
 
 int main(void)
 {
     setup();
- 66c:	0e 94 34 01 	call	0x268	; 0x268 <setup>
+ 670:	0e 94 34 01 	call	0x268	; 0x268 <setup>
     UART_sendString("PROGRAMACIÓN DE MICROCONTROLADORES - PROYECTO 2 - RECEPTOR \r\n");
- 670:	8c e1       	ldi	r24, 0x1C	; 28
- 672:	94 e0       	ldi	r25, 0x04	; 4
- 674:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 674:	8b e1       	ldi	r24, 0x1B	; 27
+ 676:	94 e0       	ldi	r25, 0x04	; 4
+ 678:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
     show_instruction_ASCII();
- 678:	0e 94 95 02 	call	0x52a	; 0x52a <show_instruction_ASCII>
+ 67c:	0e 94 97 02 	call	0x52e	; 0x52e <show_instruction_ASCII>
     PORTB |= (1 << PORTB1);
- 67c:	85 b1       	in	r24, 0x05	; 5
- 67e:	82 60       	ori	r24, 0x02	; 2
- 680:	85 b9       	out	0x05, r24	; 5
+ 680:	85 b1       	in	r24, 0x05	; 5
+ 682:	82 60       	ori	r24, 0x02	; 2
+ 684:	85 b9       	out	0x05, r24	; 5
     while(1)
 	{
 		if(manual_mode_enabled)
- 682:	80 91 c8 05 	lds	r24, 0x05C8	; 0x8005c8 <manual_mode_enabled>
- 686:	88 23       	and	r24, r24
- 688:	e1 f3       	breq	.-8      	; 0x682 <main+0x16>
+ 686:	80 91 61 05 	lds	r24, 0x0561	; 0x800561 <manual_mode_enabled>
+ 68a:	88 23       	and	r24, r24
+ 68c:	e1 f3       	breq	.-8      	; 0x686 <main+0x16>
 		{
 			manual_mode_movement(adc_value_chan0, adc_value_chan1, adc_value_chan2, adc_value_chan3);
- 68a:	20 91 c9 05 	lds	r18, 0x05C9	; 0x8005c9 <adc_value_chan3>
- 68e:	40 91 ca 05 	lds	r20, 0x05CA	; 0x8005ca <adc_value_chan2>
- 692:	60 91 cb 05 	lds	r22, 0x05CB	; 0x8005cb <adc_value_chan1>
- 696:	80 91 cc 05 	lds	r24, 0x05CC	; 0x8005cc <adc_value_chan0>
- 69a:	0e 94 1b 03 	call	0x636	; 0x636 <manual_mode_movement>
- 69e:	f1 cf       	rjmp	.-30     	; 0x682 <main+0x16>
+ 68e:	20 91 62 05 	lds	r18, 0x0562	; 0x800562 <adc_value_chan3>
+ 692:	40 91 63 05 	lds	r20, 0x0563	; 0x800563 <adc_value_chan2>
+ 696:	60 91 64 05 	lds	r22, 0x0564	; 0x800564 <adc_value_chan1>
+ 69a:	80 91 65 05 	lds	r24, 0x0565	; 0x800565 <adc_value_chan0>
+ 69e:	0e 94 1d 03 	call	0x63a	; 0x63a <manual_mode_movement>
+ 6a2:	f1 cf       	rjmp	.-30     	; 0x686 <main+0x16>
 
-000006a0 <__vector_21>:
+000006a4 <__vector_21>:
 /************************************************************************/
 /* RUTINAS DE INTERRUPCIÓN                                              */
 /************************************************************************/
 // Interrupción por conversión completa en el ADC - Lectura y Multiplexado de canales
 ISR(ADC_vect)
 {
- 6a0:	1f 92       	push	r1
- 6a2:	0f 92       	push	r0
- 6a4:	0f b6       	in	r0, 0x3f	; 63
+ 6a4:	1f 92       	push	r1
  6a6:	0f 92       	push	r0
- 6a8:	11 24       	eor	r1, r1
- 6aa:	2f 93       	push	r18
- 6ac:	3f 93       	push	r19
- 6ae:	4f 93       	push	r20
- 6b0:	5f 93       	push	r21
- 6b2:	6f 93       	push	r22
- 6b4:	7f 93       	push	r23
- 6b6:	8f 93       	push	r24
- 6b8:	9f 93       	push	r25
- 6ba:	af 93       	push	r26
- 6bc:	bf 93       	push	r27
- 6be:	ef 93       	push	r30
- 6c0:	ff 93       	push	r31
+ 6a8:	0f b6       	in	r0, 0x3f	; 63
+ 6aa:	0f 92       	push	r0
+ 6ac:	11 24       	eor	r1, r1
+ 6ae:	2f 93       	push	r18
+ 6b0:	3f 93       	push	r19
+ 6b2:	4f 93       	push	r20
+ 6b4:	5f 93       	push	r21
+ 6b6:	6f 93       	push	r22
+ 6b8:	7f 93       	push	r23
+ 6ba:	8f 93       	push	r24
+ 6bc:	9f 93       	push	r25
+ 6be:	af 93       	push	r26
+ 6c0:	bf 93       	push	r27
+ 6c2:	ef 93       	push	r30
+ 6c4:	ff 93       	push	r31
 	// Hacer multiplexado de canal
 	switch(current_channel)
- 6c2:	80 91 cd 05 	lds	r24, 0x05CD	; 0x8005cd <current_channel>
- 6c6:	81 30       	cpi	r24, 0x01	; 1
- 6c8:	81 f0       	breq	.+32     	; 0x6ea <__vector_21+0x4a>
- 6ca:	28 f0       	brcs	.+10     	; 0x6d6 <__vector_21+0x36>
- 6cc:	82 30       	cpi	r24, 0x02	; 2
- 6ce:	b9 f0       	breq	.+46     	; 0x6fe <__vector_21+0x5e>
- 6d0:	83 30       	cpi	r24, 0x03	; 3
- 6d2:	f9 f0       	breq	.+62     	; 0x712 <__vector_21+0x72>
- 6d4:	28 c0       	rjmp	.+80     	; 0x726 <__vector_21+0x86>
+ 6c6:	80 91 66 05 	lds	r24, 0x0566	; 0x800566 <current_channel>
+ 6ca:	81 30       	cpi	r24, 0x01	; 1
+ 6cc:	81 f0       	breq	.+32     	; 0x6ee <__vector_21+0x4a>
+ 6ce:	28 f0       	brcs	.+10     	; 0x6da <__vector_21+0x36>
+ 6d0:	82 30       	cpi	r24, 0x02	; 2
+ 6d2:	b9 f0       	breq	.+46     	; 0x702 <__vector_21+0x5e>
+ 6d4:	83 30       	cpi	r24, 0x03	; 3
+ 6d6:	f9 f0       	breq	.+62     	; 0x716 <__vector_21+0x72>
+ 6d8:	28 c0       	rjmp	.+80     	; 0x72a <__vector_21+0x86>
 	{
 		case 0:
 		adc_value_chan0 = ADCH;		// Guardar valor para canal 0
- 6d6:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
- 6da:	80 93 cc 05 	sts	0x05CC, r24	; 0x8005cc <adc_value_chan0>
+ 6da:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 6de:	80 93 65 05 	sts	0x0565, r24	; 0x800565 <adc_value_chan0>
 		current_channel = 1;
- 6de:	81 e0       	ldi	r24, 0x01	; 1
- 6e0:	80 93 cd 05 	sts	0x05CD, r24	; 0x8005cd <current_channel>
+ 6e2:	81 e0       	ldi	r24, 0x01	; 1
+ 6e4:	80 93 66 05 	sts	0x0566, r24	; 0x800566 <current_channel>
 		adc_set_channel(1);			// Cambiar al canal 1
- 6e4:	0e 94 81 00 	call	0x102	; 0x102 <adc_set_channel>
+ 6e8:	0e 94 81 00 	call	0x102	; 0x102 <adc_set_channel>
 		break;
- 6e8:	27 c0       	rjmp	.+78     	; 0x738 <__vector_21+0x98>
+ 6ec:	27 c0       	rjmp	.+78     	; 0x73c <__vector_21+0x98>
 		
 		case 1:
 		adc_value_chan1 = ADCH;		// Guardar valor para canal 1
- 6ea:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
- 6ee:	80 93 cb 05 	sts	0x05CB, r24	; 0x8005cb <adc_value_chan1>
+ 6ee:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 6f2:	80 93 64 05 	sts	0x0564, r24	; 0x800564 <adc_value_chan1>
 		current_channel = 2;
- 6f2:	82 e0       	ldi	r24, 0x02	; 2
- 6f4:	80 93 cd 05 	sts	0x05CD, r24	; 0x8005cd <current_channel>
+ 6f6:	82 e0       	ldi	r24, 0x02	; 2
+ 6f8:	80 93 66 05 	sts	0x0566, r24	; 0x800566 <current_channel>
 		adc_set_channel(2);			// Cambiar al canal 2
- 6f8:	0e 94 81 00 	call	0x102	; 0x102 <adc_set_channel>
+ 6fc:	0e 94 81 00 	call	0x102	; 0x102 <adc_set_channel>
 		break;
- 6fc:	1d c0       	rjmp	.+58     	; 0x738 <__vector_21+0x98>
+ 700:	1d c0       	rjmp	.+58     	; 0x73c <__vector_21+0x98>
 		
 		case 2:
 		adc_value_chan2 = ADCH;		// Guardar valor para canal 2
- 6fe:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
- 702:	80 93 ca 05 	sts	0x05CA, r24	; 0x8005ca <adc_value_chan2>
+ 702:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 706:	80 93 63 05 	sts	0x0563, r24	; 0x800563 <adc_value_chan2>
 		current_channel = 3;
- 706:	83 e0       	ldi	r24, 0x03	; 3
- 708:	80 93 cd 05 	sts	0x05CD, r24	; 0x8005cd <current_channel>
+ 70a:	83 e0       	ldi	r24, 0x03	; 3
+ 70c:	80 93 66 05 	sts	0x0566, r24	; 0x800566 <current_channel>
 		adc_set_channel(3);			// Cambiar al canal 3
- 70c:	0e 94 81 00 	call	0x102	; 0x102 <adc_set_channel>
+ 710:	0e 94 81 00 	call	0x102	; 0x102 <adc_set_channel>
 		break;
- 710:	13 c0       	rjmp	.+38     	; 0x738 <__vector_21+0x98>
+ 714:	13 c0       	rjmp	.+38     	; 0x73c <__vector_21+0x98>
 		
 		case 3:
 		adc_value_chan3 = ADCH;		// Guardar valor para canal 3
- 712:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
- 716:	80 93 c9 05 	sts	0x05C9, r24	; 0x8005c9 <adc_value_chan3>
+ 716:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 71a:	80 93 62 05 	sts	0x0562, r24	; 0x800562 <adc_value_chan3>
 		current_channel = 0;
- 71a:	10 92 cd 05 	sts	0x05CD, r1	; 0x8005cd <current_channel>
+ 71e:	10 92 66 05 	sts	0x0566, r1	; 0x800566 <current_channel>
 		adc_set_channel(0);			// Cambiar al canal 0
- 71e:	80 e0       	ldi	r24, 0x00	; 0
- 720:	0e 94 81 00 	call	0x102	; 0x102 <adc_set_channel>
+ 722:	80 e0       	ldi	r24, 0x00	; 0
+ 724:	0e 94 81 00 	call	0x102	; 0x102 <adc_set_channel>
 		break;
- 724:	09 c0       	rjmp	.+18     	; 0x738 <__vector_21+0x98>
+ 728:	09 c0       	rjmp	.+18     	; 0x73c <__vector_21+0x98>
 		
 		default:
 		adc_value_chan0 = ADCH;		// Guardar valor para canal 0
- 726:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
- 72a:	80 93 cc 05 	sts	0x05CC, r24	; 0x8005cc <adc_value_chan0>
+ 72a:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 72e:	80 93 65 05 	sts	0x0565, r24	; 0x800565 <adc_value_chan0>
 		current_channel = 0;
- 72e:	10 92 cd 05 	sts	0x05CD, r1	; 0x8005cd <current_channel>
+ 732:	10 92 66 05 	sts	0x0566, r1	; 0x800566 <current_channel>
 		adc_set_channel(0);			// En cualquier otro caso regresar al canal 0
- 732:	80 e0       	ldi	r24, 0x00	; 0
- 734:	0e 94 81 00 	call	0x102	; 0x102 <adc_set_channel>
+ 736:	80 e0       	ldi	r24, 0x00	; 0
+ 738:	0e 94 81 00 	call	0x102	; 0x102 <adc_set_channel>
 		break;
 	}
 }
- 738:	ff 91       	pop	r31
- 73a:	ef 91       	pop	r30
- 73c:	bf 91       	pop	r27
- 73e:	af 91       	pop	r26
- 740:	9f 91       	pop	r25
- 742:	8f 91       	pop	r24
- 744:	7f 91       	pop	r23
- 746:	6f 91       	pop	r22
- 748:	5f 91       	pop	r21
- 74a:	4f 91       	pop	r20
- 74c:	3f 91       	pop	r19
- 74e:	2f 91       	pop	r18
- 750:	0f 90       	pop	r0
- 752:	0f be       	out	0x3f, r0	; 63
+ 73c:	ff 91       	pop	r31
+ 73e:	ef 91       	pop	r30
+ 740:	bf 91       	pop	r27
+ 742:	af 91       	pop	r26
+ 744:	9f 91       	pop	r25
+ 746:	8f 91       	pop	r24
+ 748:	7f 91       	pop	r23
+ 74a:	6f 91       	pop	r22
+ 74c:	5f 91       	pop	r21
+ 74e:	4f 91       	pop	r20
+ 750:	3f 91       	pop	r19
+ 752:	2f 91       	pop	r18
  754:	0f 90       	pop	r0
- 756:	1f 90       	pop	r1
- 758:	18 95       	reti
+ 756:	0f be       	out	0x3f, r0	; 63
+ 758:	0f 90       	pop	r0
+ 75a:	1f 90       	pop	r1
+ 75c:	18 95       	reti
 
-0000075a <__vector_18>:
+0000075e <__vector_18>:
 
 
 // RECEPCIÓN DE DATOS EN UART
 ISR(USART_RX_vect)
 {
- 75a:	1f 92       	push	r1
- 75c:	0f 92       	push	r0
- 75e:	0f b6       	in	r0, 0x3f	; 63
+ 75e:	1f 92       	push	r1
  760:	0f 92       	push	r0
- 762:	11 24       	eor	r1, r1
- 764:	2f 93       	push	r18
- 766:	3f 93       	push	r19
- 768:	4f 93       	push	r20
- 76a:	5f 93       	push	r21
- 76c:	6f 93       	push	r22
- 76e:	7f 93       	push	r23
- 770:	8f 93       	push	r24
- 772:	9f 93       	push	r25
- 774:	af 93       	push	r26
- 776:	bf 93       	push	r27
- 778:	cf 93       	push	r28
- 77a:	df 93       	push	r29
- 77c:	ef 93       	push	r30
- 77e:	ff 93       	push	r31
-	// Guardar caracter (Y limpiar el buffer)
+ 762:	0f b6       	in	r0, 0x3f	; 63
+ 764:	0f 92       	push	r0
+ 766:	11 24       	eor	r1, r1
+ 768:	2f 93       	push	r18
+ 76a:	3f 93       	push	r19
+ 76c:	4f 93       	push	r20
+ 76e:	5f 93       	push	r21
+ 770:	6f 93       	push	r22
+ 772:	7f 93       	push	r23
+ 774:	8f 93       	push	r24
+ 776:	9f 93       	push	r25
+ 778:	af 93       	push	r26
+ 77a:	bf 93       	push	r27
+ 77c:	cf 93       	push	r28
+ 77e:	ef 93       	push	r30
+ 780:	ff 93       	push	r31
 	char data = UDR0;
- 780:	c0 91 c6 00 	lds	r28, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7f80c6>
-	//UART_sendChar(data);
-	
-	// Inicializar framing (Lo que tiene más protección)
-	if ((data == RXTX_START) && (!reception_started) && (reception_ended))
- 784:	c5 3a       	cpi	r28, 0xA5	; 165
- 786:	19 f5       	brne	.+70     	; 0x7ce <__vector_18+0x74>
- 788:	80 91 c7 05 	lds	r24, 0x05C7	; 0x8005c7 <reception_started>
- 78c:	81 11       	cpse	r24, r1
- 78e:	1f c0       	rjmp	.+62     	; 0x7ce <__vector_18+0x74>
- 790:	80 91 03 01 	lds	r24, 0x0103	; 0x800103 <reception_ended>
- 794:	88 23       	and	r24, r24
- 796:	d9 f0       	breq	.+54     	; 0x7ce <__vector_18+0x74>
+ 782:	c0 91 c6 00 	lds	r28, 0x00C6	; 0x8000c6 <__TEXT_REGION_LENGTH__+0x7f80c6>
+
+	switch (reception_state)
+ 786:	80 91 60 05 	lds	r24, 0x0560	; 0x800560 <__data_end>
+ 78a:	82 30       	cpi	r24, 0x02	; 2
+ 78c:	69 f1       	breq	.+90     	; 0x7e8 <__vector_18+0x8a>
+ 78e:	28 f4       	brcc	.+10     	; 0x79a <__vector_18+0x3c>
+ 790:	88 23       	and	r24, r24
+ 792:	49 f0       	breq	.+18     	; 0x7a6 <__vector_18+0x48>
+ 794:	81 30       	cpi	r24, 0x01	; 1
+ 796:	b9 f0       	breq	.+46     	; 0x7c6 <__vector_18+0x68>
+ 798:	5d c0       	rjmp	.+186    	; 0x854 <__DATA_REGION_LENGTH__+0x54>
+ 79a:	83 30       	cpi	r24, 0x03	; 3
+ 79c:	b1 f1       	breq	.+108    	; 0x80a <__DATA_REGION_LENGTH__+0xa>
+ 79e:	84 30       	cpi	r24, 0x04	; 4
+ 7a0:	09 f4       	brne	.+2      	; 0x7a4 <__vector_18+0x46>
+ 7a2:	44 c0       	rjmp	.+136    	; 0x82c <__DATA_REGION_LENGTH__+0x2c>
+ 7a4:	57 c0       	rjmp	.+174    	; 0x854 <__DATA_REGION_LENGTH__+0x54>
 	{
-		// Bajar la bandera de fin de framing
-		reception_ended = 0;
- 798:	10 92 03 01 	sts	0x0103, r1	; 0x800103 <reception_ended>
-		
-		// Levantar la bandera de inicio de framing
-		reception_started = 1;
- 79c:	81 e0       	ldi	r24, 0x01	; 1
- 79e:	80 93 c7 05 	sts	0x05C7, r24	; 0x8005c7 <reception_started>
-		
-		// Limpiar todos los valores del arreglo
-		for (uint8_t i = 0; i < 3; i++) {
- 7a2:	80 e0       	ldi	r24, 0x00	; 0
- 7a4:	06 c0       	rjmp	.+12     	; 0x7b2 <__vector_18+0x58>
-			received_data[i] = 0;
- 7a6:	e8 2f       	mov	r30, r24
- 7a8:	f0 e0       	ldi	r31, 0x00	; 0
- 7aa:	e0 50       	subi	r30, 0x00	; 0
- 7ac:	ff 4f       	sbci	r31, 0xFF	; 255
- 7ae:	10 82       	st	Z, r1
-		
-		// Levantar la bandera de inicio de framing
-		reception_started = 1;
-		
-		// Limpiar todos los valores del arreglo
-		for (uint8_t i = 0; i < 3; i++) {
- 7b0:	8f 5f       	subi	r24, 0xFF	; 255
- 7b2:	83 30       	cpi	r24, 0x03	; 3
- 7b4:	c0 f3       	brcs	.-16     	; 0x7a6 <__vector_18+0x4c>
-			received_data[i] = 0;
+		case 0:  // Esperando START
+		if (data == RXTX_START) {
+ 7a6:	c0 33       	cpi	r28, 0x30	; 48
+ 7a8:	09 f0       	breq	.+2      	; 0x7ac <__vector_18+0x4e>
+ 7aa:	56 c0       	rjmp	.+172    	; 0x858 <__DATA_REGION_LENGTH__+0x58>
+			reception_state = 1;
+ 7ac:	81 e0       	ldi	r24, 0x01	; 1
+ 7ae:	80 93 60 05 	sts	0x0560, r24	; 0x800560 <__data_end>
+			received_data[0] = 0;
+ 7b2:	e0 e0       	ldi	r30, 0x00	; 0
+ 7b4:	f1 e0       	ldi	r31, 0x01	; 1
+ 7b6:	10 82       	st	Z, r1
+			received_data[1] = 0;
+ 7b8:	11 82       	std	Z+1, r1	; 0x01
+			received_data[2] = 0;
+ 7ba:	12 82       	std	Z+2, r1	; 0x02
+			UART_sendString("Inicio de Frame\r\n");
+ 7bc:	89 e5       	ldi	r24, 0x59	; 89
+ 7be:	94 e0       	ldi	r25, 0x04	; 4
+ 7c0:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 7c4:	49 c0       	rjmp	.+146    	; 0x858 <__DATA_REGION_LENGTH__+0x58>
 		}
-		
-		// Indicador de prueba
-		UART_sendString("Marca de Inicio de Frame: ");
- 7b6:	8a e5       	ldi	r24, 0x5A	; 90
- 7b8:	94 e0       	ldi	r25, 0x04	; 4
- 7ba:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
-		UART_sendChar(data);
- 7be:	8c 2f       	mov	r24, r28
- 7c0:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
-		UART_sendString("\r\n");
- 7c4:	8a e4       	ldi	r24, 0x4A	; 74
- 7c6:	93 e0       	ldi	r25, 0x03	; 3
- 7c8:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
- 7cc:	88 c0       	rjmp	.+272    	; 0x8de <__DATA_REGION_LENGTH__+0xde>
-	}
-	
-	// Recepción del primer byte de instrucción
-	else if(reception_started)
- 7ce:	80 91 c7 05 	lds	r24, 0x05C7	; 0x8005c7 <reception_started>
- 7d2:	88 23       	and	r24, r24
- 7d4:	99 f0       	breq	.+38     	; 0x7fc <__vector_18+0xa2>
-	{
-		// Bajar la bandera de inicio de framing
-		reception_started = 0;
- 7d6:	10 92 c7 05 	sts	0x05C7, r1	; 0x8005c7 <reception_started>
-		
-		// Guardar el dato en la posición 0 del arreglo
+		break;
+
+		case 1:  // Recibiendo BYTE 1
 		received_data[0] = data;
- 7da:	c0 93 00 01 	sts	0x0100, r28	; 0x800100 <__DATA_REGION_ORIGIN__>
-		
-		// Levantar la bandera de recepción del primer byte de instrucción
-		ins_byte1_received = 1;
- 7de:	81 e0       	ldi	r24, 0x01	; 1
- 7e0:	80 93 c6 05 	sts	0x05C6, r24	; 0x8005c6 <ins_byte1_received>
-		
-		// Indicador de prueba
-		UART_sendString("Primer Caracter de Instrucción Recibido: ");
- 7e4:	85 e7       	ldi	r24, 0x75	; 117
- 7e6:	94 e0       	ldi	r25, 0x04	; 4
- 7e8:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 7c6:	c0 93 00 01 	sts	0x0100, r28	; 0x800100 <__DATA_REGION_ORIGIN__>
+		reception_state = 2;
+ 7ca:	82 e0       	ldi	r24, 0x02	; 2
+ 7cc:	80 93 60 05 	sts	0x0560, r24	; 0x800560 <__data_end>
+		UART_sendString("Byte 1 recibido: ");
+ 7d0:	8b e6       	ldi	r24, 0x6B	; 107
+ 7d2:	94 e0       	ldi	r25, 0x04	; 4
+ 7d4:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		UART_sendChar(data);
- 7ec:	8c 2f       	mov	r24, r28
- 7ee:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
+ 7d8:	8c 2f       	mov	r24, r28
+ 7da:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
 		UART_sendString("\r\n");
- 7f2:	8a e4       	ldi	r24, 0x4A	; 74
- 7f4:	93 e0       	ldi	r25, 0x03	; 3
- 7f6:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
- 7fa:	71 c0       	rjmp	.+226    	; 0x8de <__DATA_REGION_LENGTH__+0xde>
-	}
-	
-	// Recepción del segundo byte de instrucción
-	else if(ins_byte1_received)
- 7fc:	80 91 c6 05 	lds	r24, 0x05C6	; 0x8005c6 <ins_byte1_received>
- 800:	88 23       	and	r24, r24
- 802:	99 f0       	breq	.+38     	; 0x82a <__DATA_REGION_LENGTH__+0x2a>
-	{
-		// Bajar la bandera de recepción del primer byte de instrucción
-		ins_byte1_received = 0;
- 804:	10 92 c6 05 	sts	0x05C6, r1	; 0x8005c6 <ins_byte1_received>
-		
-		// Guardar el dato en la posición 1 del arreglo
+ 7de:	89 e4       	ldi	r24, 0x49	; 73
+ 7e0:	93 e0       	ldi	r25, 0x03	; 3
+ 7e2:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+		break;
+ 7e6:	38 c0       	rjmp	.+112    	; 0x858 <__DATA_REGION_LENGTH__+0x58>
+
+		case 2:  // Recibiendo BYTE 2
 		received_data[1] = data;
- 808:	c0 93 01 01 	sts	0x0101, r28	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
-		
-		// Levantar la bandera de recepción del segundo byte de instrucción
-		ins_byte2_received = 1;
- 80c:	81 e0       	ldi	r24, 0x01	; 1
- 80e:	80 93 c5 05 	sts	0x05C5, r24	; 0x8005c5 <ins_byte2_received>
-		
-		// Indicador de prueba
-		UART_sendString("Segundo Caracter de Instrucción Recibido: ");
- 812:	8f e9       	ldi	r24, 0x9F	; 159
- 814:	94 e0       	ldi	r25, 0x04	; 4
- 816:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 7e8:	c0 93 01 01 	sts	0x0101, r28	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
+		reception_state = 3;
+ 7ec:	83 e0       	ldi	r24, 0x03	; 3
+ 7ee:	80 93 60 05 	sts	0x0560, r24	; 0x800560 <__data_end>
+		UART_sendString("Byte 2 recibido: ");
+ 7f2:	8d e7       	ldi	r24, 0x7D	; 125
+ 7f4:	94 e0       	ldi	r25, 0x04	; 4
+ 7f6:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		UART_sendChar(data);
- 81a:	8c 2f       	mov	r24, r28
- 81c:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
+ 7fa:	8c 2f       	mov	r24, r28
+ 7fc:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
 		UART_sendString("\r\n");
- 820:	8a e4       	ldi	r24, 0x4A	; 74
- 822:	93 e0       	ldi	r25, 0x03	; 3
- 824:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
- 828:	5a c0       	rjmp	.+180    	; 0x8de <__DATA_REGION_LENGTH__+0xde>
-	}
-	
-	// Recepción de caracter de dato
-	else if(ins_byte2_received)
- 82a:	80 91 c5 05 	lds	r24, 0x05C5	; 0x8005c5 <ins_byte2_received>
- 82e:	88 23       	and	r24, r24
- 830:	99 f0       	breq	.+38     	; 0x858 <__DATA_REGION_LENGTH__+0x58>
-	{
-		// Bajar la bandera de recepción del segundo byte de instrucción
-		ins_byte2_received = 0;
- 832:	10 92 c5 05 	sts	0x05C5, r1	; 0x8005c5 <ins_byte2_received>
-		
-		// Guardar el byte en la posición 2 del arreglo
+ 800:	89 e4       	ldi	r24, 0x49	; 73
+ 802:	93 e0       	ldi	r25, 0x03	; 3
+ 804:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+		break;
+ 808:	27 c0       	rjmp	.+78     	; 0x858 <__DATA_REGION_LENGTH__+0x58>
+
+		case 3:  // Recibiendo DATO
 		received_data[2] = data;
- 836:	c0 93 02 01 	sts	0x0102, r28	; 0x800102 <__DATA_REGION_ORIGIN__+0x2>
-		
-		// Levantar la bandera de caracter de dato recibido
-		data_byte_received = 1;
- 83a:	81 e0       	ldi	r24, 0x01	; 1
- 83c:	80 93 c4 05 	sts	0x05C4, r24	; 0x8005c4 <__data_end>
-		
-		// Indicador de prueba
-		UART_sendString("Caracter de Datos Recibido: ");
- 840:	8a ec       	ldi	r24, 0xCA	; 202
- 842:	94 e0       	ldi	r25, 0x04	; 4
- 844:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 80a:	c0 93 02 01 	sts	0x0102, r28	; 0x800102 <__DATA_REGION_ORIGIN__+0x2>
+		reception_state = 4;
+ 80e:	84 e0       	ldi	r24, 0x04	; 4
+ 810:	80 93 60 05 	sts	0x0560, r24	; 0x800560 <__data_end>
+		UART_sendString("Dato recibido: ");
+ 814:	8f e8       	ldi	r24, 0x8F	; 143
+ 816:	94 e0       	ldi	r25, 0x04	; 4
+ 818:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
 		UART_sendChar(data);
- 848:	8c 2f       	mov	r24, r28
- 84a:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
+ 81c:	8c 2f       	mov	r24, r28
+ 81e:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
 		UART_sendString("\r\n");
- 84e:	8a e4       	ldi	r24, 0x4A	; 74
- 850:	93 e0       	ldi	r25, 0x03	; 3
- 852:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
- 856:	43 c0       	rjmp	.+134    	; 0x8de <__DATA_REGION_LENGTH__+0xde>
-	}
-	
-	// Fin de transmisión
-	else if((data == RXTX_END) && (data_byte_received))
- 858:	ca 35       	cpi	r28, 0x5A	; 90
- 85a:	b1 f5       	brne	.+108    	; 0x8c8 <__DATA_REGION_LENGTH__+0xc8>
- 85c:	80 91 c4 05 	lds	r24, 0x05C4	; 0x8005c4 <__data_end>
- 860:	88 23       	and	r24, r24
- 862:	91 f1       	breq	.+100    	; 0x8c8 <__DATA_REGION_LENGTH__+0xc8>
-	{
-		// Bajar la bandera de recepción del byte de dato
-		data_byte_received = 0;
- 864:	10 92 c4 05 	sts	0x05C4, r1	; 0x8005c4 <__data_end>
-		
-		// Levantar la bandera de recepción terminada
-		reception_ended = 1;
- 868:	81 e0       	ldi	r24, 0x01	; 1
- 86a:	80 93 03 01 	sts	0x0103, r24	; 0x800103 <reception_ended>
-		
-		// Indicador de prueba
-		UART_sendString("Fin de Frame de Información: ");
- 86e:	87 ee       	ldi	r24, 0xE7	; 231
- 870:	94 e0       	ldi	r25, 0x04	; 4
- 872:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
-		UART_sendChar(data);
- 876:	8c 2f       	mov	r24, r28
- 878:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
-		UART_sendString("\r\n");
- 87c:	8a e4       	ldi	r24, 0x4A	; 74
- 87e:	93 e0       	ldi	r25, 0x03	; 3
- 880:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
-		UART_sendString("Arreglo de Datos: [");
- 884:	85 e0       	ldi	r24, 0x05	; 5
- 886:	95 e0       	ldi	r25, 0x05	; 5
- 888:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
-		UART_sendChar(received_data[0]);
- 88c:	c0 e0       	ldi	r28, 0x00	; 0
- 88e:	d1 e0       	ldi	r29, 0x01	; 1
- 890:	88 81       	ld	r24, Y
- 892:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
-		UART_sendString(", ");
- 896:	89 e1       	ldi	r24, 0x19	; 25
- 898:	95 e0       	ldi	r25, 0x05	; 5
- 89a:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
-		UART_sendChar(received_data[1]);
- 89e:	89 81       	ldd	r24, Y+1	; 0x01
- 8a0:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
-		UART_sendString(", ");
- 8a4:	89 e1       	ldi	r24, 0x19	; 25
- 8a6:	95 e0       	ldi	r25, 0x05	; 5
- 8a8:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
-		UART_sendChar(received_data[2]);
- 8ac:	8a 81       	ldd	r24, Y+2	; 0x02
- 8ae:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
-		UART_sendString("] ");
- 8b2:	8c e1       	ldi	r24, 0x1C	; 28
- 8b4:	95 e0       	ldi	r25, 0x05	; 5
- 8b6:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
-		UART_sendString("\r\n");
- 8ba:	8a e4       	ldi	r24, 0x4A	; 74
- 8bc:	93 e0       	ldi	r25, 0x03	; 3
- 8be:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
-		
-		// PROCESAR INSTRUCCIÓN!!!!
-		process_instruction_uart();
- 8c2:	0e 94 3f 01 	call	0x27e	; 0x27e <process_instruction_uart>
- 8c6:	0b c0       	rjmp	.+22     	; 0x8de <__DATA_REGION_LENGTH__+0xde>
-	}
-	else
-	{
-		// Indicador de prueba
-		UART_sendString("Caracter Inválido: ");
- 8c8:	8f e1       	ldi	r24, 0x1F	; 31
- 8ca:	95 e0       	ldi	r25, 0x05	; 5
- 8cc:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
-		UART_sendChar(data);
- 8d0:	8c 2f       	mov	r24, r28
- 8d2:	0e 94 20 01 	call	0x240	; 0x240 <UART_sendChar>
-		UART_sendString("\r\n");
- 8d6:	8a e4       	ldi	r24, 0x4A	; 74
- 8d8:	93 e0       	ldi	r25, 0x03	; 3
- 8da:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+ 822:	89 e4       	ldi	r24, 0x49	; 73
+ 824:	93 e0       	ldi	r25, 0x03	; 3
+ 826:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+		break;
+ 82a:	16 c0       	rjmp	.+44     	; 0x858 <__DATA_REGION_LENGTH__+0x58>
+
+		case 4:  // Esperando END
+		if (data == RXTX_END) {
+ 82c:	ca 35       	cpi	r28, 0x5A	; 90
+ 82e:	39 f4       	brne	.+14     	; 0x83e <__DATA_REGION_LENGTH__+0x3e>
+			UART_sendString("Fin de Frame\r\n");
+ 830:	8f e9       	ldi	r24, 0x9F	; 159
+ 832:	94 e0       	ldi	r25, 0x04	; 4
+ 834:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+			process_instruction_uart();  // Ejecutar instrucción
+ 838:	0e 94 41 01 	call	0x282	; 0x282 <process_instruction_uart>
+ 83c:	08 c0       	rjmp	.+16     	; 0x84e <__DATA_REGION_LENGTH__+0x4e>
+			} else {
+			UART_sendString("ERROR: Se esperaba fin de frame\r\n");
+ 83e:	8e ea       	ldi	r24, 0xAE	; 174
+ 840:	94 e0       	ldi	r25, 0x04	; 4
+ 842:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+			UART_sendString("\r\n");
+ 846:	89 e4       	ldi	r24, 0x49	; 73
+ 848:	93 e0       	ldi	r25, 0x03	; 3
+ 84a:	0e 94 27 01 	call	0x24e	; 0x24e <UART_sendString>
+		}
+		reception_state = 0;  // Reiniciar recepción
+ 84e:	10 92 60 05 	sts	0x0560, r1	; 0x800560 <__data_end>
+		break;
+ 852:	02 c0       	rjmp	.+4      	; 0x858 <__DATA_REGION_LENGTH__+0x58>
+
+		default:
+		reception_state = 0;
+ 854:	10 92 60 05 	sts	0x0560, r1	; 0x800560 <__data_end>
+		break;
 	}
 }
- 8de:	ff 91       	pop	r31
- 8e0:	ef 91       	pop	r30
- 8e2:	df 91       	pop	r29
- 8e4:	cf 91       	pop	r28
- 8e6:	bf 91       	pop	r27
- 8e8:	af 91       	pop	r26
- 8ea:	9f 91       	pop	r25
- 8ec:	8f 91       	pop	r24
- 8ee:	7f 91       	pop	r23
- 8f0:	6f 91       	pop	r22
- 8f2:	5f 91       	pop	r21
- 8f4:	4f 91       	pop	r20
- 8f6:	3f 91       	pop	r19
- 8f8:	2f 91       	pop	r18
- 8fa:	0f 90       	pop	r0
- 8fc:	0f be       	out	0x3f, r0	; 63
- 8fe:	0f 90       	pop	r0
- 900:	1f 90       	pop	r1
- 902:	18 95       	reti
+ 858:	ff 91       	pop	r31
+ 85a:	ef 91       	pop	r30
+ 85c:	cf 91       	pop	r28
+ 85e:	bf 91       	pop	r27
+ 860:	af 91       	pop	r26
+ 862:	9f 91       	pop	r25
+ 864:	8f 91       	pop	r24
+ 866:	7f 91       	pop	r23
+ 868:	6f 91       	pop	r22
+ 86a:	5f 91       	pop	r21
+ 86c:	4f 91       	pop	r20
+ 86e:	3f 91       	pop	r19
+ 870:	2f 91       	pop	r18
+ 872:	0f 90       	pop	r0
+ 874:	0f be       	out	0x3f, r0	; 63
+ 876:	0f 90       	pop	r0
+ 878:	1f 90       	pop	r1
+ 87a:	18 95       	reti
 
-00000904 <__umulhisi3>:
- 904:	a2 9f       	mul	r26, r18
- 906:	b0 01       	movw	r22, r0
- 908:	b3 9f       	mul	r27, r19
- 90a:	c0 01       	movw	r24, r0
- 90c:	a3 9f       	mul	r26, r19
- 90e:	70 0d       	add	r23, r0
- 910:	81 1d       	adc	r24, r1
- 912:	11 24       	eor	r1, r1
- 914:	91 1d       	adc	r25, r1
- 916:	b2 9f       	mul	r27, r18
- 918:	70 0d       	add	r23, r0
- 91a:	81 1d       	adc	r24, r1
- 91c:	11 24       	eor	r1, r1
- 91e:	91 1d       	adc	r25, r1
- 920:	08 95       	ret
+0000087c <__umulhisi3>:
+ 87c:	a2 9f       	mul	r26, r18
+ 87e:	b0 01       	movw	r22, r0
+ 880:	b3 9f       	mul	r27, r19
+ 882:	c0 01       	movw	r24, r0
+ 884:	a3 9f       	mul	r26, r19
+ 886:	70 0d       	add	r23, r0
+ 888:	81 1d       	adc	r24, r1
+ 88a:	11 24       	eor	r1, r1
+ 88c:	91 1d       	adc	r25, r1
+ 88e:	b2 9f       	mul	r27, r18
+ 890:	70 0d       	add	r23, r0
+ 892:	81 1d       	adc	r24, r1
+ 894:	11 24       	eor	r1, r1
+ 896:	91 1d       	adc	r25, r1
+ 898:	08 95       	ret
 
-00000922 <_exit>:
- 922:	f8 94       	cli
+0000089a <_exit>:
+ 89a:	f8 94       	cli
 
-00000924 <__stop_program>:
- 924:	ff cf       	rjmp	.-2      	; 0x924 <__stop_program>
+0000089c <__stop_program>:
+ 89c:	ff cf       	rjmp	.-2      	; 0x89c <__stop_program>

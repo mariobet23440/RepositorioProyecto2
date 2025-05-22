@@ -13,6 +13,23 @@ Los caracteres de instrucción, inicio y fin fueron escogidos para que la *Distan
 (El número de bits distintos entre un par de caracteres) sea la máxima posible. Al usar dos caracteres de
 instrucción y caracteres de inicio y fin complementarios, es posible realizar un protocolo de comunicaciones
 más robusto y dificil de malinterpretar.
+
+*/
+
+/*
+HOY: Adafruit y verificar UART
+
+COSAS QUE YA ESTÁN HECHAS Y HAY QUE PROBAR
+- Servomotores
+- Motorreductores - No hay suficiente
+
+
+COSAS QUE FALTAN
+- Adafruit
+
+COSAS QUE DEFINITIVAMENTE YA ESTÁN BIEN Y NO HAY QUE TOCAR MÁS
+- UART - El 
+- EEPROM - Se comprobó que los datos se guardan, solo falta revisar servomotores
 */
 
 /************************************************************************/
@@ -36,6 +53,9 @@ más robusto y dificil de malinterpretar.
 /************************************************************************/
 /* CONSTANTES		                                                    */
 /************************************************************************/
+
+/*
+CARACTERES CON DISTANCIAS DE HAMMING MÁXIMAS
 // Caracteres para framing de recepción de datos
 #define RXTX_START			0xA5    // Marca de inicio de transmisión (¥)
 #define RXTX_END			0x5A    // Complemento con máxima distancia de Hamming (Z)
@@ -49,6 +69,24 @@ más robusto y dificil de malinterpretar.
 #define EEPROM_WRITE		0xF0F0  // 1111 0000 1111 0000
 #define MANUAL_ENABLE		0x9999  // 1001 1001 1001 1001
 #define MANUAL_DISABLE		0x6666  // 0110 0110 0110 0110
+*/
+
+
+// CARACTERES CON VALORES ASCII
+// Caracteres para framing de recepción de datos
+#define RXTX_START			0x30    // Marca de inicio de transmisión (0)
+#define RXTX_END			0x5A    // Complemento con máxima distancia de Hamming (Z)
+
+// Constantes para pares de caracteres de instrucción
+#define MOTORREDUCTOR_X		0x4141  // AA
+#define MOTORREDUCTOR_Y		0x4242  // BB
+#define SERVOMOTOR_X		0x4343  // CC
+#define SERVOMOTOR_Y		0x4444  // DD
+#define EEPROM_READ			0x4545  // EE
+#define EEPROM_WRITE		0x4646  // FF
+#define MANUAL_ENABLE		0x4747  // GG
+#define MANUAL_DISABLE		0x4848  // HH
+
 
 // Constante de punto medio
 #define MIDPOINT			0x7F	// 255/2 (Valor medio)
@@ -84,11 +122,9 @@ char adc_value_chan3 = 0;	// Valor del canal 3 del ADC
 char manual_mode_enabled = 0;	// Modo manual activado
 
 // RECEPCIÓN DE DATOS 
-volatile char reception_started = 0;		// Bandera de inicio de framing
-volatile char ins_byte1_received = 0;		// Bandera de recepción del byte 1 de instrucción
-volatile char ins_byte2_received = 0;		// Bandera de recepción del byte 2 de instrucción
-volatile char data_byte_received = 0;		// Bandera de recepción del byte de datos
-volatile char reception_ended = 1;			// Bandera de final de framing
+// Variable de estado de recepción
+volatile uint8_t reception_state = 0;
+
 
 // Arreglo de datos recibidos
 volatile uint8_t received_data[3] = {0xA5, 0xCC, 0xFF};  // Ejemplo de 3 bytes hexadecimales
@@ -135,12 +171,18 @@ void manual_mode_movement(char Mx, char My, char Sx, char Sy);
 /************************************************************************/
 void setup(void)
 {
+	// Deshabilitar interrupciones
+	cli();
+	
 	// Inicializar cosas en librerías
 	init_timer0();			// Timer0
 	init_timer1();			// Timer1
 	init_HBridgePins();		// Puente H
-	UART_init();			// UART
 	setup_adc();			// ADC
+	UART_init();			// UART
+	
+	// Habilitar Interrupciones
+	sei();
 }
 
 int main(void)
@@ -221,25 +263,25 @@ void process_instruction_uart(void)
 		// Leemos dos posiciones dependiendo del valor de la entrada
 		switch(data_char)
 		{
-			case 1:
+			case '1':
 			UART_sendString("Leyendo datos en dirección No. 1");
 			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS1A);
 			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS1B);
 			break;
 			
-			case 2:
+			case '2':
 			UART_sendString("Leyendo datos en dirección No. 2");
 			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS2A);
 			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS2B);
 			break;
 			
-			case 3:
+			case '3':
 			UART_sendString("Leyendo datos en dirección No. 3");
 			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS3A);
 			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS3B);
 			break;
 			
-			case 4:
+			case '4':
 			UART_sendString("Leyendo datos en dirección No. 4");
 			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS4A);
 			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS4B);
@@ -269,25 +311,25 @@ void process_instruction_uart(void)
 		
 		switch(data_char)
 		{
-			case 1:
+			case '1':
 			UART_sendString("Guardando datos en dirección No. 1");
 			EEPROM_write(EEPROM_ADDRESS1A, adc_value_chan0);
 			EEPROM_write(EEPROM_ADDRESS1B, adc_value_chan1);
 			break;
 			
-			case 2:
+			case '2':
 			UART_sendString("Guardando datos en dirección No. 2");
 			EEPROM_write(EEPROM_ADDRESS2A, adc_value_chan0);
 			EEPROM_write(EEPROM_ADDRESS2B, adc_value_chan1);
 			break;
 			
-			case 3:
+			case '3':
 			UART_sendString("Guardando datos en dirección No. 3");
 			EEPROM_write(EEPROM_ADDRESS3A, adc_value_chan0);
 			EEPROM_write(EEPROM_ADDRESS3B, adc_value_chan1);
 			break;
 			
-			case 4:
+			case '4':
 			UART_sendString("Guardando datos en dirección No. 4");
 			EEPROM_write(EEPROM_ADDRESS4A, adc_value_chan0);
 			EEPROM_write(EEPROM_ADDRESS4B, adc_value_chan1);
@@ -339,7 +381,7 @@ void show_instruction_ASCII(void)
 	}
 	UART_sendString("\r\n");
 	UART_sendString("Para iniciar y terminar frames de 3 bytes \r\n");
-	UART_sendString("Inicio: ¥ \r\n");
+	UART_sendString("Inicio: 0 \r\n");
 	UART_sendString("Fin: Z \r\n");
 	UART_sendString("\r\n");
 	UART_sendString("Ingrese un caracter para accionar el sistema. \r\n");
@@ -428,115 +470,59 @@ ISR(ADC_vect)
 // RECEPCIÓN DE DATOS EN UART
 ISR(USART_RX_vect)
 {
-	// Guardar caracter (Y limpiar el buffer)
 	char data = UDR0;
-	//UART_sendChar(data);
-	
-	// Inicializar framing (Lo que tiene más protección)
-	if ((data == RXTX_START) && (!reception_started) && (reception_ended))
+
+	switch (reception_state)
 	{
-		// Bajar la bandera de fin de framing
-		reception_ended = 0;
-		
-		// Levantar la bandera de inicio de framing
-		reception_started = 1;
-		
-		// Limpiar todos los valores del arreglo
-		for (uint8_t i = 0; i < 3; i++) {
-			received_data[i] = 0;
+		case 0:  // Esperando START
+		if (data == RXTX_START) {
+			reception_state = 1;
+			received_data[0] = 0;
+			received_data[1] = 0;
+			received_data[2] = 0;
+			UART_sendString("Inicio de Frame\r\n");
 		}
-		
-		// Indicador de prueba
-		UART_sendString("Marca de Inicio de Frame: ");
-		UART_sendChar(data);
-		UART_sendString("\r\n");
-	}
-	
-	// Recepción del primer byte de instrucción
-	else if(reception_started)
-	{
-		// Bajar la bandera de inicio de framing
-		reception_started = 0;
-		
-		// Guardar el dato en la posición 0 del arreglo
+		break;
+
+		case 1:  // Recibiendo BYTE 1
 		received_data[0] = data;
-		
-		// Levantar la bandera de recepción del primer byte de instrucción
-		ins_byte1_received = 1;
-		
-		// Indicador de prueba
-		UART_sendString("Primer Caracter de Instrucción Recibido: ");
+		reception_state = 2;
+		UART_sendString("Byte 1 recibido: ");
 		UART_sendChar(data);
 		UART_sendString("\r\n");
-	}
-	
-	// Recepción del segundo byte de instrucción
-	else if(ins_byte1_received)
-	{
-		// Bajar la bandera de recepción del primer byte de instrucción
-		ins_byte1_received = 0;
-		
-		// Guardar el dato en la posición 1 del arreglo
+		break;
+
+		case 2:  // Recibiendo BYTE 2
 		received_data[1] = data;
-		
-		// Levantar la bandera de recepción del segundo byte de instrucción
-		ins_byte2_received = 1;
-		
-		// Indicador de prueba
-		UART_sendString("Segundo Caracter de Instrucción Recibido: ");
+		reception_state = 3;
+		UART_sendString("Byte 2 recibido: ");
 		UART_sendChar(data);
 		UART_sendString("\r\n");
-	}
-	
-	// Recepción de caracter de dato
-	else if(ins_byte2_received)
-	{
-		// Bajar la bandera de recepción del segundo byte de instrucción
-		ins_byte2_received = 0;
-		
-		// Guardar el byte en la posición 2 del arreglo
+		break;
+
+		case 3:  // Recibiendo DATO
 		received_data[2] = data;
-		
-		// Levantar la bandera de caracter de dato recibido
-		data_byte_received = 1;
-		
-		// Indicador de prueba
-		UART_sendString("Caracter de Datos Recibido: ");
+		reception_state = 4;
+		UART_sendString("Dato recibido: ");
 		UART_sendChar(data);
 		UART_sendString("\r\n");
-	}
-	
-	// Fin de transmisión
-	else if((data == RXTX_END) && (data_byte_received))
-	{
-		// Bajar la bandera de recepción del byte de dato
-		data_byte_received = 0;
-		
-		// Levantar la bandera de recepción terminada
-		reception_ended = 1;
-		
-		// Indicador de prueba
-		UART_sendString("Fin de Frame de Información: ");
-		UART_sendChar(data);
-		UART_sendString("\r\n");
-		UART_sendString("Arreglo de Datos: [");
-		UART_sendChar(received_data[0]);
-		UART_sendString(", ");
-		UART_sendChar(received_data[1]);
-		UART_sendString(", ");
-		UART_sendChar(received_data[2]);
-		UART_sendString("] ");
-		UART_sendString("\r\n");
-		
-		// PROCESAR INSTRUCCIÓN!!!!
-		process_instruction_uart();
-	}
-	else
-	{
-		// Indicador de prueba
-		UART_sendString("Caracter Inválido: ");
-		UART_sendChar(data);
-		UART_sendString("\r\n");
+		break;
+
+		case 4:  // Esperando END
+		if (data == RXTX_END) {
+			UART_sendString("Fin de Frame\r\n");
+			process_instruction_uart();  // Ejecutar instrucción
+			} else {
+			UART_sendString("ERROR: Se esperaba fin de frame\r\n");
+			UART_sendString("\r\n");
+		}
+		reception_state = 0;  // Reiniciar recepción
+		break;
+
+		default:
+		reception_state = 0;
+		break;
 	}
 }
+
 
