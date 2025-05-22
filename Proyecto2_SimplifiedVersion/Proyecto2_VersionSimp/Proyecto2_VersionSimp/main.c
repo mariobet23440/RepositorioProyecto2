@@ -400,6 +400,8 @@ void show_instruction_ASCII(void)
 	UART_sendString("Inicio: 0 \r\n");
 	UART_sendString("Fin: Z \r\n");
 	UART_sendString("\r\n");
+	UART_sendString("Estos caracteres pueden servir para hacer pruebas: ! (0X21) y ~ (0x7E) \r\n");
+	UART_sendString("\r\n");
 	UART_sendString("Ingrese un caracter para accionar el sistema. \r\n");
 }
 
@@ -485,16 +487,23 @@ ISR(ADC_vect)
 
 // RECEPCIÓN DE DATOS EN UART
 ISR(USART_RX_vect)
-{
+{	
+	// Guardar el valor del buffer y liberarlo
 	char data = UDR0;
-
+	
+	// Si el frame no está listo, entrar
 	if (!frame_ready) {
+		// Marca de Inicio de Frame
 		if (data == RXTX_START) {
 			reception_index = 0;
 		}
+		
+		// Marca de fin de frame
 		else if (data == RXTX_END && reception_index == FRAME_SIZE) {
 			frame_ready = 1;
 		}
+		
+		// Recepción de instrucciones y datos
 		else if (reception_index < FRAME_SIZE) {
 			received_data[reception_index++] = data;
 		}
