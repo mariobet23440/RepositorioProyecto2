@@ -38,11 +38,13 @@ SUBDIRS :=  \
 ../Libreria_UART \
 ../Libreria_HBridge \
 ../Libreria_ADC \
+../Libreria_EEPROM \
 ../TrabajoPrevio
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../Libreria_EEPROM/Libreria_EEPROM.c \
 ../Libreria_ADC/LibreriaADC.c \
 ../Libreria_HBridge/Libreria_HBridge.c \
 ../Libreria_Timer0PWM/Libreria_Timer0PWM.c \
@@ -58,6 +60,7 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+Libreria_EEPROM/Libreria_EEPROM.o \
 Libreria_ADC/LibreriaADC.o \
 Libreria_HBridge/Libreria_HBridge.o \
 Libreria_Timer0PWM/Libreria_Timer0PWM.o \
@@ -66,6 +69,7 @@ Libreria_UART/Libreria_UART.o \
 main.o
 
 OBJS_AS_ARGS +=  \
+Libreria_EEPROM/Libreria_EEPROM.o \
 Libreria_ADC/LibreriaADC.o \
 Libreria_HBridge/Libreria_HBridge.o \
 Libreria_Timer0PWM/Libreria_Timer0PWM.o \
@@ -74,6 +78,7 @@ Libreria_UART/Libreria_UART.o \
 main.o
 
 C_DEPS +=  \
+Libreria_EEPROM/Libreria_EEPROM.d \
 Libreria_ADC/LibreriaADC.d \
 Libreria_HBridge/Libreria_HBridge.d \
 Libreria_Timer0PWM/Libreria_Timer0PWM.d \
@@ -82,6 +87,7 @@ Libreria_UART/Libreria_UART.d \
 main.d
 
 C_DEPS_AS_ARGS +=  \
+Libreria_EEPROM/Libreria_EEPROM.d \
 Libreria_ADC/LibreriaADC.d \
 Libreria_HBridge/Libreria_HBridge.d \
 Libreria_Timer0PWM/Libreria_Timer0PWM.d \
@@ -103,6 +109,13 @@ LINKER_SCRIPT_DEP+=
 
 
 # AVR32/GNU C Compiler
+Libreria_EEPROM/Libreria_EEPROM.o: ../Libreria_EEPROM/Libreria_EEPROM.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\gcc\dev\atmega328p" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
 Libreria_ADC/LibreriaADC.o: ../Libreria_ADC/LibreriaADC.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0

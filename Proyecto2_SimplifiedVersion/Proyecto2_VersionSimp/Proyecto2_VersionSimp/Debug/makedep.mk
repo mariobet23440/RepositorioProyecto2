@@ -2,6 +2,8 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+Libreria_EEPROM\Libreria_EEPROM.c
+
 Libreria_ADC\LibreriaADC.c
 
 Libreria_HBridge\Libreria_HBridge.c

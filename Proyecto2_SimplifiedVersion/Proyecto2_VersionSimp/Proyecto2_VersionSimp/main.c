@@ -31,6 +31,7 @@ más robusto y dificil de malinterpretar.
 #include "Libreria_UART/Libreria_UART.h"
 #include "Libreria_HBridge/Libreria_HBridge.h"
 #include "Libreria_ADC/LibreriaADC.h"
+#include "Libreria_EEPROM/Libreria_EEPROM.h"
 
 /************************************************************************/
 /* CONSTANTES		                                                    */
@@ -44,13 +45,28 @@ más robusto y dificil de malinterpretar.
 #define MOTORREDUCTOR_Y		0xAAAA  // 1010 1010 1010 1010
 #define SERVOMOTOR_X		0x3333  // 0011 0011 0011 0011
 #define SERVOMOTOR_Y		0xCCCC  // 1100 1100 1100 1100
-#define EEPROM_1			0x0F0F  // 0000 1111 0000 1111
-#define EEPROM_2			0xF0F0  // 1111 0000 1111 0000
-#define EEPROM_3			0x9999  // 1001 1001 1001 1001
-#define EEPROM_4			0x6666  // 0110 0110 0110 0110
+#define EEPROM_READ			0x0F0F  // 0000 1111 0000 1111
+#define EEPROM_WRITE		0xF0F0  // 1111 0000 1111 0000
+#define MANUAL_ENABLE		0x9999  // 1001 1001 1001 1001
+#define MANUAL_DISABLE		0x6666  // 0110 0110 0110 0110
 
 // Constante de punto medio
 #define MIDPOINT			0x7F	// 255/2 (Valor medio)
+
+// Direcciones en EEPROM
+#define EEPROM_ADDRESS1A	0X0000	// Dirección 1A
+#define EEPROM_ADDRESS1B	0X0001	// Dirección 1B
+#define EEPROM_ADDRESS2A	0X0002	// Dirección 1A
+#define EEPROM_ADDRESS2B	0X0003	// Dirección 1B
+#define EEPROM_ADDRESS3A	0X0004	// Dirección 1A
+#define EEPROM_ADDRESS3B	0X0005	// Dirección 1B
+#define EEPROM_ADDRESS4A	0X0006	// Dirección 1A
+#define EEPROM_ADDRESS4B	0X0007	// Dirección 1B
+
+// Pines para LEDs indicadores de modos
+#define MANUAL_MODE_LED		PORTD3
+#define UART_MODE_LED		PORTD4
+#define EEPROM_MODE_LED		PORTD5
 
 /************************************************************************/
 /* VARIABLES GLOBALES                                                   */
@@ -65,7 +81,6 @@ char adc_value_chan2 = 0;	// Valor del canal 2 del ADC
 char adc_value_chan3 = 0;	// Valor del canal 3 del ADC
 
 // MODOS OPERACIONALES
-char uart_mode_enabled = 0;		// Modo UART activado
 char manual_mode_enabled = 0;	// Modo manual activado
 
 // RECEPCIÓN DE DATOS 
@@ -84,10 +99,10 @@ const uint16_t instrucciones[] = {
 	MOTORREDUCTOR_Y,
 	SERVOMOTOR_X,
 	SERVOMOTOR_Y,
-	EEPROM_1,
-	EEPROM_2,
-	EEPROM_3,
-	EEPROM_4
+	EEPROM_READ,
+	EEPROM_WRITE,
+	MANUAL_ENABLE,
+	MANUAL_DISABLE
 };
 
 // Nombres de Instrucciones
@@ -96,10 +111,10 @@ const char* const nombres_instrucciones[] = {
 	"MOTORREDUCTOR_Y",
 	"SERVOMOTOR_X",
 	"SERVOMOTOR_Y",
-	"EEPROM_1",
-	"EEPROM_2",
-	"EEPROM_3",
-	"EEPROM_4"
+	"EEPROM_READ",
+	"EEPROM_WRITE",
+	"MANUAL_ENABLE",
+	"MANUAL_DISABLE"
 };
 
 // Tamaño del arreglo
@@ -194,6 +209,111 @@ void process_instruction_uart(void)
 		case SERVOMOTOR_Y:
 		UART_sendString("SERVOMOTOR Y - ");
 		TIMER1_PWMB_set_servo_PW(data_char);
+		break;
+		
+		// LECTURA DE EEPROM - Mostrar Posiciones en Servomotores
+		case EEPROM_READ:
+		UART_sendString("EEPROM READ - ");
+		
+		char eeprom_dataA = 0;
+		char eeprom_dataB = 0;
+		
+		// Leemos dos posiciones dependiendo del valor de la entrada
+		switch(data_char)
+		{
+			case 1:
+			UART_sendString("Leyendo datos en dirección No. 1");
+			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS1A);
+			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS1B);
+			break;
+			
+			case 2:
+			UART_sendString("Leyendo datos en dirección No. 2");
+			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS2A);
+			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS2B);
+			break;
+			
+			case 3:
+			UART_sendString("Leyendo datos en dirección No. 3");
+			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS3A);
+			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS3B);
+			break;
+			
+			case 4:
+			UART_sendString("Leyendo datos en dirección No. 4");
+			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS4A);
+			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS4B);
+			break;
+			
+			default:
+			UART_sendString("Dirección Inválida");
+			break;
+		}
+		
+		UART_sendString("\r\n");
+		UART_sendString("Datos Recibidos: ");
+		UART_sendChar(eeprom_dataA);
+		UART_sendString(" - ");
+		UART_sendChar(eeprom_dataB);
+		UART_sendString("\r\n");
+		
+		// Mostramos las posiciones en los servomotores
+		TIMER1_PWMA_set_servo_PW(eeprom_dataA);
+		TIMER1_PWMB_set_servo_PW(eeprom_dataB);
+		break;
+		
+		// Escribir en EEPROM
+		case EEPROM_WRITE:
+		UART_sendString("EEPROM WRITE - ");
+		
+		
+		switch(data_char)
+		{
+			case 1:
+			UART_sendString("Guardando datos en dirección No. 1");
+			EEPROM_write(EEPROM_ADDRESS1A, adc_value_chan0);
+			EEPROM_write(EEPROM_ADDRESS1B, adc_value_chan1);
+			break;
+			
+			case 2:
+			UART_sendString("Guardando datos en dirección No. 2");
+			EEPROM_write(EEPROM_ADDRESS2A, adc_value_chan0);
+			EEPROM_write(EEPROM_ADDRESS2B, adc_value_chan1);
+			break;
+			
+			case 3:
+			UART_sendString("Guardando datos en dirección No. 3");
+			EEPROM_write(EEPROM_ADDRESS3A, adc_value_chan0);
+			EEPROM_write(EEPROM_ADDRESS3B, adc_value_chan1);
+			break;
+			
+			case 4:
+			UART_sendString("Guardando datos en dirección No. 4");
+			EEPROM_write(EEPROM_ADDRESS4A, adc_value_chan0);
+			EEPROM_write(EEPROM_ADDRESS4B, adc_value_chan1);
+			break;
+			
+			default:
+			UART_sendString("Dirección Inválida");
+		}
+		
+		UART_sendString("\r\n");
+		UART_sendString("Datos Escritos: ");
+		UART_sendChar(adc_value_chan0);
+		UART_sendString(" - ");
+		UART_sendChar(adc_value_chan1);
+		UART_sendString("\r\n");
+		break;
+		
+		// Habilitar y deshabilitar modo manual
+		case MANUAL_ENABLE:
+		UART_sendString("MANUAL ENABLE - Habilitando modo manual");
+		manual_mode_enabled = 1;
+		break;
+		
+		case MANUAL_DISABLE:
+		UART_sendString("MANUAL ENABLE - Deshabilitando modo manual");
+		manual_mode_enabled = 0;
 		break;
 		
 		default:
