@@ -106,6 +106,9 @@ CARACTERES CON DISTANCIAS DE HAMMING MÁXIMAS
 #define UART_MODE_LED		PORTD4
 #define EEPROM_MODE_LED		PORTD5
 
+// Tamaño de Frame
+#define FRAME_SIZE 3
+
 /************************************************************************/
 /* VARIABLES GLOBALES                                                   */
 /************************************************************************/
@@ -122,12 +125,9 @@ char adc_value_chan3 = 0;	// Valor del canal 3 del ADC
 char manual_mode_enabled = 0;	// Modo manual activado
 
 // RECEPCIÓN DE DATOS 
-// Variable de estado de recepción
-volatile uint8_t reception_state = 0;
-
-
-// Arreglo de datos recibidos
-volatile uint8_t received_data[3] = {0xA5, 0xCC, 0xFF};  // Ejemplo de 3 bytes hexadecimales
+volatile uint8_t received_data[FRAME_SIZE];
+volatile uint8_t reception_index = 0;
+volatile uint8_t frame_ready = 0;
 
 // Arreglo de constantes
 const uint16_t instrucciones[] = {
@@ -187,20 +187,36 @@ void setup(void)
 
 int main(void)
 {
-    setup();
-    UART_sendString("PROGRAMACIÓN DE MICROCONTROLADORES - PROYECTO 2 - RECEPTOR \r\n");
-    show_instruction_ASCII();
-    PORTB |= (1 << PORTB1);
-    while(1)
+	setup();
+	UART_sendString("PROGRAMACIÓN DE MICROCONTROLADORES - PROYECTO 2 - RECEPTOR \r\n");
+	show_instruction_ASCII();
+	PORTB |= (1 << PORTB1);
+	while (1)
 	{
-		if(manual_mode_enabled)
-		{
+		// Si hay un frame listo, procesar la instrucción
+		if (frame_ready) {
+			// Mostrar datos recibidos
+			UART_sendString("Frame recibido: ");
+			for (uint8_t i = 0; i < FRAME_SIZE; i++) {
+				UART_sendChar(received_data[i]);
+				UART_sendString(" ");
+			}
+			UART_sendString("\r\n");
+			
+			process_instruction_uart();  // Procesar instrucción usa received_data
+
+			frame_ready = 0;
+		}
+		
+		// Si el modo manual está activo, hacer algo
+		if (manual_mode_enabled) {
 			manual_mode_movement(adc_value_chan0, adc_value_chan1, adc_value_chan2, adc_value_chan3);
 		}
 	}
 	
-    return 0;
+	return 0;
 }
+
 
 /************************************************************************/
 /* RUTINAS NO DE INTERRUPCIÓN                                           */
@@ -472,57 +488,15 @@ ISR(USART_RX_vect)
 {
 	char data = UDR0;
 
-	switch (reception_state)
-	{
-		case 0:  // Esperando START
+	if (!frame_ready) {
 		if (data == RXTX_START) {
-			reception_state = 1;
-			received_data[0] = 0;
-			received_data[1] = 0;
-			received_data[2] = 0;
-			UART_sendString("Inicio de Frame\r\n");
+			reception_index = 0;
 		}
-		break;
-
-		case 1:  // Recibiendo BYTE 1
-		received_data[0] = data;
-		reception_state = 2;
-		UART_sendString("Byte 1 recibido: ");
-		UART_sendChar(data);
-		UART_sendString("\r\n");
-		break;
-
-		case 2:  // Recibiendo BYTE 2
-		received_data[1] = data;
-		reception_state = 3;
-		UART_sendString("Byte 2 recibido: ");
-		UART_sendChar(data);
-		UART_sendString("\r\n");
-		break;
-
-		case 3:  // Recibiendo DATO
-		received_data[2] = data;
-		reception_state = 4;
-		UART_sendString("Dato recibido: ");
-		UART_sendChar(data);
-		UART_sendString("\r\n");
-		break;
-
-		case 4:  // Esperando END
-		if (data == RXTX_END) {
-			UART_sendString("Fin de Frame\r\n");
-			process_instruction_uart();  // Ejecutar instrucción
-			} else {
-			UART_sendString("ERROR: Se esperaba fin de frame\r\n");
-			UART_sendString("\r\n");
+		else if (data == RXTX_END && reception_index == FRAME_SIZE) {
+			frame_ready = 1;
 		}
-		reception_state = 0;  // Reiniciar recepción
-		break;
-
-		default:
-		reception_state = 0;
-		break;
+		else if (reception_index < FRAME_SIZE) {
+			received_data[reception_index++] = data;
+		}
 	}
 }
-
-
