@@ -1,6 +1,7 @@
 # Import standard python modules.
 import sys
 import time
+import serial
 
 # This example uses the MQTTClient instead of the REST client
 from Adafruit_IO import MQTTClient
@@ -12,8 +13,8 @@ run_count = 0
 # Set to your Adafruit IO username and key.
 # Remember, your key is a secret,
 # so make sure not to publish it when you publish this code!
-ADAFRUIT_IO_USERNAME = "mariobet04"
-ADAFRUIT_IO_KEY = "aio_VhIs51L3AabBCEGHUqbkXZdhciiu"
+#ADAFRUIT_IO_USERNAME = "mariobet04"
+#ADAFRUIT_IO_KEY = ""
 
 # Set to the ID of the feed to subscribe to for updates.
 FEED_ID_receive = 'Carrito_TX'
@@ -42,29 +43,39 @@ def message(client, feed_id, payload):
     the new value.
     """
     print('Feed {0} received new value: {1}'.format(feed_id, payload))
+
+    # Enviar caracteres
+    miArduino.write(bytes(payload,'utf-8'))
+
     # Publish or "send" message to corresponding feed
     print('Sendind data back: {0}'.format(payload))
     client.publish(FEED_ID_Send, payload)
-    # Create an MQTT client instance.
-    client = MQTTClient(ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY)
-    # Setup the callback functions defined above.
-    client.on_connect = connected
-    client.on_disconnect = disconnected
-    client.on_message = message
-    # Connect to the Adafruit IO server.
-    client.connect()
-    # The first option is to run a thread in the background so you can continue
-    # doing things in your program.
-    client.loop_background()
+    
+# Create an MQTT client instance.
+client = MQTTClient(ADAFRUIT_IO_USERNAME, ADAFRUIT_IO_KEY)
+miArduino = serial.Serial(port='COM4', baudrate=9600, timeout=0.1)
+
+
+# Setup the callback functions defined above.
+client.on_connect = connected
+client.on_disconnect = disconnected
+client.on_message = message
+
+# Connect to the Adafruit IO server.
+client.connect()
+
+# The first option is to run a thread in the background so you can continue
+# doing things in your program.
+client.loop_background()
 
 while True:
     """
     # Uncomment the next 3 lines if you want to constantly send data
     # Adafruit IO is rate-limited for publishing
     # so we'll need a delay for calls to aio.send_data()
-    run_count += 1
-    print('sending count: ', run_count)
-    client.publish(FEED_ID_Send, run_count)
     """
+    #run_count += 1
+    #print('sending count: ', run_count)
+    #client.publish(FEED_ID_Send, run_count)
     print('Running "main loop" ')
     time.sleep(3)
