@@ -144,40 +144,122 @@ void process_instruction_uart(void) {
 		UART_sendString("[LOG] Ejecutando: MOTORREDUCTOR_X\r\n");
 		TIMER0_PWMA_set_PW(data_char);
 		break;
+		
 		case MOTORREDUCTOR_Y:
 		UART_sendString("[LOG] Ejecutando: MOTORREDUCTOR_Y\r\n");
 		TIMER0_PWMB_set_PW(data_char);
 		break;
+		
 		case SERVOMOTOR_X:
 		UART_sendString("[LOG] Ejecutando: SERVOMOTOR_X\r\n");
 		TIMER1_PWMA_set_servo_PW(data_char);
 		break;
+		
 		case SERVOMOTOR_Y:
 		UART_sendString("[LOG] Ejecutando: SERVOMOTOR_Y\r\n");
 		TIMER1_PWMB_set_servo_PW(data_char);
 		break;
+		
 		case EEPROM_READ:
 		UART_sendString("[LOG] Ejecutando: EEPROM_READ\r\n");
 		UART_sendString("[LOG] Leyendo EEPROM bloque: ");
 		UART_sendChar(data_char);
 		UART_sendString("\r\n");
-		// EEPROM read cases...
+
+		char read_buffer[8];
+		uint8_t valA, valB;
+
+		switch (data_char) {
+			case '1':
+			valA = EEPROM_read(EEPROM_ADDRESS1A);
+			valB = EEPROM_read(EEPROM_ADDRESS1B);
+			break;
+			case '2':
+			valA = EEPROM_read(EEPROM_ADDRESS2A);
+			valB = EEPROM_read(EEPROM_ADDRESS2B);
+			break;
+			case '3':
+			valA = EEPROM_read(EEPROM_ADDRESS3A);
+			valB = EEPROM_read(EEPROM_ADDRESS3B);
+			break;
+			case '4':
+			valA = EEPROM_read(EEPROM_ADDRESS4A);
+			valB = EEPROM_read(EEPROM_ADDRESS4B);
+			break;
+			default:
+			UART_sendString("[ERROR] Bloque EEPROM inválido\r\n");
+			return;
+		}
+
+		// Mostrar valores leídos en hexadecimal
+		UART_sendString("[LOG] Valor A leído: 0x");
+		itoa(valA, read_buffer, 16);
+		UART_sendString(read_buffer);
+		UART_sendString("\r\n");
+
+		UART_sendString("[LOG] Valor B leído: 0x");
+		itoa(valB, read_buffer, 16);
+		UART_sendString(read_buffer);
+		UART_sendString("\r\n");
+
+		// Aplicar valores a servos
+		TIMER1_PWMA_set_servo_PW(valA);
+		TIMER1_PWMB_set_servo_PW(valB);
 		break;
+		
 		case EEPROM_WRITE:
 		UART_sendString("[LOG] Ejecutando: EEPROM_WRITE\r\n");
 		UART_sendString("[LOG] Escribiendo EEPROM bloque: ");
 		UART_sendChar(data_char);
 		UART_sendString("\r\n");
-		// EEPROM write cases...
+
+		char write_buffer[8];
+
+		switch (data_char) {
+			case '1':
+			EEPROM_write(EEPROM_ADDRESS1A, adc_value_chan0);
+			EEPROM_write(EEPROM_ADDRESS1B, adc_value_chan1);
+			break;
+			case '2':
+			EEPROM_write(EEPROM_ADDRESS2A, adc_value_chan0);
+			EEPROM_write(EEPROM_ADDRESS2B, adc_value_chan1);
+			break;
+			case '3':
+			EEPROM_write(EEPROM_ADDRESS3A, adc_value_chan0);
+			EEPROM_write(EEPROM_ADDRESS3B, adc_value_chan1);
+			break;
+			case '4':
+			EEPROM_write(EEPROM_ADDRESS4A, adc_value_chan0);
+			EEPROM_write(EEPROM_ADDRESS4B, adc_value_chan1);
+			break;
+			default:
+			UART_sendString("[ERROR] Bloque EEPROM inválido\r\n");
+			return;
+		}
+
+		// Mostrar valores escritos en hexadecimal
+		UART_sendString("[LOG] Valor A escrito: 0x");
+		itoa(adc_value_chan0, write_buffer, 16);
+		UART_sendString(write_buffer);
+		UART_sendString("\r\n");
+
+		UART_sendString("[LOG] Valor B escrito: 0x");
+		itoa(adc_value_chan1, write_buffer, 16);
+		UART_sendString(write_buffer);
+		UART_sendString("\r\n");
+
 		break;
+		
 		case MANUAL_ENABLE:
 		UART_sendString("[LOG] Modo manual ACTIVADO\r\n");
 		manual_mode_enabled = 1;
 		break;
+		
 		case MANUAL_DISABLE:
 		UART_sendString("[LOG] Modo manual DESACTIVADO\r\n");
 		manual_mode_enabled = 0;
 		break;
+		
 		default:
 		UART_sendString("[ERROR] Instrucción desconocida\r\n");
 		break;
