@@ -122,7 +122,7 @@ char adc_value_chan2 = 0;	// Valor del canal 2 del ADC
 char adc_value_chan3 = 0;	// Valor del canal 3 del ADC
 
 // MODOS OPERACIONALES
-char manual_mode_enabled = 0;	// Modo manual activado
+char manual_mode_enabled = 1;	// Modo manual activado desde el principio
 
 // RECEPCIÓN DE DATOS 
 volatile uint8_t received_data[FRAME_SIZE];
@@ -231,6 +231,10 @@ void manual_mode_movement(char Mx, char My, char Sx, char Sy)
 	int8_t traslacion = normalize_input(Mx);
 	int8_t rotacion   = normalize_input(My);
 	move_differential(traslacion, rotacion);
+	UART_sendChar(Sx);
+	UART_sendChar(' ');
+	UART_sendChar(Sy);
+	UART_sendString("\r\n");
 }
 
 

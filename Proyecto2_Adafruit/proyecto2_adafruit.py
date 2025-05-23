@@ -13,12 +13,12 @@ run_count = 0
 # Set to your Adafruit IO username and key.
 # Remember, your key is a secret,
 # so make sure not to publish it when you publish this code!
-#ADAFRUIT_IO_USERNAME = "mariobet04"
-#ADAFRUIT_IO_KEY = ""
+ADAFRUIT_IO_USERNAME = "mariobet04"
+ADAFRUIT_IO_KEY = "aio_VhIs51L3AabBCEGHUqbkXZdhciiu"
 
 # Set to the ID of the feed to subscribe to for updates.
-FEED_ID_receive = 'Carrito_TX'
-FEED_ID_Send = 'Carrito_RX'
+FEED_ID_receive = 'Servomotor_X_TX'
+FEED_ID_Send = 'Servomotor_X_RX'
 
 # Define "callback" functions which will be called when certain events
 # happen (connected, disconnected, message arrived).
