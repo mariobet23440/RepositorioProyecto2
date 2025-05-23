@@ -23,11 +23,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  00000270  00000000  00000000  000029c0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000695  00000000  00000000  00002c30  2**0
+ 10 .debug_str    00000734  00000000  00000000  00002c30  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000003bd  00000000  00000000  000032c5  2**0
+ 11 .debug_loc    000003bd  00000000  00000000  00003364  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000f0  00000000  00000000  00003682  2**0
+ 12 .debug_ranges 000000f0  00000000  00000000  00003721  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -101,228 +101,130 @@ Disassembly of section .text:
   a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 000000a6 <setup_adc>:
-
-#include "LibreriaADC.h"
-
-void setup_adc(void)
-{
-	ADMUX  = (1 << REFS0) | (1 << ADLAR);  // AVCC, resultado a la izquierda
   a6:	80 e6       	ldi	r24, 0x60	; 96
   a8:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x7f807c>
-	ADCSRA = (1 << ADEN) | (1 << ADIE) | (1 << ADATE) | (1 << ADPS2) | (1 << ADPS1);
   ac:	ea e7       	ldi	r30, 0x7A	; 122
   ae:	f0 e0       	ldi	r31, 0x00	; 0
   b0:	8e ea       	ldi	r24, 0xAE	; 174
   b2:	80 83       	st	Z, r24
-	ADCSRB = 0x00;                         // Modo de Trigger Libre
   b4:	10 92 7b 00 	sts	0x007B, r1	; 0x80007b <__TEXT_REGION_LENGTH__+0x7f807b>
-	ADCSRA |= (1 << ADSC);                 // Iniciar la conversión
   b8:	80 81       	ld	r24, Z
   ba:	80 64       	ori	r24, 0x40	; 64
   bc:	80 83       	st	Z, r24
   be:	08 95       	ret
 
 000000c0 <adc_set_channel>:
-
-
-// Establecer canal en ADC
-void adc_set_channel(unsigned char channel)
-{
-	ADMUX = (1 << ADLAR) | (1 << REFS0) | (channel & 0x0F); // Limpiar bits de canal y asignar nuevo canal
   c0:	8f 70       	andi	r24, 0x0F	; 15
   c2:	80 66       	ori	r24, 0x60	; 96
   c4:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <__TEXT_REGION_LENGTH__+0x7f807c>
   c8:	08 95       	ret
 
 000000ca <init_HBridgePins>:
-
-// Inicialización de pines de salida
-void init_HBridgePins(void)
-{
-	// Configura IN1 e IN2 como salidas
-	DDRD |= (1 << PD2) | (1 << PD3);
   ca:	8a b1       	in	r24, 0x0a	; 10
   cc:	8c 60       	ori	r24, 0x0C	; 12
   ce:	8a b9       	out	0x0a, r24	; 10
-	
-	// Configura IN3 e IN4 como salidas
-	DDRD |= (1 << PD4) | (1 << PD7);
   d0:	8a b1       	in	r24, 0x0a	; 10
   d2:	80 69       	ori	r24, 0x90	; 144
   d4:	8a b9       	out	0x0a, r24	; 10
   d6:	08 95       	ret
 
 000000d8 <motorA_forward>:
-}
-
-// Control de dirección - Motor A
-void motorA_forward(void) {
-	PORTD |= (1 << PD2);   // IN1 = HIGH
   d8:	8b b1       	in	r24, 0x0b	; 11
   da:	84 60       	ori	r24, 0x04	; 4
   dc:	8b b9       	out	0x0b, r24	; 11
-	PORTD &= ~(1 << PD3);  // IN2 = LOW
   de:	8b b1       	in	r24, 0x0b	; 11
   e0:	87 7f       	andi	r24, 0xF7	; 247
   e2:	8b b9       	out	0x0b, r24	; 11
   e4:	08 95       	ret
 
 000000e6 <motorA_backward>:
-}
-
-void motorA_backward(void) {
-	PORTD &= ~(1 << PD2);  // IN1 = LOW
   e6:	8b b1       	in	r24, 0x0b	; 11
   e8:	8b 7f       	andi	r24, 0xFB	; 251
   ea:	8b b9       	out	0x0b, r24	; 11
-	PORTD |= (1 << PD3);   // IN2 = HIGH
   ec:	8b b1       	in	r24, 0x0b	; 11
   ee:	88 60       	ori	r24, 0x08	; 8
   f0:	8b b9       	out	0x0b, r24	; 11
   f2:	08 95       	ret
 
 000000f4 <motorA_stop>:
-}
-
-void motorA_stop(void) {
-	PORTD &= ~((1 << PD2) | (1 << PD3));  // IN1 = LOW, IN2 = LOW
   f4:	8b b1       	in	r24, 0x0b	; 11
   f6:	83 7f       	andi	r24, 0xF3	; 243
   f8:	8b b9       	out	0x0b, r24	; 11
   fa:	08 95       	ret
 
 000000fc <motorB_forward>:
-}
-
-// Control de dirección - Motor B
-void motorB_forward(void) {
-	PORTD |= (1 << PD4);   // IN3 = HIGH
   fc:	8b b1       	in	r24, 0x0b	; 11
   fe:	80 61       	ori	r24, 0x10	; 16
  100:	8b b9       	out	0x0b, r24	; 11
-	PORTD &= ~(1 << PD7);  // IN4 = LOW
  102:	8b b1       	in	r24, 0x0b	; 11
  104:	8f 77       	andi	r24, 0x7F	; 127
  106:	8b b9       	out	0x0b, r24	; 11
  108:	08 95       	ret
 
 0000010a <motorB_backward>:
-}
-
-void motorB_backward(void) {
-	PORTD &= ~(1 << PD4);  // IN3 = LOW
  10a:	8b b1       	in	r24, 0x0b	; 11
  10c:	8f 7e       	andi	r24, 0xEF	; 239
  10e:	8b b9       	out	0x0b, r24	; 11
-	PORTD |= (1 << PD7);   // IN4 = HIGH
  110:	8b b1       	in	r24, 0x0b	; 11
  112:	80 68       	ori	r24, 0x80	; 128
  114:	8b b9       	out	0x0b, r24	; 11
  116:	08 95       	ret
 
 00000118 <motorB_stop>:
-}
-
-void motorB_stop(void) {
-	PORTD &= ~((1 << PD4) | (1 << PD7));  // IN3 = LOW, IN3 = LOW
  118:	8b b1       	in	r24, 0x0b	; 11
  11a:	8f 76       	andi	r24, 0x6F	; 111
  11c:	8b b9       	out	0x0b, r24	; 11
  11e:	08 95       	ret
 
 00000120 <init_timer0>:
-
-// INICIALIZACIÓN DE TIMER0 - FASTPWM
-void init_timer0(void)
-{
-	// Fast PWM, OC0A y OC0B no invertidos
-	TCCR0A |= (1 << COM0A1) | (1 << COM0B1) | (1 << WGM01) | (1 << WGM00);
  120:	84 b5       	in	r24, 0x24	; 36
  122:	83 6a       	ori	r24, 0xA3	; 163
  124:	84 bd       	out	0x24, r24	; 36
-
-	// Limpiar bits del prescaler
-	TCCR0B &= ~((1 << CS02) | (1 << CS01) | (1 << CS00));
  126:	85 b5       	in	r24, 0x25	; 37
  128:	88 7f       	andi	r24, 0xF8	; 248
  12a:	85 bd       	out	0x25, r24	; 37
-
-	// Establecer prescaler = 128 (no está directamente soportado por hardware)
-	// Usamos 256 mejor (estándar en AVR), para obtener 244 Hz
-	TCCR0B |= (1 << CS02); // prescaler = 256
  12c:	85 b5       	in	r24, 0x25	; 37
  12e:	84 60       	ori	r24, 0x04	; 4
  130:	85 bd       	out	0x25, r24	; 37
-
-	// Salidas PWM
-	DDRD |= (1 << DDD6); // OC0A - Motor A
  132:	8a b1       	in	r24, 0x0a	; 10
  134:	80 64       	ori	r24, 0x40	; 64
  136:	8a b9       	out	0x0a, r24	; 10
-	DDRD |= (1 << DDD5); // OC0B - Motor B
  138:	8a b1       	in	r24, 0x0a	; 10
  13a:	80 62       	ori	r24, 0x20	; 32
  13c:	8a b9       	out	0x0a, r24	; 10
  13e:	08 95       	ret
 
 00000140 <TIMER0_PWMA_set_PW>:
-
-
-// Establecer ancho de pulso en OC0A
-void TIMER0_PWMA_set_PW(uint8_t value)
-{
-    OCR0A = 255 - value;
  140:	80 95       	com	r24
  142:	87 bd       	out	0x27, r24	; 39
  144:	08 95       	ret
 
 00000146 <TIMER0_PWMB_set_PW>:
-}
-
-// Establecer ancho de pulso en OC0B
-void TIMER0_PWMB_set_PW(uint8_t value)
-{
-    OCR0B = 255 - value;
  146:	80 95       	com	r24
  148:	88 bd       	out	0x28, r24	; 40
  14a:	08 95       	ret
 
 0000014c <init_timer1>:
-#include "LibreriaTimer1PWM.h"
-
-// Inicialización de Timer1
-void init_timer1(void)
-{
-	TCCR1A |= (1 << COM1A1) | (1 << COM1B1) | (1 << WGM11); // Fast PWM, OC1A y OC1B no invertido
  14c:	e0 e8       	ldi	r30, 0x80	; 128
  14e:	f0 e0       	ldi	r31, 0x00	; 0
  150:	80 81       	ld	r24, Z
  152:	82 6a       	ori	r24, 0xA2	; 162
  154:	80 83       	st	Z, r24
-	TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << CS11);  // Prescaler de 8, Fast PWM
  156:	e1 e8       	ldi	r30, 0x81	; 129
  158:	f0 e0       	ldi	r31, 0x00	; 0
  15a:	80 81       	ld	r24, Z
  15c:	8a 61       	ori	r24, 0x1A	; 26
  15e:	80 83       	st	Z, r24
-	ICR1 = 39999;							// Establecer TOP a 39999 (Frecuencia de 50 Hz, 20ms)
  160:	8f e3       	ldi	r24, 0x3F	; 63
  162:	9c e9       	ldi	r25, 0x9C	; 156
  164:	90 93 87 00 	sts	0x0087, r25	; 0x800087 <__TEXT_REGION_LENGTH__+0x7f8087>
  168:	80 93 86 00 	sts	0x0086, r24	; 0x800086 <__TEXT_REGION_LENGTH__+0x7f8086>
-	DDRB |= (1 << DDB1) | (1 << DDB2);		// Configurar PB1 y PB2 como salida (OC1A y OC1B)
  16c:	84 b1       	in	r24, 0x04	; 4
  16e:	86 60       	ori	r24, 0x06	; 6
  170:	84 b9       	out	0x04, r24	; 4
  172:	08 95       	ret
 
 00000174 <TIMER1_PWMA_set_servo_PW>:
-}
-
-// PWM para servo en canal A (PB1)
-void TIMER1_PWMA_set_servo_PW(uint8_t value)
-{
-	uint16_t ticks = ((uint32_t)value * 4000) / 255 + 1000;
  174:	28 2f       	mov	r18, r24
  176:	30 e0       	ldi	r19, 0x00	; 0
  178:	a0 ea       	ldi	r26, 0xA0	; 160
@@ -335,18 +237,11 @@ void TIMER1_PWMA_set_servo_PW(uint8_t value)
  188:	0e 94 cd 01 	call	0x39a	; 0x39a <__udivmodsi4>
  18c:	28 51       	subi	r18, 0x18	; 24
  18e:	3c 4f       	sbci	r19, 0xFC	; 252
-	OCR1A = ticks;
  190:	30 93 89 00 	sts	0x0089, r19	; 0x800089 <__TEXT_REGION_LENGTH__+0x7f8089>
  194:	20 93 88 00 	sts	0x0088, r18	; 0x800088 <__TEXT_REGION_LENGTH__+0x7f8088>
  198:	08 95       	ret
 
 0000019a <TIMER1_PWMB_set_servo_PW>:
-}
-
-// PWM para servo en canal B (PB2)
-void TIMER1_PWMB_set_servo_PW(uint8_t value)
-{
-	uint16_t ticks = ((uint32_t)value * 4000) / 255 + 1000;
  19a:	28 2f       	mov	r18, r24
  19c:	30 e0       	ldi	r19, 0x00	; 0
  19e:	a0 ea       	ldi	r26, 0xA0	; 160
@@ -359,41 +254,23 @@ void TIMER1_PWMB_set_servo_PW(uint8_t value)
  1ae:	0e 94 cd 01 	call	0x39a	; 0x39a <__udivmodsi4>
  1b2:	28 51       	subi	r18, 0x18	; 24
  1b4:	3c 4f       	sbci	r19, 0xFC	; 252
-	OCR1B = ticks;
  1b6:	30 93 8b 00 	sts	0x008B, r19	; 0x80008b <__TEXT_REGION_LENGTH__+0x7f808b>
  1ba:	20 93 8a 00 	sts	0x008A, r18	; 0x80008a <__TEXT_REGION_LENGTH__+0x7f808a>
  1be:	08 95       	ret
 
 000001c0 <UART_init>:
-#include "Libreria_UART.h"
-
-// Inicialización UART a 9600 baudios
-void UART_init(void) {
-	// Configura TX como salida, RX como entrada
-	DDRD |= (1 << PD1);   // TX
  1c0:	8a b1       	in	r24, 0x0a	; 10
  1c2:	82 60       	ori	r24, 0x02	; 2
  1c4:	8a b9       	out	0x0a, r24	; 10
-	DDRD &= ~(1 << PD0);  // RX
  1c6:	8a b1       	in	r24, 0x0a	; 10
  1c8:	8e 7f       	andi	r24, 0xFE	; 254
  1ca:	8a b9       	out	0x0a, r24	; 10
-
-	// Configura baud rate a 9600 (F_CPU = 16 MHz)
-	// UBRR = (F_CPU / (16 * BAUD)) - 1 = 103
-	UBRR0 = 103;
  1cc:	87 e6       	ldi	r24, 0x67	; 103
  1ce:	90 e0       	ldi	r25, 0x00	; 0
  1d0:	90 93 c5 00 	sts	0x00C5, r25	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7f80c5>
  1d4:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7f80c4>
-
-	// Habilita recepción, transmisión e interrupción de recepción
-	UCSR0B = (1 << RXEN0) | (1 << TXEN0) | (1 << RXCIE0);
  1d8:	88 e9       	ldi	r24, 0x98	; 152
  1da:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7f80c1>
-
-	// 8 bits, 1 bit de stop, sin paridad
-	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
  1de:	86 e0       	ldi	r24, 0x06	; 6
  1e0:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7f80c2>
  1e4:	08 95       	ret
