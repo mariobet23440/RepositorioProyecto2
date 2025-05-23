@@ -23,15 +23,13 @@ void init_timer1(void)
 // PWM para servo en canal A (PB1)
 void TIMER1_PWMA_set_servo_PW(uint8_t value)
 {
-	uint16_t ticks = ((uint32_t)value * 3277) / 256 + 3276;
-	if (ticks > ICR1) ticks = ICR1;
+	uint16_t ticks = ((uint32_t)value * 4000) / 255 + 1000;
 	OCR1A = ticks;
 }
 
 // PWM para servo en canal B (PB2)
 void TIMER1_PWMB_set_servo_PW(uint8_t value)
 {
-	uint16_t ticks = ((uint32_t)value * 3277) / 256 + 3276;
-	if (ticks > ICR1) ticks = ICR1;
+	uint16_t ticks = ((uint32_t)value * 4000) / 255 + 1000;
 	OCR1B = ticks;
 }

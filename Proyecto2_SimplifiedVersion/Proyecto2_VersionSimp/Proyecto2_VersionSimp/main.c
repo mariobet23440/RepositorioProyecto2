@@ -1,433 +1,90 @@
-/*
- * Proyecto2_VersionSimp.c
- *
- * Created: 21/05/2025 10:39:13
- * Author : mario
- */ 
-
-/*
-PROTOCOLO DE COMUNICACIONES
-Las instrucciones se transmiten en un formato como el siguiente
-[START] - [INS BYTE 1] - [INS BYTE 2] - [DATA] - [END]
-Los caracteres de instrucción, inicio y fin fueron escogidos para que la *Distancia de Hamming* entre ellos
-(El número de bits distintos entre un par de caracteres) sea la máxima posible. Al usar dos caracteres de
-instrucción y caracteres de inicio y fin complementarios, es posible realizar un protocolo de comunicaciones
-más robusto y dificil de malinterpretar.
-
-*/
-
-/*
-HOY: Adafruit y verificar UART
-
-COSAS QUE YA ESTÁN HECHAS Y HAY QUE PROBAR
-- Servomotores
-- Motorreductores - No hay suficiente
-
-
-COSAS QUE FALTAN
-- Adafruit
-
-COSAS QUE DEFINITIVAMENTE YA ESTÁN BIEN Y NO HAY QUE TOCAR MÁS
-- UART - El 
-- EEPROM - Se comprobó que los datos se guardan, solo falta revisar servomotores
-*/
-
 /************************************************************************/
-/* LIBRERIAS EXTERNAS                                                   */
+/* CONTROLADOR PRINCIPAL FUSIONADO UART + MODO MANUAL                   */
+/* Versión: 23/05/2025                                                  */
 /************************************************************************/
+
+#define F_CPU 16000000
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
+#include <util/delay.h>
 #include <stdio.h>
 
 /************************************************************************/
-/* LIBRERIAS PROPIAS (INCLUDES)                                         */
+/* INCLUDES LIBRERÍAS                                                   */
 /************************************************************************/
 #include "Libreria_Timer0PWM/Libreria_Timer0PWM.h"
 #include "Libreria_Timer1PWM/LibreriaTimer1PWM.h"
-#include "Libreria_UART/Libreria_UART.h"
 #include "Libreria_HBridge/Libreria_HBridge.h"
 #include "Libreria_ADC/LibreriaADC.h"
+#include "Libreria_UART/Libreria_UART.h"
 #include "Libreria_EEPROM/Libreria_EEPROM.h"
 
 /************************************************************************/
-/* CONSTANTES		                                                    */
+/* CONSTANTES                                                           */
 /************************************************************************/
+#define RXTX_START         0x30
+#define RXTX_END           0x5A
+#define MOTORREDUCTOR_X    0x4141
+#define MOTORREDUCTOR_Y    0x4242
+#define SERVOMOTOR_X       0x4343
+#define SERVOMOTOR_Y       0x4444
+#define EEPROM_READ        0x4545
+#define EEPROM_WRITE       0x4646
+#define MANUAL_ENABLE      0x4747
+#define MANUAL_DISABLE     0x4848
 
-/*
-CARACTERES CON DISTANCIAS DE HAMMING MÁXIMAS
-// Caracteres para framing de recepción de datos
-#define RXTX_START			0xA5    // Marca de inicio de transmisión (¥)
-#define RXTX_END			0x5A    // Complemento con máxima distancia de Hamming (Z)
+#define FRAME_SIZE         3
 
-// Constantes para pares de caracteres de instrucción
-#define MOTORREDUCTOR_X		0x5555  // 0101 0101 0101 0101 (En ascii es 77)
-#define MOTORREDUCTOR_Y		0xAAAA  // 1010 1010 1010 1010
-#define SERVOMOTOR_X		0x3333  // 0011 0011 0011 0011
-#define SERVOMOTOR_Y		0xCCCC  // 1100 1100 1100 1100
-#define EEPROM_READ			0x0F0F  // 0000 1111 0000 1111
-#define EEPROM_WRITE		0xF0F0  // 1111 0000 1111 0000
-#define MANUAL_ENABLE		0x9999  // 1001 1001 1001 1001
-#define MANUAL_DISABLE		0x6666  // 0110 0110 0110 0110
-*/
-
-
-// CARACTERES CON VALORES ASCII
-// Caracteres para framing de recepción de datos
-#define RXTX_START			0x30    // Marca de inicio de transmisión (0)
-#define RXTX_END			0x5A    // Complemento con máxima distancia de Hamming (Z)
-
-// Constantes para pares de caracteres de instrucción
-#define MOTORREDUCTOR_X		0x4141  // AA
-#define MOTORREDUCTOR_Y		0x4242  // BB
-#define SERVOMOTOR_X		0x4343  // CC
-#define SERVOMOTOR_Y		0x4444  // DD
-#define EEPROM_READ			0x4545  // EE
-#define EEPROM_WRITE		0x4646  // FF
-#define MANUAL_ENABLE		0x4747  // GG
-#define MANUAL_DISABLE		0x4848  // HH
-
-
-// Constante de punto medio
-#define MIDPOINT			0x7F	// 255/2 (Valor medio)
-
-// Direcciones en EEPROM
-#define EEPROM_ADDRESS1A	0X0000	// Dirección 1A
-#define EEPROM_ADDRESS1B	0X0001	// Dirección 1B
-#define EEPROM_ADDRESS2A	0X0002	// Dirección 1A
-#define EEPROM_ADDRESS2B	0X0003	// Dirección 1B
-#define EEPROM_ADDRESS3A	0X0004	// Dirección 1A
-#define EEPROM_ADDRESS3B	0X0005	// Dirección 1B
-#define EEPROM_ADDRESS4A	0X0006	// Dirección 1A
-#define EEPROM_ADDRESS4B	0X0007	// Dirección 1B
-
-// Pines para LEDs indicadores de modos
-#define MANUAL_MODE_LED		PORTD3
-#define UART_MODE_LED		PORTD4
-#define EEPROM_MODE_LED		PORTD5
-
-// Tamaño de Frame
-#define FRAME_SIZE 3
+#define EEPROM_ADDRESS1A   0x0000
+#define EEPROM_ADDRESS1B   0x0001
+#define EEPROM_ADDRESS2A   0x0002
+#define EEPROM_ADDRESS2B   0x0003
+#define EEPROM_ADDRESS3A   0x0004
+#define EEPROM_ADDRESS3B   0x0005
+#define EEPROM_ADDRESS4A   0x0006
+#define EEPROM_ADDRESS4B   0x0007
 
 /************************************************************************/
 /* VARIABLES GLOBALES                                                   */
 /************************************************************************/
+char current_channel = 0;
+char adc_value_chan0 = 0;
+char adc_value_chan1 = 0;
+char adc_value_chan2 = 0;
+char adc_value_chan3 = 0;
 
-// VARIABLES PARA ADC
-// -- VARIABLES --
-char current_channel = 0;	// Canal actual del ADC
-char adc_value_chan0 = 0;	// Valor del canal 0 del ADC
-char adc_value_chan1 = 0;	// Valor del canal 1 del ADC
-char adc_value_chan2 = 0;	// Valor del canal 2 del ADC
-char adc_value_chan3 = 0;	// Valor del canal 3 del ADC
-
-// MODOS OPERACIONALES
-char manual_mode_enabled = 1;	// Modo manual activado desde el principio
-
-// RECEPCIÓN DE DATOS 
 volatile uint8_t received_data[FRAME_SIZE];
 volatile uint8_t reception_index = 0;
 volatile uint8_t frame_ready = 0;
 
-// Arreglo de constantes
-const uint16_t instrucciones[] = {
-	MOTORREDUCTOR_X,
-	MOTORREDUCTOR_Y,
-	SERVOMOTOR_X,
-	SERVOMOTOR_Y,
-	EEPROM_READ,
-	EEPROM_WRITE,
-	MANUAL_ENABLE,
-	MANUAL_DISABLE
-};
-
-// Nombres de Instrucciones
-const char* const nombres_instrucciones[] = {
-	"MOTORREDUCTOR_X",
-	"MOTORREDUCTOR_Y",
-	"SERVOMOTOR_X",
-	"SERVOMOTOR_Y",
-	"EEPROM_READ",
-	"EEPROM_WRITE",
-	"MANUAL_ENABLE",
-	"MANUAL_DISABLE"
-};
-
-// Tamaño del arreglo
-const size_t num_instrucciones = sizeof(instrucciones) / sizeof(instrucciones[0]);
+char manual_mode_enabled = 1;
 
 /************************************************************************/
-/* PROTOTIPOS DE FUNCIONES                                              */
+/* FUNCIONES AUXILIARES                                                 */
 /************************************************************************/
-void process_instruction_uart(void);
-void show_instruction_ASCII(void);
-int8_t normalize_input(char valor);
-void move_differential(int8_t traslacion, int8_t rotacion);
-void manual_mode_movement(char Mx, char My, char Sx, char Sy);
 
-
-/************************************************************************/
-/* SETUP Y MAINLOOP                                                     */
-/************************************************************************/
-void setup(void)
-{
-	// Deshabilitar interrupciones
-	cli();
-	
-	// Inicializar cosas en librerías
-	init_timer0();			// Timer0
-	init_timer1();			// Timer1
-	init_HBridgePins();		// Puente H
-	setup_adc();			// ADC
-	UART_init();			// UART
-	
-	// Habilitar Interrupciones
-	sei();
+int8_t normalize_input(char valor) {
+	return ((int16_t)valor - 128);
 }
 
-int main(void)
-{
-	setup();
-	UART_sendString("PROGRAMACIÓN DE MICROCONTROLADORES - PROYECTO 2 - RECEPTOR \r\n");
-	show_instruction_ASCII();
-	PORTB |= (1 << PORTB1);
-	while (1)
-	{
-		// Si hay un frame listo, procesar la instrucción
-		if (frame_ready) {
-			// Mostrar datos recibidos
-			UART_sendString("Frame recibido: ");
-			for (uint8_t i = 0; i < FRAME_SIZE; i++) {
-				UART_sendChar(received_data[i]);
-				UART_sendString(" ");
-			}
-			UART_sendString("\r\n");
-			
-			process_instruction_uart();  // Procesar instrucción usa received_data
-
-			frame_ready = 0;
-		}
-		
-		// Si el modo manual está activo, hacer algo
-		if (manual_mode_enabled) {
-			manual_mode_movement(adc_value_chan0, adc_value_chan1, adc_value_chan2, adc_value_chan3);
-		}
-	}
-	
-	return 0;
-}
-
-
-/************************************************************************/
-/* RUTINAS NO DE INTERRUPCIÓN                                           */
-/************************************************************************/
-void manual_mode_movement(char Mx, char My, char Sx, char Sy)
-{
-	// Mover servomotores
-	TIMER1_PWMA_set_servo_PW(Sx);
-	TIMER1_PWMB_set_servo_PW(Sy);
-	
-	// Mover motorreductores (ruedas diferenciales)
-	int8_t traslacion = normalize_input(Mx);
-	int8_t rotacion   = normalize_input(My);
-	move_differential(traslacion, rotacion);
-	UART_sendChar(Sx);
-	UART_sendChar(' ');
-	UART_sendChar(Sy);
-	UART_sendString("\r\n");
-}
-
-
-// Procesar Instrucciones (A partir del arreglo de datos recibido) - SOLO CUANDO MODO UART ESTÁ ACTIVADO!!!
-// Esta rutina es exclusiva para ISR(USART_RX_vect) y no se usa para ninguna otra parte del código
-void process_instruction_uart(void)
-{
-	// Número de 16 bits de caracteres de instrucción
-	uint16_t	instruction = ((uint16_t)received_data[0] << 8) | received_data[1];
-	
-	// Caracter de datos
-	char		data_char = received_data[2];
-	
-	// Logs de prueba para monitor serial
-	UART_sendString("Instrucción recibida: ");
-	
-	switch(instruction)
-	{
-		case MOTORREDUCTOR_X:
-		UART_sendString("MOTORREDUCTOR X - ");
-		TIMER0_PWMA_set_PW(data_char);
-		break;
-		
-		case MOTORREDUCTOR_Y:
-		UART_sendString("MOTORREDUCTOR Y - ");
-		TIMER0_PWMB_set_PW(data_char);
-		break;
-		
-		case SERVOMOTOR_X:
-		UART_sendString("SERVOMOTOR X - ");
-		TIMER1_PWMA_set_servo_PW(data_char);
-		break;
-		
-		case SERVOMOTOR_Y:
-		UART_sendString("SERVOMOTOR Y - ");
-		TIMER1_PWMB_set_servo_PW(data_char);
-		break;
-		
-		// LECTURA DE EEPROM - Mostrar Posiciones en Servomotores
-		case EEPROM_READ:
-		UART_sendString("EEPROM READ - ");
-		
-		char eeprom_dataA = 0;
-		char eeprom_dataB = 0;
-		
-		// Leemos dos posiciones dependiendo del valor de la entrada
-		switch(data_char)
-		{
-			case '1':
-			UART_sendString("Leyendo datos en dirección No. 1");
-			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS1A);
-			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS1B);
-			break;
-			
-			case '2':
-			UART_sendString("Leyendo datos en dirección No. 2");
-			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS2A);
-			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS2B);
-			break;
-			
-			case '3':
-			UART_sendString("Leyendo datos en dirección No. 3");
-			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS3A);
-			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS3B);
-			break;
-			
-			case '4':
-			UART_sendString("Leyendo datos en dirección No. 4");
-			eeprom_dataA = EEPROM_read(EEPROM_ADDRESS4A);
-			eeprom_dataB = EEPROM_read(EEPROM_ADDRESS4B);
-			break;
-			
-			default:
-			UART_sendString("Dirección Inválida");
-			break;
-		}
-		
-		UART_sendString("\r\n");
-		UART_sendString("Datos Recibidos: ");
-		UART_sendChar(eeprom_dataA);
-		UART_sendString(" - ");
-		UART_sendChar(eeprom_dataB);
-		UART_sendString("\r\n");
-		
-		// Mostramos las posiciones en los servomotores
-		TIMER1_PWMA_set_servo_PW(eeprom_dataA);
-		TIMER1_PWMB_set_servo_PW(eeprom_dataB);
-		break;
-		
-		// Escribir en EEPROM
-		case EEPROM_WRITE:
-		UART_sendString("EEPROM WRITE - ");
-		
-		
-		switch(data_char)
-		{
-			case '1':
-			UART_sendString("Guardando datos en dirección No. 1");
-			EEPROM_write(EEPROM_ADDRESS1A, adc_value_chan0);
-			EEPROM_write(EEPROM_ADDRESS1B, adc_value_chan1);
-			break;
-			
-			case '2':
-			UART_sendString("Guardando datos en dirección No. 2");
-			EEPROM_write(EEPROM_ADDRESS2A, adc_value_chan0);
-			EEPROM_write(EEPROM_ADDRESS2B, adc_value_chan1);
-			break;
-			
-			case '3':
-			UART_sendString("Guardando datos en dirección No. 3");
-			EEPROM_write(EEPROM_ADDRESS3A, adc_value_chan0);
-			EEPROM_write(EEPROM_ADDRESS3B, adc_value_chan1);
-			break;
-			
-			case '4':
-			UART_sendString("Guardando datos en dirección No. 4");
-			EEPROM_write(EEPROM_ADDRESS4A, adc_value_chan0);
-			EEPROM_write(EEPROM_ADDRESS4B, adc_value_chan1);
-			break;
-			
-			default:
-			UART_sendString("Dirección Inválida");
-		}
-		
-		UART_sendString("\r\n");
-		UART_sendString("Datos Escritos: ");
-		UART_sendChar(adc_value_chan0);
-		UART_sendString(" - ");
-		UART_sendChar(adc_value_chan1);
-		UART_sendString("\r\n");
-		break;
-		
-		// Habilitar y deshabilitar modo manual
-		case MANUAL_ENABLE:
-		UART_sendString("MANUAL ENABLE - Habilitando modo manual");
-		manual_mode_enabled = 1;
-		break;
-		
-		case MANUAL_DISABLE:
-		UART_sendString("MANUAL ENABLE - Deshabilitando modo manual");
-		manual_mode_enabled = 0;
-		break;
-		
-		default:
-		UART_sendString("INSTRUCCIÓN INVÁLIDA - ");
-		break;
-	}
-	
-	UART_sendChar(data_char);
-	UART_sendString("\r\n");
-	UART_sendString("\r\n");
-}
-
-// Mostrar ASCII de instrucciones
-void show_instruction_ASCII(void)
-{
-	UART_sendString("INSTRUCCIONES (EN ASCII) \r\n");
-	UART_sendString("Para ejecutar las siguientes instrucciones, coloque el caracter mostrado dos veces \r\n");
-	for (size_t i = 0; i < num_instrucciones; ++i) {
-		UART_sendString(nombres_instrucciones[i]);		// Mostrar nombre de instrucción
-		UART_sendString(" : ");							// Espacio
-		UART_sendChar(instrucciones[i] >> 8);			// Mostrar instrucción
-		UART_sendString("\r\n");
-	}
-	UART_sendString("\r\n");
-	UART_sendString("Para iniciar y terminar frames de 3 bytes \r\n");
-	UART_sendString("Inicio: 0 \r\n");
-	UART_sendString("Fin: Z \r\n");
-	UART_sendString("\r\n");
-	UART_sendString("Estos caracteres pueden servir para hacer pruebas: ! (0X21) y ~ (0x7E) \r\n");
-	UART_sendString("\r\n");
-	UART_sendString("Ingrese un caracter para accionar el sistema. \r\n");
-}
-
-// Normalizar entrada (0 a 255 -> -128 a 127)
-int8_t normalize_input(char valor)
-{
-	return ((int16_t)valor - 128); // Convierte 0–255 en -128 a 127
-}
-
-// Movimiento de ruedas diferenciales - Permite traslación y rotación con entradas analógicas
-void move_differential(int8_t traslacion, int8_t rotacion)
-{
+void move_differential(int8_t traslacion, int8_t rotacion) {
 	int16_t vel_izq = traslacion - rotacion;
 	int16_t vel_der = traslacion + rotacion;
 
-	// Saturación
 	if (vel_izq > 255) vel_izq = 255;
 	if (vel_izq < -255) vel_izq = -255;
 	if (vel_der > 255) vel_der = 255;
 	if (vel_der < -255) vel_der = -255;
 
-	// Motor izquierdo
+	if (traslacion > -10 && traslacion < 10 && rotacion > -10 && rotacion < 10) {
+		motorA_stop();
+		motorB_stop();
+		TIMER0_PWMA_set_PW(0);
+		TIMER0_PWMB_set_PW(0);
+		return;
+	}
+
 	if (vel_izq >= 0) {
 		motorA_forward();
 		TIMER0_PWMA_set_PW((uint8_t)vel_izq);
@@ -436,7 +93,6 @@ void move_differential(int8_t traslacion, int8_t rotacion)
 		TIMER0_PWMA_set_PW((uint8_t)(-vel_izq));
 	}
 
-	// Motor derecho
 	if (vel_der >= 0) {
 		motorB_forward();
 		TIMER0_PWMB_set_PW((uint8_t)vel_der);
@@ -446,69 +102,135 @@ void move_differential(int8_t traslacion, int8_t rotacion)
 	}
 }
 
+void manual_mode_movement(char Mx, char My, char Sx, char Sy) {
+	TIMER1_PWMA_set_servo_PW(Sx);
+	TIMER1_PWMB_set_servo_PW(Sy);
+	int8_t traslacion = normalize_input(Mx);
+	int8_t rotacion = normalize_input(My);
+	move_differential(traslacion, rotacion);
+}
 
 /************************************************************************/
-/* RUTINAS DE INTERRUPCIÓN                                              */
+/* COMUNICACIÓN UART - Procesamiento de Frame                           */
 /************************************************************************/
-// Interrupción por conversión completa en el ADC - Lectura y Multiplexado de canales
-ISR(ADC_vect)
-{
-	// Hacer multiplexado de canal
-	switch(current_channel)
-	{
-		case 0:
-		adc_value_chan0 = ADCH;		// Guardar valor para canal 0
-		current_channel = 1;
-		adc_set_channel(1);			// Cambiar al canal 1
+void process_instruction_uart(void) {
+	uint16_t instruction = ((uint16_t)received_data[0] << 8) | received_data[1];
+	char data_char = received_data[2];
+
+	switch (instruction) {
+		case MOTORREDUCTOR_X:
+		TIMER0_PWMA_set_PW(data_char);
 		break;
-		
-		case 1:
-		adc_value_chan1 = ADCH;		// Guardar valor para canal 1
-		current_channel = 2;
-		adc_set_channel(2);			// Cambiar al canal 2
+		case MOTORREDUCTOR_Y:
+		TIMER0_PWMB_set_PW(data_char);
 		break;
-		
-		case 2:
-		adc_value_chan2 = ADCH;		// Guardar valor para canal 2
-		current_channel = 3;
-		adc_set_channel(3);			// Cambiar al canal 3
+		case SERVOMOTOR_X:
+		TIMER1_PWMA_set_servo_PW(data_char);
 		break;
-		
-		case 3:
-		adc_value_chan3 = ADCH;		// Guardar valor para canal 3
-		current_channel = 0;
-		adc_set_channel(0);			// Cambiar al canal 0
+		case SERVOMOTOR_Y:
+		TIMER1_PWMB_set_servo_PW(data_char);
 		break;
-		
+		case EEPROM_READ:
+		switch (data_char) {
+			case '1':
+			TIMER1_PWMA_set_servo_PW(EEPROM_read(EEPROM_ADDRESS1A));
+			TIMER1_PWMB_set_servo_PW(EEPROM_read(EEPROM_ADDRESS1B));
+			break;
+			case '2':
+			TIMER1_PWMA_set_servo_PW(EEPROM_read(EEPROM_ADDRESS2A));
+			TIMER1_PWMB_set_servo_PW(EEPROM_read(EEPROM_ADDRESS2B));
+			break;
+			case '3':
+			TIMER1_PWMA_set_servo_PW(EEPROM_read(EEPROM_ADDRESS3A));
+			TIMER1_PWMB_set_servo_PW(EEPROM_read(EEPROM_ADDRESS3B));
+			break;
+			case '4':
+			TIMER1_PWMA_set_servo_PW(EEPROM_read(EEPROM_ADDRESS4A));
+			TIMER1_PWMB_set_servo_PW(EEPROM_read(EEPROM_ADDRESS4B));
+			break;
+		}
+		break;
+		case EEPROM_WRITE:
+		switch (data_char) {
+			case '1':
+			EEPROM_write(EEPROM_ADDRESS1A, adc_value_chan0);
+			EEPROM_write(EEPROM_ADDRESS1B, adc_value_chan1);
+			break;
+			case '2':
+			EEPROM_write(EEPROM_ADDRESS2A, adc_value_chan0);
+			EEPROM_write(EEPROM_ADDRESS2B, adc_value_chan1);
+			break;
+			case '3':
+			EEPROM_write(EEPROM_ADDRESS3A, adc_value_chan0);
+			EEPROM_write(EEPROM_ADDRESS3B, adc_value_chan1);
+			break;
+			case '4':
+			EEPROM_write(EEPROM_ADDRESS4A, adc_value_chan0);
+			EEPROM_write(EEPROM_ADDRESS4B, adc_value_chan1);
+			break;
+		}
+		break;
+		case MANUAL_ENABLE:
+		manual_mode_enabled = 1;
+		break;
+		case MANUAL_DISABLE:
+		manual_mode_enabled = 0;
+		break;
 		default:
-		adc_value_chan0 = ADCH;		// Guardar valor para canal 0
-		current_channel = 0;
-		adc_set_channel(0);			// En cualquier otro caso regresar al canal 0
+		// Instrucción inválida
 		break;
 	}
 }
 
+/************************************************************************/
+/* CONFIGURACIÓN Y MAIN LOOP                                            */
+/************************************************************************/
+void setup(void) {
+	cli();
+	init_timer0();
+	init_timer1();
+	init_HBridgePins();
+	setup_adc();
+	UART_init();
+	sei();
+}
 
-// RECEPCIÓN DE DATOS EN UART
-ISR(USART_RX_vect)
-{	
-	// Guardar el valor del buffer y liberarlo
+int main(void) {
+	setup();
+
+	while (1) {
+		if (frame_ready) {
+			process_instruction_uart();
+			frame_ready = 0;
+		}
+
+		if (manual_mode_enabled) {
+			manual_mode_movement(adc_value_chan0, adc_value_chan1, adc_value_chan2, adc_value_chan3);
+		}
+	}
+}
+
+/************************************************************************/
+/* INTERRUPCIONES                                                       */
+/************************************************************************/
+ISR(ADC_vect) {
+	switch (current_channel) {
+		case 0: adc_value_chan0 = ADCH; current_channel = 1; adc_set_channel(1); break;
+		case 1: adc_value_chan1 = ADCH; current_channel = 2; adc_set_channel(2); break;
+		case 2: adc_value_chan2 = ADCH; current_channel = 3; adc_set_channel(3); break;
+		case 3: adc_value_chan3 = ADCH; current_channel = 0; adc_set_channel(0); break;
+	}
+}
+
+ISR(USART_RX_vect) {
 	char data = UDR0;
-	
-	// Si el frame no está listo, entrar
+
 	if (!frame_ready) {
-		// Marca de Inicio de Frame
 		if (data == RXTX_START) {
 			reception_index = 0;
-		}
-		
-		// Marca de fin de frame
-		else if (data == RXTX_END && reception_index == FRAME_SIZE) {
+			} else if (data == RXTX_END && reception_index == FRAME_SIZE) {
 			frame_ready = 1;
-		}
-		
-		// Recepción de instrucciones y datos
-		else if (reception_index < FRAME_SIZE) {
+			} else if (reception_index < FRAME_SIZE) {
 			received_data[reception_index++] = data;
 		}
 	}
