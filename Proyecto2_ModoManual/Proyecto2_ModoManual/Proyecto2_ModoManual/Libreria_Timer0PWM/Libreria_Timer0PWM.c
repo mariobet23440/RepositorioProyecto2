@@ -9,16 +9,24 @@
 
 #include "Libreria_Timer0PWM.h"
 
-// Inicialización de TIMER0 - PWM
+// INICIALIZACIÓN DE TIMER0 - FASTPWM
 void init_timer0(void)
 {
-    // Modo Fast PWM, TOP = 255, salida no invertida en OC0A y OC0B
-    TCCR0A |= (1 << COM0A1) | (1 << COM0B1) | (1 << WGM01) | (1 << WGM00);
-    TCCR0B |= (1 << CS01); // Prescaler de 8 (~7.8kHz con F_CPU = 16MHz)
+	// Fast PWM, OC0A y OC0B no invertidos
+	TCCR0A |= (1 << COM0A1) | (1 << COM0B1) | (1 << WGM01) | (1 << WGM00);
 
-    DDRD |= (1 << DDD6); // PD6 como salida (OC0A)
-    DDRD |= (1 << DDD5); // PD5 como salida (OC0B)
+	// Limpiar bits del prescaler
+	TCCR0B &= ~((1 << CS02) | (1 << CS01) | (1 << CS00));
+
+	// Establecer prescaler = 128 (no está directamente soportado por hardware)
+	// Usamos 256 mejor (estándar en AVR), para obtener 244 Hz
+	TCCR0B |= (1 << CS02); // prescaler = 256
+
+	// Salidas PWM
+	DDRD |= (1 << DDD6); // OC0A - Motor A
+	DDRD |= (1 << DDD5); // OC0B - Motor B
 }
+
 
 // Establecer ancho de pulso en OC0A
 void TIMER0_PWMA_set_PW(uint8_t value)

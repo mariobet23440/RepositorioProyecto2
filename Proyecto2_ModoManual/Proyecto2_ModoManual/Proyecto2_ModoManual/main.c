@@ -53,6 +53,15 @@ void move_differential(int8_t traslacion, int8_t rotacion) {
 	if (vel_izq < -255) vel_izq = -255;
 	if (vel_der > 255) vel_der = 255;
 	if (vel_der < -255) vel_der = -255;
+	
+	// ZONA MUERTA: si ambos valores están cerca de 0, detener motores
+	if (traslacion > -10 && traslacion < 10 && rotacion > -10 && rotacion < 10) {
+		motorA_stop();
+		motorB_stop();
+		TIMER0_PWMA_set_PW(0);
+		TIMER0_PWMB_set_PW(0);
+		return;
+	}
 
 	// Control de dirección y velocidad para el motor izquierdo
 	if (vel_izq >= 0) {
@@ -71,6 +80,8 @@ void move_differential(int8_t traslacion, int8_t rotacion) {
 		motorB_backward(); // Atrás
 		TIMER0_PWMB_set_PW((uint8_t)(-vel_der));
 	}
+	
+	
 }
 
 /**
@@ -124,17 +135,45 @@ void setup(void) {
 int main(void) {
 	setup(); // Inicializar el sistema
 
-	while (1) {
-		// Movimiento controlado por potenciómetros
-		//manual_mode_movement(adc_value_chan0, adc_value_chan1, adc_value_chan2, adc_value_chan3);
-		
+	uint8_t modo_prueba = 0; // Cambia a 0 para usar el modo joystick/manual
+
+	if (modo_prueba) {
+		// ========== MODO PRUEBA DE MOTORES ==========
+		TIMER1_PWMA_set_servo_PW(100);
+		TIMER1_PWMB_set_servo_PW(100);
+
+
+		// Giro hacia adelante
 		motorA_forward();
 		motorB_forward();
-		TIMER0_PWMA_set_PW(255); // Máxima potencia para motor A
-		TIMER0_PWMB_set_PW(255); // Máxima potencia para motor B
+		TIMER0_PWMA_set_PW(200); // PWM medio-alto
+		TIMER0_PWMB_set_PW(200);
+		_delay_ms(2000); // Espera 2 segundos
+
+		// Giro hacia atrás
+		motorA_backward();
+		motorB_backward();
+		TIMER0_PWMA_set_PW(200);
+		TIMER0_PWMB_set_PW(200);
+		_delay_ms(2000); // Espera 2 segundos
+
+		// Detener motores
+		motorA_stop();
+		motorB_stop();
+		TIMER0_PWMA_set_PW(0);
+		TIMER0_PWMB_set_PW(0);
+
+		while (1); // Mantener detenido después de prueba
+	}
+	else {
+		// ========== MODO MANUAL (CONTROL ANALÓGICO) ==========
+		while (1) {
+			manual_mode_movement(adc_value_chan0, adc_value_chan1, adc_value_chan2, adc_value_chan3);
+		}
 	}
 
 	return 0;
+
 }
 
 // ==========================

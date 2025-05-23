@@ -3,31 +3,31 @@ Proyecto2_ModoManual.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  000002ba  2**0
+  0 .data         00000000  00800100  00800100  00000474  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000246  00000000  00000000  00000074  2**1
+  1 .text         00000400  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000005  00800100  00800100  000002ba  2**0
+  2 .bss          00000005  00800100  00800100  00000474  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000002ba  2**0
+  3 .comment      00000030  00000000  00000000  00000474  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000002ec  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000004a4  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000150  00000000  00000000  0000032c  2**0
+  5 .debug_aranges 00000150  00000000  00000000  000004e4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000f04  00000000  00000000  0000047c  2**0
+  6 .debug_info   00000f86  00000000  00000000  00000634  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000099b  00000000  00000000  00001380  2**0
+  7 .debug_abbrev 000009ed  00000000  00000000  000015ba  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000098f  00000000  00000000  00001d1b  2**0
+  8 .debug_line   00000a17  00000000  00000000  00001fa7  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000270  00000000  00000000  000026ac  2**2
+  9 .debug_frame  00000270  00000000  00000000  000029c0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000647  00000000  00000000  0000291c  2**0
+ 10 .debug_str    00000695  00000000  00000000  00002c30  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000037e  00000000  00000000  00002f63  2**0
+ 11 .debug_loc    000003bd  00000000  00000000  000032c5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 000000f0  00000000  00000000  000032e1  2**0
+ 12 .debug_ranges 000000f0  00000000  00000000  00003682  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -54,7 +54,7 @@ Disassembly of section .text:
   48:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   4c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   50:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
-  54:	0c 94 ce 00 	jmp	0x19c	; 0x19c <__vector_21>
+  54:	0c 94 7a 01 	jmp	0x2f4	; 0x2f4 <__vector_21>
   58:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   5c:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
   60:	0c 94 51 00 	jmp	0xa2	; 0xa2 <__bad_interrupt>
@@ -72,8 +72,8 @@ Disassembly of section .text:
   74:	11 e0       	ldi	r17, 0x01	; 1
   76:	a0 e0       	ldi	r26, 0x00	; 0
   78:	b1 e0       	ldi	r27, 0x01	; 1
-  7a:	e6 e4       	ldi	r30, 0x46	; 70
-  7c:	f2 e0       	ldi	r31, 0x02	; 2
+  7a:	e0 e0       	ldi	r30, 0x00	; 0
+  7c:	f4 e0       	ldi	r31, 0x04	; 4
   7e:	02 c0       	rjmp	.+4      	; 0x84 <__do_copy_data+0x10>
   80:	05 90       	lpm	r0, Z+
   82:	0d 92       	st	X+, r0
@@ -94,8 +94,8 @@ Disassembly of section .text:
   94:	a5 30       	cpi	r26, 0x05	; 5
   96:	b2 07       	cpc	r27, r18
   98:	e1 f7       	brne	.-8      	; 0x92 <.do_clear_bss_loop>
-  9a:	0e 94 c1 00 	call	0x182	; 0x182 <main>
-  9e:	0c 94 21 01 	jmp	0x242	; 0x242 <_exit>
+  9a:	0e 94 6d 01 	call	0x2da	; 0x2da <main>
+  9e:	0c 94 fe 01 	jmp	0x3fc	; 0x3fc <_exit>
 
 000000a2 <__bad_interrupt>:
   a2:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -135,303 +135,635 @@ void adc_set_channel(unsigned char channel)
   c8:	08 95       	ret
 
 000000ca <init_HBridgePins>:
-	PORTD &= ~(1 << PD2);  // IN1 = LOW
-	PORTD |= (1 << PD3);   // IN2 = HIGH
-}
 
-void motorA_stop(void) {
-	PORTD &= ~((1 << PD2) | (1 << PD3));  // IN1 = LOW, IN2 = LOW
+// Inicialización de pines de salida
+void init_HBridgePins(void)
+{
+	// Configura IN1 e IN2 como salidas
+	DDRD |= (1 << PD2) | (1 << PD3);
   ca:	8a b1       	in	r24, 0x0a	; 10
   cc:	8c 60       	ori	r24, 0x0C	; 12
   ce:	8a b9       	out	0x0a, r24	; 10
+	
+	// Configura IN3 e IN4 como salidas
+	DDRD |= (1 << PD4) | (1 << PD7);
   d0:	8a b1       	in	r24, 0x0a	; 10
   d2:	80 69       	ori	r24, 0x90	; 144
   d4:	8a b9       	out	0x0a, r24	; 10
   d6:	08 95       	ret
 
 000000d8 <motorA_forward>:
+}
+
+// Control de dirección - Motor A
+void motorA_forward(void) {
+	PORTD |= (1 << PD2);   // IN1 = HIGH
   d8:	8b b1       	in	r24, 0x0b	; 11
   da:	84 60       	ori	r24, 0x04	; 4
   dc:	8b b9       	out	0x0b, r24	; 11
+	PORTD &= ~(1 << PD3);  // IN2 = LOW
   de:	8b b1       	in	r24, 0x0b	; 11
   e0:	87 7f       	andi	r24, 0xF7	; 247
   e2:	8b b9       	out	0x0b, r24	; 11
   e4:	08 95       	ret
 
-000000e6 <motorB_forward>:
+000000e6 <motorA_backward>:
+}
+
+void motorA_backward(void) {
+	PORTD &= ~(1 << PD2);  // IN1 = LOW
+  e6:	8b b1       	in	r24, 0x0b	; 11
+  e8:	8b 7f       	andi	r24, 0xFB	; 251
+  ea:	8b b9       	out	0x0b, r24	; 11
+	PORTD |= (1 << PD3);   // IN2 = HIGH
+  ec:	8b b1       	in	r24, 0x0b	; 11
+  ee:	88 60       	ori	r24, 0x08	; 8
+  f0:	8b b9       	out	0x0b, r24	; 11
+  f2:	08 95       	ret
+
+000000f4 <motorA_stop>:
+}
+
+void motorA_stop(void) {
+	PORTD &= ~((1 << PD2) | (1 << PD3));  // IN1 = LOW, IN2 = LOW
+  f4:	8b b1       	in	r24, 0x0b	; 11
+  f6:	83 7f       	andi	r24, 0xF3	; 243
+  f8:	8b b9       	out	0x0b, r24	; 11
+  fa:	08 95       	ret
+
+000000fc <motorB_forward>:
 }
 
 // Control de dirección - Motor B
 void motorB_forward(void) {
 	PORTD |= (1 << PD4);   // IN3 = HIGH
-  e6:	8b b1       	in	r24, 0x0b	; 11
-  e8:	80 61       	ori	r24, 0x10	; 16
-  ea:	8b b9       	out	0x0b, r24	; 11
+  fc:	8b b1       	in	r24, 0x0b	; 11
+  fe:	80 61       	ori	r24, 0x10	; 16
+ 100:	8b b9       	out	0x0b, r24	; 11
 	PORTD &= ~(1 << PD7);  // IN4 = LOW
-  ec:	8b b1       	in	r24, 0x0b	; 11
-  ee:	8f 77       	andi	r24, 0x7F	; 127
-  f0:	8b b9       	out	0x0b, r24	; 11
-  f2:	08 95       	ret
+ 102:	8b b1       	in	r24, 0x0b	; 11
+ 104:	8f 77       	andi	r24, 0x7F	; 127
+ 106:	8b b9       	out	0x0b, r24	; 11
+ 108:	08 95       	ret
 
-000000f4 <init_timer0>:
+0000010a <motorB_backward>:
+}
 
-// Inicialización de TIMER0 - PWM
+void motorB_backward(void) {
+	PORTD &= ~(1 << PD4);  // IN3 = LOW
+ 10a:	8b b1       	in	r24, 0x0b	; 11
+ 10c:	8f 7e       	andi	r24, 0xEF	; 239
+ 10e:	8b b9       	out	0x0b, r24	; 11
+	PORTD |= (1 << PD7);   // IN4 = HIGH
+ 110:	8b b1       	in	r24, 0x0b	; 11
+ 112:	80 68       	ori	r24, 0x80	; 128
+ 114:	8b b9       	out	0x0b, r24	; 11
+ 116:	08 95       	ret
+
+00000118 <motorB_stop>:
+}
+
+void motorB_stop(void) {
+	PORTD &= ~((1 << PD4) | (1 << PD7));  // IN3 = LOW, IN3 = LOW
+ 118:	8b b1       	in	r24, 0x0b	; 11
+ 11a:	8f 76       	andi	r24, 0x6F	; 111
+ 11c:	8b b9       	out	0x0b, r24	; 11
+ 11e:	08 95       	ret
+
+00000120 <init_timer0>:
+
+// INICIALIZACIÓN DE TIMER0 - FASTPWM
 void init_timer0(void)
 {
-    // Modo Fast PWM, TOP = 255, salida no invertida en OC0A y OC0B
-    TCCR0A |= (1 << COM0A1) | (1 << COM0B1) | (1 << WGM01) | (1 << WGM00);
-  f4:	84 b5       	in	r24, 0x24	; 36
-  f6:	83 6a       	ori	r24, 0xA3	; 163
-  f8:	84 bd       	out	0x24, r24	; 36
-    TCCR0B |= (1 << CS01); // Prescaler de 8 (~7.8kHz con F_CPU = 16MHz)
-  fa:	85 b5       	in	r24, 0x25	; 37
-  fc:	82 60       	ori	r24, 0x02	; 2
-  fe:	85 bd       	out	0x25, r24	; 37
+	// Fast PWM, OC0A y OC0B no invertidos
+	TCCR0A |= (1 << COM0A1) | (1 << COM0B1) | (1 << WGM01) | (1 << WGM00);
+ 120:	84 b5       	in	r24, 0x24	; 36
+ 122:	83 6a       	ori	r24, 0xA3	; 163
+ 124:	84 bd       	out	0x24, r24	; 36
 
-    DDRD |= (1 << DDD6); // PD6 como salida (OC0A)
- 100:	8a b1       	in	r24, 0x0a	; 10
- 102:	80 64       	ori	r24, 0x40	; 64
- 104:	8a b9       	out	0x0a, r24	; 10
-    DDRD |= (1 << DDD5); // PD5 como salida (OC0B)
- 106:	8a b1       	in	r24, 0x0a	; 10
- 108:	80 62       	ori	r24, 0x20	; 32
- 10a:	8a b9       	out	0x0a, r24	; 10
- 10c:	08 95       	ret
+	// Limpiar bits del prescaler
+	TCCR0B &= ~((1 << CS02) | (1 << CS01) | (1 << CS00));
+ 126:	85 b5       	in	r24, 0x25	; 37
+ 128:	88 7f       	andi	r24, 0xF8	; 248
+ 12a:	85 bd       	out	0x25, r24	; 37
 
-0000010e <TIMER0_PWMA_set_PW>:
-}
+	// Establecer prescaler = 128 (no está directamente soportado por hardware)
+	// Usamos 256 mejor (estándar en AVR), para obtener 244 Hz
+	TCCR0B |= (1 << CS02); // prescaler = 256
+ 12c:	85 b5       	in	r24, 0x25	; 37
+ 12e:	84 60       	ori	r24, 0x04	; 4
+ 130:	85 bd       	out	0x25, r24	; 37
+
+	// Salidas PWM
+	DDRD |= (1 << DDD6); // OC0A - Motor A
+ 132:	8a b1       	in	r24, 0x0a	; 10
+ 134:	80 64       	ori	r24, 0x40	; 64
+ 136:	8a b9       	out	0x0a, r24	; 10
+	DDRD |= (1 << DDD5); // OC0B - Motor B
+ 138:	8a b1       	in	r24, 0x0a	; 10
+ 13a:	80 62       	ori	r24, 0x20	; 32
+ 13c:	8a b9       	out	0x0a, r24	; 10
+ 13e:	08 95       	ret
+
+00000140 <TIMER0_PWMA_set_PW>:
+
 
 // Establecer ancho de pulso en OC0A
 void TIMER0_PWMA_set_PW(uint8_t value)
 {
     OCR0A = 255 - value;
- 10e:	80 95       	com	r24
- 110:	87 bd       	out	0x27, r24	; 39
- 112:	08 95       	ret
+ 140:	80 95       	com	r24
+ 142:	87 bd       	out	0x27, r24	; 39
+ 144:	08 95       	ret
 
-00000114 <TIMER0_PWMB_set_PW>:
+00000146 <TIMER0_PWMB_set_PW>:
 }
 
 // Establecer ancho de pulso en OC0B
 void TIMER0_PWMB_set_PW(uint8_t value)
 {
     OCR0B = 255 - value;
- 114:	80 95       	com	r24
- 116:	88 bd       	out	0x28, r24	; 40
- 118:	08 95       	ret
+ 146:	80 95       	com	r24
+ 148:	88 bd       	out	0x28, r24	; 40
+ 14a:	08 95       	ret
 
-0000011a <init_timer1>:
+0000014c <init_timer1>:
 #include "LibreriaTimer1PWM.h"
 
 // Inicialización de Timer1
 void init_timer1(void)
 {
 	TCCR1A |= (1 << COM1A1) | (1 << COM1B1) | (1 << WGM11); // Fast PWM, OC1A y OC1B no invertido
- 11a:	e0 e8       	ldi	r30, 0x80	; 128
- 11c:	f0 e0       	ldi	r31, 0x00	; 0
- 11e:	80 81       	ld	r24, Z
- 120:	82 6a       	ori	r24, 0xA2	; 162
- 122:	80 83       	st	Z, r24
+ 14c:	e0 e8       	ldi	r30, 0x80	; 128
+ 14e:	f0 e0       	ldi	r31, 0x00	; 0
+ 150:	80 81       	ld	r24, Z
+ 152:	82 6a       	ori	r24, 0xA2	; 162
+ 154:	80 83       	st	Z, r24
 	TCCR1B |= (1 << WGM13) | (1 << WGM12) | (1 << CS11);  // Prescaler de 8, Fast PWM
- 124:	e1 e8       	ldi	r30, 0x81	; 129
- 126:	f0 e0       	ldi	r31, 0x00	; 0
- 128:	80 81       	ld	r24, Z
- 12a:	8a 61       	ori	r24, 0x1A	; 26
- 12c:	80 83       	st	Z, r24
+ 156:	e1 e8       	ldi	r30, 0x81	; 129
+ 158:	f0 e0       	ldi	r31, 0x00	; 0
+ 15a:	80 81       	ld	r24, Z
+ 15c:	8a 61       	ori	r24, 0x1A	; 26
+ 15e:	80 83       	st	Z, r24
 	ICR1 = 39999;							// Establecer TOP a 39999 (Frecuencia de 50 Hz, 20ms)
- 12e:	8f e3       	ldi	r24, 0x3F	; 63
- 130:	9c e9       	ldi	r25, 0x9C	; 156
- 132:	90 93 87 00 	sts	0x0087, r25	; 0x800087 <__TEXT_REGION_LENGTH__+0x7f8087>
- 136:	80 93 86 00 	sts	0x0086, r24	; 0x800086 <__TEXT_REGION_LENGTH__+0x7f8086>
+ 160:	8f e3       	ldi	r24, 0x3F	; 63
+ 162:	9c e9       	ldi	r25, 0x9C	; 156
+ 164:	90 93 87 00 	sts	0x0087, r25	; 0x800087 <__TEXT_REGION_LENGTH__+0x7f8087>
+ 168:	80 93 86 00 	sts	0x0086, r24	; 0x800086 <__TEXT_REGION_LENGTH__+0x7f8086>
 	DDRB |= (1 << DDB1) | (1 << DDB2);		// Configurar PB1 y PB2 como salida (OC1A y OC1B)
- 13a:	84 b1       	in	r24, 0x04	; 4
- 13c:	86 60       	ori	r24, 0x06	; 6
- 13e:	84 b9       	out	0x04, r24	; 4
- 140:	08 95       	ret
+ 16c:	84 b1       	in	r24, 0x04	; 4
+ 16e:	86 60       	ori	r24, 0x06	; 6
+ 170:	84 b9       	out	0x04, r24	; 4
+ 172:	08 95       	ret
 
-00000142 <UART_init>:
+00000174 <TIMER1_PWMA_set_servo_PW>:
+}
+
+// PWM para servo en canal A (PB1)
+void TIMER1_PWMA_set_servo_PW(uint8_t value)
+{
+	uint16_t ticks = ((uint32_t)value * 4000) / 255 + 1000;
+ 174:	28 2f       	mov	r18, r24
+ 176:	30 e0       	ldi	r19, 0x00	; 0
+ 178:	a0 ea       	ldi	r26, 0xA0	; 160
+ 17a:	bf e0       	ldi	r27, 0x0F	; 15
+ 17c:	0e 94 ef 01 	call	0x3de	; 0x3de <__umulhisi3>
+ 180:	2f ef       	ldi	r18, 0xFF	; 255
+ 182:	30 e0       	ldi	r19, 0x00	; 0
+ 184:	40 e0       	ldi	r20, 0x00	; 0
+ 186:	50 e0       	ldi	r21, 0x00	; 0
+ 188:	0e 94 cd 01 	call	0x39a	; 0x39a <__udivmodsi4>
+ 18c:	28 51       	subi	r18, 0x18	; 24
+ 18e:	3c 4f       	sbci	r19, 0xFC	; 252
+	OCR1A = ticks;
+ 190:	30 93 89 00 	sts	0x0089, r19	; 0x800089 <__TEXT_REGION_LENGTH__+0x7f8089>
+ 194:	20 93 88 00 	sts	0x0088, r18	; 0x800088 <__TEXT_REGION_LENGTH__+0x7f8088>
+ 198:	08 95       	ret
+
+0000019a <TIMER1_PWMB_set_servo_PW>:
+}
+
+// PWM para servo en canal B (PB2)
+void TIMER1_PWMB_set_servo_PW(uint8_t value)
+{
+	uint16_t ticks = ((uint32_t)value * 4000) / 255 + 1000;
+ 19a:	28 2f       	mov	r18, r24
+ 19c:	30 e0       	ldi	r19, 0x00	; 0
+ 19e:	a0 ea       	ldi	r26, 0xA0	; 160
+ 1a0:	bf e0       	ldi	r27, 0x0F	; 15
+ 1a2:	0e 94 ef 01 	call	0x3de	; 0x3de <__umulhisi3>
+ 1a6:	2f ef       	ldi	r18, 0xFF	; 255
+ 1a8:	30 e0       	ldi	r19, 0x00	; 0
+ 1aa:	40 e0       	ldi	r20, 0x00	; 0
+ 1ac:	50 e0       	ldi	r21, 0x00	; 0
+ 1ae:	0e 94 cd 01 	call	0x39a	; 0x39a <__udivmodsi4>
+ 1b2:	28 51       	subi	r18, 0x18	; 24
+ 1b4:	3c 4f       	sbci	r19, 0xFC	; 252
+	OCR1B = ticks;
+ 1b6:	30 93 8b 00 	sts	0x008B, r19	; 0x80008b <__TEXT_REGION_LENGTH__+0x7f808b>
+ 1ba:	20 93 8a 00 	sts	0x008A, r18	; 0x80008a <__TEXT_REGION_LENGTH__+0x7f808a>
+ 1be:	08 95       	ret
+
+000001c0 <UART_init>:
 #include "Libreria_UART.h"
 
 // Inicialización UART a 9600 baudios
 void UART_init(void) {
 	// Configura TX como salida, RX como entrada
 	DDRD |= (1 << PD1);   // TX
- 142:	8a b1       	in	r24, 0x0a	; 10
- 144:	82 60       	ori	r24, 0x02	; 2
- 146:	8a b9       	out	0x0a, r24	; 10
+ 1c0:	8a b1       	in	r24, 0x0a	; 10
+ 1c2:	82 60       	ori	r24, 0x02	; 2
+ 1c4:	8a b9       	out	0x0a, r24	; 10
 	DDRD &= ~(1 << PD0);  // RX
- 148:	8a b1       	in	r24, 0x0a	; 10
- 14a:	8e 7f       	andi	r24, 0xFE	; 254
- 14c:	8a b9       	out	0x0a, r24	; 10
+ 1c6:	8a b1       	in	r24, 0x0a	; 10
+ 1c8:	8e 7f       	andi	r24, 0xFE	; 254
+ 1ca:	8a b9       	out	0x0a, r24	; 10
 
 	// Configura baud rate a 9600 (F_CPU = 16 MHz)
 	// UBRR = (F_CPU / (16 * BAUD)) - 1 = 103
 	UBRR0 = 103;
- 14e:	87 e6       	ldi	r24, 0x67	; 103
- 150:	90 e0       	ldi	r25, 0x00	; 0
- 152:	90 93 c5 00 	sts	0x00C5, r25	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7f80c5>
- 156:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7f80c4>
+ 1cc:	87 e6       	ldi	r24, 0x67	; 103
+ 1ce:	90 e0       	ldi	r25, 0x00	; 0
+ 1d0:	90 93 c5 00 	sts	0x00C5, r25	; 0x8000c5 <__TEXT_REGION_LENGTH__+0x7f80c5>
+ 1d4:	80 93 c4 00 	sts	0x00C4, r24	; 0x8000c4 <__TEXT_REGION_LENGTH__+0x7f80c4>
 
 	// Habilita recepción, transmisión e interrupción de recepción
 	UCSR0B = (1 << RXEN0) | (1 << TXEN0) | (1 << RXCIE0);
- 15a:	88 e9       	ldi	r24, 0x98	; 152
- 15c:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7f80c1>
+ 1d8:	88 e9       	ldi	r24, 0x98	; 152
+ 1da:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7f80c1>
 
 	// 8 bits, 1 bit de stop, sin paridad
 	UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
- 160:	86 e0       	ldi	r24, 0x06	; 6
- 162:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7f80c2>
- 166:	08 95       	ret
+ 1de:	86 e0       	ldi	r24, 0x06	; 6
+ 1e0:	80 93 c2 00 	sts	0x00C2, r24	; 0x8000c2 <__TEXT_REGION_LENGTH__+0x7f80c2>
+ 1e4:	08 95       	ret
 
-00000168 <setup>:
+000001e6 <normalize_input>:
+ * a un rango de -128 a 127 para simplificar
+ * el control de velocidad en motores diferenciales.
+ */
+int8_t normalize_input(char valor) {
+	return ((int16_t)valor - 128);
+}
+ 1e6:	80 58       	subi	r24, 0x80	; 128
+ 1e8:	08 95       	ret
+
+000001ea <move_differential>:
+/**
+ * Controla las ruedas diferenciales de un robot.
+ * El parámetro `traslacion` se refiere al movimiento hacia adelante/atrás.
+ * El parámetro `rotacion` indica el giro (izquierda/derecha).
+ */
+void move_differential(int8_t traslacion, int8_t rotacion) {
+ 1ea:	0f 93       	push	r16
+ 1ec:	1f 93       	push	r17
+ 1ee:	cf 93       	push	r28
+ 1f0:	df 93       	push	r29
+	// Cálculo de velocidades para cada rueda
+	int16_t vel_izq = traslacion - rotacion;
+ 1f2:	c8 2f       	mov	r28, r24
+ 1f4:	08 2e       	mov	r0, r24
+ 1f6:	00 0c       	add	r0, r0
+ 1f8:	dd 0b       	sbc	r29, r29
+ 1fa:	26 2f       	mov	r18, r22
+ 1fc:	06 2e       	mov	r0, r22
+ 1fe:	00 0c       	add	r0, r0
+ 200:	33 0b       	sbc	r19, r19
+ 202:	8e 01       	movw	r16, r28
+ 204:	02 1b       	sub	r16, r18
+ 206:	13 0b       	sbc	r17, r19
+	int16_t vel_der = traslacion + rotacion;
+ 208:	c2 0f       	add	r28, r18
+ 20a:	d3 1f       	adc	r29, r19
+
+	// Limitación (saturación) de las velocidades a -255 a 255
+	if (vel_izq > 255) vel_izq = 255;
+	if (vel_izq < -255) vel_izq = -255;
+ 20c:	01 30       	cpi	r16, 0x01	; 1
+ 20e:	9f ef       	ldi	r25, 0xFF	; 255
+ 210:	19 07       	cpc	r17, r25
+ 212:	14 f4       	brge	.+4      	; 0x218 <move_differential+0x2e>
+ 214:	01 e0       	ldi	r16, 0x01	; 1
+ 216:	1f ef       	ldi	r17, 0xFF	; 255
+	if (vel_der > 255) vel_der = 255;
+	if (vel_der < -255) vel_der = -255;
+ 218:	c1 30       	cpi	r28, 0x01	; 1
+ 21a:	9f ef       	ldi	r25, 0xFF	; 255
+ 21c:	d9 07       	cpc	r29, r25
+ 21e:	14 f4       	brge	.+4      	; 0x224 <move_differential+0x3a>
+ 220:	c1 e0       	ldi	r28, 0x01	; 1
+ 222:	df ef       	ldi	r29, 0xFF	; 255
+	
+	// ZONA MUERTA: si ambos valores están cerca de 0, detener motores
+	if (traslacion > -10 && traslacion < 10 && rotacion > -10 && rotacion < 10) {
+ 224:	87 5f       	subi	r24, 0xF7	; 247
+ 226:	83 31       	cpi	r24, 0x13	; 19
+ 228:	78 f4       	brcc	.+30     	; 0x248 <move_differential+0x5e>
+ 22a:	67 3f       	cpi	r22, 0xF7	; 247
+ 22c:	6c f0       	brlt	.+26     	; 0x248 <move_differential+0x5e>
+ 22e:	6a 30       	cpi	r22, 0x0A	; 10
+ 230:	5c f4       	brge	.+22     	; 0x248 <move_differential+0x5e>
+		motorA_stop();
+ 232:	0e 94 7a 00 	call	0xf4	; 0xf4 <motorA_stop>
+		motorB_stop();
+ 236:	0e 94 8c 00 	call	0x118	; 0x118 <motorB_stop>
+		TIMER0_PWMA_set_PW(0);
+ 23a:	80 e0       	ldi	r24, 0x00	; 0
+ 23c:	0e 94 a0 00 	call	0x140	; 0x140 <TIMER0_PWMA_set_PW>
+		TIMER0_PWMB_set_PW(0);
+ 240:	80 e0       	ldi	r24, 0x00	; 0
+ 242:	0e 94 a3 00 	call	0x146	; 0x146 <TIMER0_PWMB_set_PW>
+		return;
+ 246:	1c c0       	rjmp	.+56     	; 0x280 <move_differential+0x96>
+	}
+
+	// Control de dirección y velocidad para el motor izquierdo
+	if (vel_izq >= 0) {
+ 248:	11 23       	and	r17, r17
+ 24a:	34 f0       	brlt	.+12     	; 0x258 <move_differential+0x6e>
+		motorA_forward();  // Adelante
+ 24c:	0e 94 6c 00 	call	0xd8	; 0xd8 <motorA_forward>
+		TIMER0_PWMA_set_PW((uint8_t)vel_izq);
+ 250:	80 2f       	mov	r24, r16
+ 252:	0e 94 a0 00 	call	0x140	; 0x140 <TIMER0_PWMA_set_PW>
+ 256:	06 c0       	rjmp	.+12     	; 0x264 <move_differential+0x7a>
+	} else {
+		motorA_backward(); // Atrás
+ 258:	0e 94 73 00 	call	0xe6	; 0xe6 <motorA_backward>
+		TIMER0_PWMA_set_PW((uint8_t)(-vel_izq));
+ 25c:	80 2f       	mov	r24, r16
+ 25e:	81 95       	neg	r24
+ 260:	0e 94 a0 00 	call	0x140	; 0x140 <TIMER0_PWMA_set_PW>
+	}
+
+	// Control de dirección y velocidad para el motor derecho
+	if (vel_der >= 0) {
+ 264:	dd 23       	and	r29, r29
+ 266:	34 f0       	brlt	.+12     	; 0x274 <move_differential+0x8a>
+		motorB_forward();  // Adelante
+ 268:	0e 94 7e 00 	call	0xfc	; 0xfc <motorB_forward>
+		TIMER0_PWMB_set_PW((uint8_t)vel_der);
+ 26c:	8c 2f       	mov	r24, r28
+ 26e:	0e 94 a3 00 	call	0x146	; 0x146 <TIMER0_PWMB_set_PW>
+ 272:	06 c0       	rjmp	.+12     	; 0x280 <move_differential+0x96>
+	} else {
+		motorB_backward(); // Atrás
+ 274:	0e 94 85 00 	call	0x10a	; 0x10a <motorB_backward>
+		TIMER0_PWMB_set_PW((uint8_t)(-vel_der));
+ 278:	8c 2f       	mov	r24, r28
+ 27a:	81 95       	neg	r24
+ 27c:	0e 94 a3 00 	call	0x146	; 0x146 <TIMER0_PWMB_set_PW>
+	}
+	
+	
+}
+ 280:	df 91       	pop	r29
+ 282:	cf 91       	pop	r28
+ 284:	1f 91       	pop	r17
+ 286:	0f 91       	pop	r16
+ 288:	08 95       	ret
+
+0000028a <manual_mode_movement>:
+ * para controlar tanto los servomotores como los motorreductores.
+ * 
+ * - Mx, My: para control de motorreductores (movimiento base)
+ * - Sx, Sy: para control de servomotores (movimiento cabeza o brazos, por ejemplo)
+ */
+void manual_mode_movement(char Mx, char My, char Sx, char Sy) {
+ 28a:	1f 93       	push	r17
+ 28c:	cf 93       	push	r28
+ 28e:	df 93       	push	r29
+ 290:	c8 2f       	mov	r28, r24
+ 292:	d6 2f       	mov	r29, r22
+ 294:	84 2f       	mov	r24, r20
+ 296:	12 2f       	mov	r17, r18
+	// PWM para servos: ajustar ángulo de servomotores
+	TIMER1_PWMA_set_servo_PW(Sx); // Servo X
+ 298:	0e 94 ba 00 	call	0x174	; 0x174 <TIMER1_PWMA_set_servo_PW>
+	TIMER1_PWMB_set_servo_PW(Sy); // Servo Y
+ 29c:	81 2f       	mov	r24, r17
+ 29e:	0e 94 cd 00 	call	0x19a	; 0x19a <TIMER1_PWMB_set_servo_PW>
+
+	// Movimiento diferencial (con ruedas)
+	int8_t traslacion = normalize_input(Mx);
+ 2a2:	8c 2f       	mov	r24, r28
+ 2a4:	0e 94 f3 00 	call	0x1e6	; 0x1e6 <normalize_input>
+ 2a8:	c8 2f       	mov	r28, r24
+	int8_t rotacion   = normalize_input(My);
+ 2aa:	8d 2f       	mov	r24, r29
+ 2ac:	0e 94 f3 00 	call	0x1e6	; 0x1e6 <normalize_input>
+	move_differential(traslacion, rotacion);
+ 2b0:	68 2f       	mov	r22, r24
+ 2b2:	8c 2f       	mov	r24, r28
+ 2b4:	0e 94 f5 00 	call	0x1ea	; 0x1ea <move_differential>
+}
+ 2b8:	df 91       	pop	r29
+ 2ba:	cf 91       	pop	r28
+ 2bc:	1f 91       	pop	r17
+ 2be:	08 95       	ret
+
+000002c0 <setup>:
 /**
  * Función de configuración del sistema.
  * Inicializa todos los periféricos necesarios.
  */
 void setup(void) {
 	cli(); // Deshabilitar interrupciones globales
- 168:	f8 94       	cli
+ 2c0:	f8 94       	cli
 
 	// Inicialización de periféricos
 	init_timer0();          // PWM para motores
- 16a:	0e 94 7a 00 	call	0xf4	; 0xf4 <init_timer0>
+ 2c2:	0e 94 90 00 	call	0x120	; 0x120 <init_timer0>
 	init_timer1();          // PWM para servos
- 16e:	0e 94 8d 00 	call	0x11a	; 0x11a <init_timer1>
+ 2c6:	0e 94 a6 00 	call	0x14c	; 0x14c <init_timer1>
 	init_HBridgePins();     // Pines de dirección del puente H
- 172:	0e 94 65 00 	call	0xca	; 0xca <init_HBridgePins>
+ 2ca:	0e 94 65 00 	call	0xca	; 0xca <init_HBridgePins>
 	setup_adc();            // Configuración del ADC
- 176:	0e 94 53 00 	call	0xa6	; 0xa6 <setup_adc>
+ 2ce:	0e 94 53 00 	call	0xa6	; 0xa6 <setup_adc>
 	UART_init();
- 17a:	0e 94 a1 00 	call	0x142	; 0x142 <UART_init>
+ 2d2:	0e 94 e0 00 	call	0x1c0	; 0x1c0 <UART_init>
 
 	sei(); // Habilitar interrupciones globales
- 17e:	78 94       	sei
- 180:	08 95       	ret
+ 2d6:	78 94       	sei
+ 2d8:	08 95       	ret
 
-00000182 <main>:
+000002da <main>:
  * Función principal del programa.
  * Ejecuta un bucle infinito donde lee entradas analógicas
  * y mueve los motores en base a eso.
  */
 int main(void) {
 	setup(); // Inicializar el sistema
- 182:	0e 94 b4 00 	call	0x168	; 0x168 <setup>
+ 2da:	0e 94 60 01 	call	0x2c0	; 0x2c0 <setup>
+		while (1); // Mantener detenido después de prueba
+	}
+	else {
+		// ========== MODO MANUAL (CONTROL ANALÓGICO) ==========
+		while (1) {
+			manual_mode_movement(adc_value_chan0, adc_value_chan1, adc_value_chan2, adc_value_chan3);
+ 2de:	20 91 00 01 	lds	r18, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 2e2:	40 91 01 01 	lds	r20, 0x0101	; 0x800101 <adc_value_chan2>
+ 2e6:	60 91 02 01 	lds	r22, 0x0102	; 0x800102 <adc_value_chan1>
+ 2ea:	80 91 03 01 	lds	r24, 0x0103	; 0x800103 <adc_value_chan0>
+ 2ee:	0e 94 45 01 	call	0x28a	; 0x28a <manual_mode_movement>
+ 2f2:	f5 cf       	rjmp	.-22     	; 0x2de <main+0x4>
 
-	while (1) {
-		// Movimiento controlado por potenciómetros
-		//manual_mode_movement(adc_value_chan0, adc_value_chan1, adc_value_chan2, adc_value_chan3);
-		
-		motorA_forward();
- 186:	0e 94 6c 00 	call	0xd8	; 0xd8 <motorA_forward>
-		motorB_forward();
- 18a:	0e 94 73 00 	call	0xe6	; 0xe6 <motorB_forward>
-		TIMER0_PWMA_set_PW(255); // Máxima potencia para motor A
- 18e:	8f ef       	ldi	r24, 0xFF	; 255
- 190:	0e 94 87 00 	call	0x10e	; 0x10e <TIMER0_PWMA_set_PW>
-		TIMER0_PWMB_set_PW(255); // Máxima potencia para motor B
- 194:	8f ef       	ldi	r24, 0xFF	; 255
- 196:	0e 94 8a 00 	call	0x114	; 0x114 <TIMER0_PWMB_set_PW>
- 19a:	f5 cf       	rjmp	.-22     	; 0x186 <main+0x4>
-
-0000019c <__vector_21>:
+000002f4 <__vector_21>:
 /**
  * Interrupción del ADC.
  * Se encarga de cambiar de canal cada vez que se completa una conversión.
  * Esto permite leer múltiples canales secuencialmente.
  */
 ISR(ADC_vect) {
- 19c:	1f 92       	push	r1
- 19e:	0f 92       	push	r0
- 1a0:	0f b6       	in	r0, 0x3f	; 63
- 1a2:	0f 92       	push	r0
- 1a4:	11 24       	eor	r1, r1
- 1a6:	2f 93       	push	r18
- 1a8:	3f 93       	push	r19
- 1aa:	4f 93       	push	r20
- 1ac:	5f 93       	push	r21
- 1ae:	6f 93       	push	r22
- 1b0:	7f 93       	push	r23
- 1b2:	8f 93       	push	r24
- 1b4:	9f 93       	push	r25
- 1b6:	af 93       	push	r26
- 1b8:	bf 93       	push	r27
- 1ba:	ef 93       	push	r30
- 1bc:	ff 93       	push	r31
+ 2f4:	1f 92       	push	r1
+ 2f6:	0f 92       	push	r0
+ 2f8:	0f b6       	in	r0, 0x3f	; 63
+ 2fa:	0f 92       	push	r0
+ 2fc:	11 24       	eor	r1, r1
+ 2fe:	2f 93       	push	r18
+ 300:	3f 93       	push	r19
+ 302:	4f 93       	push	r20
+ 304:	5f 93       	push	r21
+ 306:	6f 93       	push	r22
+ 308:	7f 93       	push	r23
+ 30a:	8f 93       	push	r24
+ 30c:	9f 93       	push	r25
+ 30e:	af 93       	push	r26
+ 310:	bf 93       	push	r27
+ 312:	ef 93       	push	r30
+ 314:	ff 93       	push	r31
 	switch(current_channel) {
- 1be:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <current_channel>
- 1c2:	81 30       	cpi	r24, 0x01	; 1
- 1c4:	81 f0       	breq	.+32     	; 0x1e6 <__vector_21+0x4a>
- 1c6:	28 f0       	brcs	.+10     	; 0x1d2 <__vector_21+0x36>
- 1c8:	82 30       	cpi	r24, 0x02	; 2
- 1ca:	b9 f0       	breq	.+46     	; 0x1fa <__vector_21+0x5e>
- 1cc:	83 30       	cpi	r24, 0x03	; 3
- 1ce:	f9 f0       	breq	.+62     	; 0x20e <__vector_21+0x72>
- 1d0:	27 c0       	rjmp	.+78     	; 0x220 <__vector_21+0x84>
+ 316:	80 91 04 01 	lds	r24, 0x0104	; 0x800104 <current_channel>
+ 31a:	81 30       	cpi	r24, 0x01	; 1
+ 31c:	81 f0       	breq	.+32     	; 0x33e <__vector_21+0x4a>
+ 31e:	28 f0       	brcs	.+10     	; 0x32a <__vector_21+0x36>
+ 320:	82 30       	cpi	r24, 0x02	; 2
+ 322:	b9 f0       	breq	.+46     	; 0x352 <__vector_21+0x5e>
+ 324:	83 30       	cpi	r24, 0x03	; 3
+ 326:	f9 f0       	breq	.+62     	; 0x366 <__vector_21+0x72>
+ 328:	27 c0       	rjmp	.+78     	; 0x378 <__vector_21+0x84>
 		case 0:
 			adc_value_chan0 = ADCH;       // Leer canal 0
- 1d2:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
- 1d6:	80 93 03 01 	sts	0x0103, r24	; 0x800103 <adc_value_chan0>
+ 32a:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 32e:	80 93 03 01 	sts	0x0103, r24	; 0x800103 <adc_value_chan0>
 			current_channel = 1;
- 1da:	81 e0       	ldi	r24, 0x01	; 1
- 1dc:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <current_channel>
+ 332:	81 e0       	ldi	r24, 0x01	; 1
+ 334:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <current_channel>
 			adc_set_channel(1);           // Cambiar a canal 1
- 1e0:	0e 94 60 00 	call	0xc0	; 0xc0 <adc_set_channel>
+ 338:	0e 94 60 00 	call	0xc0	; 0xc0 <adc_set_channel>
 			break;
- 1e4:	1d c0       	rjmp	.+58     	; 0x220 <__vector_21+0x84>
+ 33c:	1d c0       	rjmp	.+58     	; 0x378 <__vector_21+0x84>
 		case 1:
 			adc_value_chan1 = ADCH;       // Leer canal 1
- 1e6:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
- 1ea:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <adc_value_chan1>
+ 33e:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 342:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <adc_value_chan1>
 			current_channel = 2;
- 1ee:	82 e0       	ldi	r24, 0x02	; 2
- 1f0:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <current_channel>
+ 346:	82 e0       	ldi	r24, 0x02	; 2
+ 348:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <current_channel>
 			adc_set_channel(2);
- 1f4:	0e 94 60 00 	call	0xc0	; 0xc0 <adc_set_channel>
+ 34c:	0e 94 60 00 	call	0xc0	; 0xc0 <adc_set_channel>
 			break;
- 1f8:	13 c0       	rjmp	.+38     	; 0x220 <__vector_21+0x84>
+ 350:	13 c0       	rjmp	.+38     	; 0x378 <__vector_21+0x84>
 		case 2:
 			adc_value_chan2 = ADCH;       // Leer canal 2
- 1fa:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
- 1fe:	80 93 01 01 	sts	0x0101, r24	; 0x800101 <adc_value_chan2>
+ 352:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 356:	80 93 01 01 	sts	0x0101, r24	; 0x800101 <adc_value_chan2>
 			current_channel = 3;
- 202:	83 e0       	ldi	r24, 0x03	; 3
- 204:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <current_channel>
+ 35a:	83 e0       	ldi	r24, 0x03	; 3
+ 35c:	80 93 04 01 	sts	0x0104, r24	; 0x800104 <current_channel>
 			adc_set_channel(3);
- 208:	0e 94 60 00 	call	0xc0	; 0xc0 <adc_set_channel>
+ 360:	0e 94 60 00 	call	0xc0	; 0xc0 <adc_set_channel>
 			break;
- 20c:	09 c0       	rjmp	.+18     	; 0x220 <__vector_21+0x84>
+ 364:	09 c0       	rjmp	.+18     	; 0x378 <__vector_21+0x84>
 		case 3:
 			adc_value_chan3 = ADCH;       // Leer canal 3
- 20e:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
- 212:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
+ 366:	80 91 79 00 	lds	r24, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
+ 36a:	80 93 00 01 	sts	0x0100, r24	; 0x800100 <__DATA_REGION_ORIGIN__>
 			current_channel = 0;
- 216:	10 92 04 01 	sts	0x0104, r1	; 0x800104 <current_channel>
+ 36e:	10 92 04 01 	sts	0x0104, r1	; 0x800104 <current_channel>
 			adc_set_channel(0);           // Regresar al canal 0
- 21a:	80 e0       	ldi	r24, 0x00	; 0
- 21c:	0e 94 60 00 	call	0xc0	; 0xc0 <adc_set_channel>
+ 372:	80 e0       	ldi	r24, 0x00	; 0
+ 374:	0e 94 60 00 	call	0xc0	; 0xc0 <adc_set_channel>
 			break;
 	}
 }
- 220:	ff 91       	pop	r31
- 222:	ef 91       	pop	r30
- 224:	bf 91       	pop	r27
- 226:	af 91       	pop	r26
- 228:	9f 91       	pop	r25
- 22a:	8f 91       	pop	r24
- 22c:	7f 91       	pop	r23
- 22e:	6f 91       	pop	r22
- 230:	5f 91       	pop	r21
- 232:	4f 91       	pop	r20
- 234:	3f 91       	pop	r19
- 236:	2f 91       	pop	r18
- 238:	0f 90       	pop	r0
- 23a:	0f be       	out	0x3f, r0	; 63
- 23c:	0f 90       	pop	r0
- 23e:	1f 90       	pop	r1
- 240:	18 95       	reti
+ 378:	ff 91       	pop	r31
+ 37a:	ef 91       	pop	r30
+ 37c:	bf 91       	pop	r27
+ 37e:	af 91       	pop	r26
+ 380:	9f 91       	pop	r25
+ 382:	8f 91       	pop	r24
+ 384:	7f 91       	pop	r23
+ 386:	6f 91       	pop	r22
+ 388:	5f 91       	pop	r21
+ 38a:	4f 91       	pop	r20
+ 38c:	3f 91       	pop	r19
+ 38e:	2f 91       	pop	r18
+ 390:	0f 90       	pop	r0
+ 392:	0f be       	out	0x3f, r0	; 63
+ 394:	0f 90       	pop	r0
+ 396:	1f 90       	pop	r1
+ 398:	18 95       	reti
 
-00000242 <_exit>:
- 242:	f8 94       	cli
+0000039a <__udivmodsi4>:
+ 39a:	a1 e2       	ldi	r26, 0x21	; 33
+ 39c:	1a 2e       	mov	r1, r26
+ 39e:	aa 1b       	sub	r26, r26
+ 3a0:	bb 1b       	sub	r27, r27
+ 3a2:	fd 01       	movw	r30, r26
+ 3a4:	0d c0       	rjmp	.+26     	; 0x3c0 <__udivmodsi4_ep>
 
-00000244 <__stop_program>:
- 244:	ff cf       	rjmp	.-2      	; 0x244 <__stop_program>
+000003a6 <__udivmodsi4_loop>:
+ 3a6:	aa 1f       	adc	r26, r26
+ 3a8:	bb 1f       	adc	r27, r27
+ 3aa:	ee 1f       	adc	r30, r30
+ 3ac:	ff 1f       	adc	r31, r31
+ 3ae:	a2 17       	cp	r26, r18
+ 3b0:	b3 07       	cpc	r27, r19
+ 3b2:	e4 07       	cpc	r30, r20
+ 3b4:	f5 07       	cpc	r31, r21
+ 3b6:	20 f0       	brcs	.+8      	; 0x3c0 <__udivmodsi4_ep>
+ 3b8:	a2 1b       	sub	r26, r18
+ 3ba:	b3 0b       	sbc	r27, r19
+ 3bc:	e4 0b       	sbc	r30, r20
+ 3be:	f5 0b       	sbc	r31, r21
+
+000003c0 <__udivmodsi4_ep>:
+ 3c0:	66 1f       	adc	r22, r22
+ 3c2:	77 1f       	adc	r23, r23
+ 3c4:	88 1f       	adc	r24, r24
+ 3c6:	99 1f       	adc	r25, r25
+ 3c8:	1a 94       	dec	r1
+ 3ca:	69 f7       	brne	.-38     	; 0x3a6 <__udivmodsi4_loop>
+ 3cc:	60 95       	com	r22
+ 3ce:	70 95       	com	r23
+ 3d0:	80 95       	com	r24
+ 3d2:	90 95       	com	r25
+ 3d4:	9b 01       	movw	r18, r22
+ 3d6:	ac 01       	movw	r20, r24
+ 3d8:	bd 01       	movw	r22, r26
+ 3da:	cf 01       	movw	r24, r30
+ 3dc:	08 95       	ret
+
+000003de <__umulhisi3>:
+ 3de:	a2 9f       	mul	r26, r18
+ 3e0:	b0 01       	movw	r22, r0
+ 3e2:	b3 9f       	mul	r27, r19
+ 3e4:	c0 01       	movw	r24, r0
+ 3e6:	a3 9f       	mul	r26, r19
+ 3e8:	70 0d       	add	r23, r0
+ 3ea:	81 1d       	adc	r24, r1
+ 3ec:	11 24       	eor	r1, r1
+ 3ee:	91 1d       	adc	r25, r1
+ 3f0:	b2 9f       	mul	r27, r18
+ 3f2:	70 0d       	add	r23, r0
+ 3f4:	81 1d       	adc	r24, r1
+ 3f6:	11 24       	eor	r1, r1
+ 3f8:	91 1d       	adc	r25, r1
+ 3fa:	08 95       	ret
+
+000003fc <_exit>:
+ 3fc:	f8 94       	cli
+
+000003fe <__stop_program>:
+ 3fe:	ff cf       	rjmp	.-2      	; 0x3fe <__stop_program>
