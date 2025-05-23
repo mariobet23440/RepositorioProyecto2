@@ -126,7 +126,12 @@ int main(void) {
 
 	while (1) {
 		// Movimiento controlado por potenciómetros
-		manual_mode_movement(adc_value_chan0, adc_value_chan1, adc_value_chan2, adc_value_chan3);
+		//manual_mode_movement(adc_value_chan0, adc_value_chan1, adc_value_chan2, adc_value_chan3);
+		
+		motorA_forward();
+		motorB_forward();
+		TIMER0_PWMA_set_PW(255); // Máxima potencia para motor A
+		TIMER0_PWMB_set_PW(255); // Máxima potencia para motor B
 	}
 
 	return 0;

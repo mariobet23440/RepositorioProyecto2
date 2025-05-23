@@ -21,8 +21,12 @@ Discarded input sections
  .text          0x00000000        0x0 Libreria_HBridge/Libreria_HBridge.o
  .data          0x00000000        0x0 Libreria_HBridge/Libreria_HBridge.o
  .bss           0x00000000        0x0 Libreria_HBridge/Libreria_HBridge.o
+ .text.motorA_backward
+                0x00000000        0xe Libreria_HBridge/Libreria_HBridge.o
  .text.motorA_stop
                 0x00000000        0x8 Libreria_HBridge/Libreria_HBridge.o
+ .text.motorB_backward
+                0x00000000        0xe Libreria_HBridge/Libreria_HBridge.o
  .text.motorB_stop
                 0x00000000        0x8 Libreria_HBridge/Libreria_HBridge.o
  .rodata.midpoint
@@ -33,6 +37,10 @@ Discarded input sections
  .text          0x00000000        0x0 Libreria_Timer1PWM/LibreriaTimer1PWM.o
  .data          0x00000000        0x0 Libreria_Timer1PWM/LibreriaTimer1PWM.o
  .bss           0x00000000        0x0 Libreria_Timer1PWM/LibreriaTimer1PWM.o
+ .text.TIMER1_PWMA_set_servo_PW
+                0x00000000       0x26 Libreria_Timer1PWM/LibreriaTimer1PWM.o
+ .text.TIMER1_PWMB_set_servo_PW
+                0x00000000       0x26 Libreria_Timer1PWM/LibreriaTimer1PWM.o
  .text          0x00000000        0x0 Libreria_UART/Libreria_UART.o
  .data          0x00000000        0x0 Libreria_UART/Libreria_UART.o
  .bss           0x00000000        0x0 Libreria_UART/Libreria_UART.o
@@ -43,11 +51,19 @@ Discarded input sections
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
+ .text.normalize_input
+                0x00000000        0x4 main.o
+ .text.move_differential
+                0x00000000       0x78 main.o
+ .text.manual_mode_movement
+                0x00000000       0x36 main.o
  .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
  .text.libgcc.mul
                 0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
+ .text.libgcc.div
+                0x00000000       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
  .text.libgcc   0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
  .text.libgcc.prologue
                 0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
@@ -108,6 +124,8 @@ Discarded input sections
  .text          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_umulhisi3.o)
  .data          0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_umulhisi3.o)
  .bss           0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_umulhisi3.o)
+ .text.libgcc.mul
+                0x00000000       0x1e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_umulhisi3.o)
  .text.libgcc.div
                 0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_umulhisi3.o)
  .text.libgcc   0x00000000        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_umulhisi3.o)
@@ -251,7 +269,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x3c2
+.text           0x00000000      0x246
  *(.vectors)
  .vectors       0x00000000       0x68 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328p/avr5/crtatmega328p.o
                 0x00000000                __vector_default
@@ -349,63 +367,36 @@ END GROUP
  .text.motorA_forward
                 0x000000d8        0xe Libreria_HBridge/Libreria_HBridge.o
                 0x000000d8                motorA_forward
- .text.motorA_backward
-                0x000000e6        0xe Libreria_HBridge/Libreria_HBridge.o
-                0x000000e6                motorA_backward
  .text.motorB_forward
-                0x000000f4        0xe Libreria_HBridge/Libreria_HBridge.o
-                0x000000f4                motorB_forward
- .text.motorB_backward
-                0x00000102        0xe Libreria_HBridge/Libreria_HBridge.o
-                0x00000102                motorB_backward
+                0x000000e6        0xe Libreria_HBridge/Libreria_HBridge.o
+                0x000000e6                motorB_forward
  .text.init_timer0
-                0x00000110       0x1a Libreria_Timer0PWM/Libreria_Timer0PWM.o
-                0x00000110                init_timer0
+                0x000000f4       0x1a Libreria_Timer0PWM/Libreria_Timer0PWM.o
+                0x000000f4                init_timer0
  .text.TIMER0_PWMA_set_PW
-                0x0000012a        0x6 Libreria_Timer0PWM/Libreria_Timer0PWM.o
-                0x0000012a                TIMER0_PWMA_set_PW
+                0x0000010e        0x6 Libreria_Timer0PWM/Libreria_Timer0PWM.o
+                0x0000010e                TIMER0_PWMA_set_PW
  .text.TIMER0_PWMB_set_PW
-                0x00000130        0x6 Libreria_Timer0PWM/Libreria_Timer0PWM.o
-                0x00000130                TIMER0_PWMB_set_PW
+                0x00000114        0x6 Libreria_Timer0PWM/Libreria_Timer0PWM.o
+                0x00000114                TIMER0_PWMB_set_PW
  .text.init_timer1
-                0x00000136       0x28 Libreria_Timer1PWM/LibreriaTimer1PWM.o
-                0x00000136                init_timer1
- .text.TIMER1_PWMA_set_servo_PW
-                0x0000015e       0x26 Libreria_Timer1PWM/LibreriaTimer1PWM.o
-                0x0000015e                TIMER1_PWMA_set_servo_PW
- .text.TIMER1_PWMB_set_servo_PW
-                0x00000184       0x26 Libreria_Timer1PWM/LibreriaTimer1PWM.o
-                0x00000184                TIMER1_PWMB_set_servo_PW
+                0x0000011a       0x28 Libreria_Timer1PWM/LibreriaTimer1PWM.o
+                0x0000011a                init_timer1
  .text.UART_init
-                0x000001aa       0x26 Libreria_UART/Libreria_UART.o
-                0x000001aa                UART_init
- .text.normalize_input
-                0x000001d0        0x4 main.o
-                0x000001d0                normalize_input
- .text.move_differential
-                0x000001d4       0x78 main.o
-                0x000001d4                move_differential
- .text.manual_mode_movement
-                0x0000024c       0x36 main.o
-                0x0000024c                manual_mode_movement
- .text.setup    0x00000282       0x1a main.o
-                0x00000282                setup
- .text.main     0x0000029c       0x1a main.o
-                0x0000029c                main
+                0x00000142       0x26 Libreria_UART/Libreria_UART.o
+                0x00000142                UART_init
+ .text.setup    0x00000168       0x1a main.o
+                0x00000168                setup
+ .text.main     0x00000182       0x1a main.o
+                0x00000182                main
  .text.__vector_21
-                0x000002b6       0xa6 main.o
-                0x000002b6                __vector_21
- .text.libgcc.div
-                0x0000035c       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
-                0x0000035c                __udivmodsi4
- .text.libgcc.mul
-                0x000003a0       0x1e c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_umulhisi3.o)
-                0x000003a0                __umulhisi3
-                0x000003be                . = ALIGN (0x2)
+                0x0000019c       0xa6 main.o
+                0x0000019c                __vector_21
+                0x00000242                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000003be        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x000003be                _exit
-                0x000003be                exit
+ .fini9         0x00000242        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00000242                _exit
+                0x00000242                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -424,11 +415,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000003be        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00000242        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x000003c2                _etext = .
+                0x00000246                _etext = .
 
-.data           0x00800100        0x0 load address 0x000003c2
+.data           0x00800100        0x0 load address 0x00000246
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -461,8 +452,8 @@ END GROUP
                 0x00800104                current_channel
  *(COMMON)
                 0x00800105                PROVIDE (__bss_end, .)
-                0x000003c2                __data_load_start = LOADADDR (.data)
-                0x000003c2                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000246                __data_load_start = LOADADDR (.data)
+                0x00000246                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800105        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -556,7 +547,7 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xed7
+.debug_info     0x00000000      0xf04
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x5f4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_info    0x000005f4       0xa9 Libreria_ADC/LibreriaADC.o
@@ -564,7 +555,7 @@ END GROUP
  .debug_info    0x000007c2       0xd3 Libreria_Timer0PWM/Libreria_Timer0PWM.o
  .debug_info    0x00000895      0x109 Libreria_Timer1PWM/LibreriaTimer1PWM.o
  .debug_info    0x0000099e       0xf9 Libreria_UART/Libreria_UART.o
- .debug_info    0x00000a97      0x440 main.o
+ .debug_info    0x00000a97      0x46d main.o
 
 .debug_abbrev   0x00000000      0x99b
  *(.debug_abbrev)
@@ -576,7 +567,7 @@ END GROUP
  .debug_abbrev  0x000007b6       0xbe Libreria_UART/Libreria_UART.o
  .debug_abbrev  0x00000874      0x127 main.o
 
-.debug_line     0x00000000      0x971
+.debug_line     0x00000000      0x98f
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x134 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.7.374/gcc/dev/atmega328p/avr5/crtatmega328p.o
  .debug_line    0x00000134       0xdb Libreria_ADC/LibreriaADC.o
@@ -584,7 +575,7 @@ END GROUP
  .debug_line    0x0000036d       0xfe Libreria_Timer0PWM/Libreria_Timer0PWM.o
  .debug_line    0x0000046b      0x109 Libreria_Timer1PWM/LibreriaTimer1PWM.o
  .debug_line    0x00000574      0x116 Libreria_UART/Libreria_UART.o
- .debug_line    0x0000068a      0x2e7 main.o
+ .debug_line    0x0000068a      0x305 main.o
 
 .debug_frame    0x00000000      0x270
  *(.debug_frame)
