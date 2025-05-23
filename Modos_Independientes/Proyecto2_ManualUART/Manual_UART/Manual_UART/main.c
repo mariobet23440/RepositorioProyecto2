@@ -61,6 +61,9 @@ volatile uint8_t frame_ready = 0;
 
 char manual_mode_enabled = 1;
 
+char servoX_current_position = 0;
+char servoY_current_position = 0;
+
 /************************************************************************/
 /* FUNCIONES AUXILIARES                                                 */
 /************************************************************************/
@@ -153,11 +156,13 @@ void process_instruction_uart(void) {
 		case SERVOMOTOR_X:
 		UART_sendString("[LOG] Ejecutando: SERVOMOTOR_X\r\n");
 		TIMER1_PWMA_set_servo_PW(data_char);
+		servoX_current_position = data_char;
 		break;
 		
 		case SERVOMOTOR_Y:
 		UART_sendString("[LOG] Ejecutando: SERVOMOTOR_Y\r\n");
 		TIMER1_PWMB_set_servo_PW(data_char);
+		servoY_current_position = data_char;
 		break;
 		
 		case EEPROM_READ:
@@ -217,20 +222,20 @@ void process_instruction_uart(void) {
 
 		switch (data_char) {
 			case '1':
-			EEPROM_write(EEPROM_ADDRESS1A, adc_value_chan0);
-			EEPROM_write(EEPROM_ADDRESS1B, adc_value_chan1);
+			EEPROM_write(EEPROM_ADDRESS1A, servoX_current_position);
+			EEPROM_write(EEPROM_ADDRESS1B, servoY_current_position);
 			break;
 			case '2':
-			EEPROM_write(EEPROM_ADDRESS2A, adc_value_chan0);
-			EEPROM_write(EEPROM_ADDRESS2B, adc_value_chan1);
+			EEPROM_write(EEPROM_ADDRESS2A, servoX_current_position);
+			EEPROM_write(EEPROM_ADDRESS2B, servoY_current_position);
 			break;
 			case '3':
-			EEPROM_write(EEPROM_ADDRESS3A, adc_value_chan0);
-			EEPROM_write(EEPROM_ADDRESS3B, adc_value_chan1);
+			EEPROM_write(EEPROM_ADDRESS3A, servoX_current_position);
+			EEPROM_write(EEPROM_ADDRESS3B, servoY_current_position);
 			break;
 			case '4':
-			EEPROM_write(EEPROM_ADDRESS4A, adc_value_chan0);
-			EEPROM_write(EEPROM_ADDRESS4B, adc_value_chan1);
+			EEPROM_write(EEPROM_ADDRESS4A, servoX_current_position);
+			EEPROM_write(EEPROM_ADDRESS4B, servoY_current_position);
 			break;
 			default:
 			UART_sendString("[ERROR] Bloque EEPROM inválido\r\n");
@@ -239,12 +244,12 @@ void process_instruction_uart(void) {
 
 		// Mostrar valores escritos en hexadecimal
 		UART_sendString("[LOG] Valor A escrito: 0x");
-		itoa(adc_value_chan0, write_buffer, 16);
+		itoa(servoX_current_position, write_buffer, 16);
 		UART_sendString(write_buffer);
 		UART_sendString("\r\n");
 
 		UART_sendString("[LOG] Valor B escrito: 0x");
-		itoa(adc_value_chan1, write_buffer, 16);
+		itoa(servoY_current_position, write_buffer, 16);
 		UART_sendString(write_buffer);
 		UART_sendString("\r\n");
 
