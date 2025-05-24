@@ -1,5 +1,5 @@
 /************************************************************************/
-/* CONTROLADOR PRINCIPAL FUSIONADO UART + MODO MANUAL                   */
+/* CONTROLADOR PRINCIPAL FUSIONADO UART + MODO MANUAL (Y EEPROM)        */
 /* Versión: 23/05/2025                                                  */
 /************************************************************************/
 
@@ -141,16 +141,36 @@ void process_instruction_uart(void) {
 	UART_sendString("0x");
 	UART_sendString(buffer);
 	UART_sendString("\r\n");
+	
+	PORTC &= ~(1 << PORTC5); // Apagar LED EEPROM
 
 	switch (instruction) {
 		case MOTORREDUCTOR_X:
 		UART_sendString("[LOG] Ejecutando: MOTORREDUCTOR_X\r\n");
-		TIMER0_PWMA_set_PW(data_char);
+		if (data_char > 127) {
+			motorA_forward();
+			TIMER0_PWMA_set_PW(data_char - 128);
+			} else if (data_char < 127) {
+			motorA_backward();
+			TIMER0_PWMA_set_PW(127 - data_char);
+			} else {
+			motorA_stop();
+			TIMER0_PWMA_set_PW(0);
+		}
 		break;
 		
 		case MOTORREDUCTOR_Y:
 		UART_sendString("[LOG] Ejecutando: MOTORREDUCTOR_Y\r\n");
-		TIMER0_PWMB_set_PW(data_char);
+		if (data_char > 127) {
+			motorB_forward();
+			TIMER0_PWMB_set_PW(data_char - 128);
+			} else if (data_char < 127) {
+			motorB_backward();
+			TIMER0_PWMB_set_PW(127 - data_char);
+			} else {
+			motorA_stop();
+			TIMER0_PWMA_set_PW(0);
+		}
 		break;
 		
 		case SERVOMOTOR_X:
@@ -166,6 +186,7 @@ void process_instruction_uart(void) {
 		break;
 		
 		case EEPROM_READ:
+		PORTC |= (1 << PORTC5);	// Encender LED EEPROM	
 		UART_sendString("[LOG] Ejecutando: EEPROM_READ\r\n");
 		UART_sendString("[LOG] Leyendo EEPROM bloque: ");
 		UART_sendChar(data_char);
@@ -213,6 +234,7 @@ void process_instruction_uart(void) {
 		break;
 		
 		case EEPROM_WRITE:
+		PORTC |= (1 << PORTC5);	// Encender LED EEPROM
 		UART_sendString("[LOG] Ejecutando: EEPROM_WRITE\r\n");
 		UART_sendString("[LOG] Escribiendo EEPROM bloque: ");
 		UART_sendChar(data_char);
@@ -257,12 +279,14 @@ void process_instruction_uart(void) {
 		
 		case MANUAL_ENABLE:
 		UART_sendString("[LOG] Modo manual ACTIVADO\r\n");
+		PORTC &= ~(1 << PORTC4);	// Apagar LED UART después de procesamiento
 		manual_mode_enabled = 1;
 		break;
 		
 		case MANUAL_DISABLE:
 		UART_sendString("[LOG] Modo manual DESACTIVADO\r\n");
 		manual_mode_enabled = 0;
+		PORTC |= (1 << PORTC4);		// Encender LED UART	
 		break;
 		
 		default:
@@ -283,6 +307,16 @@ void setup(void) {
 	setup_adc();
 	UART_init();
 	
+	// Configurar PB5, PC4, PC5 como salidas
+	DDRB |= (1 << PB5);   // LED_MANUAL
+	DDRC |= (1 << PC4);   // LED_UART
+	DDRC |= (1 << PC5);   // LED_EEPROM
+
+	// Estado inicial: apagados
+	PORTB &= ~(1 << PB5);
+	PORTC &= ~(1 << PC4);
+	PORTC &= ~(1 << PC5);
+	
 	TIMER1_PWMA_set_servo_PW(127);
 	TIMER1_PWMA_set_servo_PW(127);
 	sei();
@@ -299,6 +333,10 @@ int main(void) {
 
 		if (manual_mode_enabled) {
 			manual_mode_movement(adc_value_chan0, adc_value_chan1, adc_value_chan2, adc_value_chan3);
+			PORTB |= (1 << PORTB5); // Encender LED modo manual
+		}
+		else{
+			PORTB &= ~(1 << PB5); // Apagar LED si modo manual está desactivado
 		}
 	}
 }
