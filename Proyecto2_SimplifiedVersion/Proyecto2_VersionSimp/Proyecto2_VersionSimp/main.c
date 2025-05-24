@@ -1,6 +1,8 @@
 /************************************************************************/
 /* CONTROLADOR PRINCIPAL FUSIONADO UART + MODO MANUAL (Y EEPROM)        */
 /* Versión: 23/05/2025  - 15:04                                         */
+/* Nota: El link al video y el documento están en el repositorio de		*/
+/* Github																*/
 /************************************************************************/
 
 #define F_CPU 16000000
